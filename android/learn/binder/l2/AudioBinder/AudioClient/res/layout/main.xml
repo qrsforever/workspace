@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dip"
+    android:layout_height="300dip"
+    android:orientation="vertical"
+    tools:context=".AudioClientActivity" >
+
+    <Button
+            android:id="@+id/set_vol"
+            android:text="@string/set_value"
+            android:background="@drawable/btn_selector"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    <Button
+            android:id="@+id/get_vol"
+            android:text="@string/get_value"
+            android:background="@drawable/btn_selector"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    <TextView
+            android:id="@+id/show_value"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+</LinearLayout>
