@@ -5,6 +5,9 @@ print dir(dict)
 
 d = { 'a' : 1, 'b' : 2, 'c' : 3 }
 
+for x, y in d.items():
+    print x, ':' , y
+
 print d
 print d['a']
 print list(d)
@@ -21,3 +24,4 @@ print d
 print dict([('aa', 11), ('bb', 22), ('cc', 33)])
 print dict(aaa = 111, bbb = 222, ccc = 333)
 print {x:x**2 for x in (2, 3, 4)}
+
