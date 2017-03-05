@@ -9,6 +9,8 @@ sudo apt-get install python-pip
 
 # 增强Shell
 sudo apt-get install ipython
+sudo pip install wcwidth
+sudo pip install ptyprocess
 
 # 安装Notebook以及依赖库:tornado 和 pyzmq.
 sudo apt-get install ipython-notebook 
@@ -66,3 +68,6 @@ sudo apt-get install libhighgui-dev opencv-doc python-opencv
 
 # 测试库
 sudo apt-get install python-nose
+
+# Others
+sudo pip install jedi --upgrade
