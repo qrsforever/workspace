@@ -68,6 +68,7 @@ sudo apt-get install libhighgui-dev opencv-doc python-opencv
 
 # 测试库
 sudo apt-get install python-nose
+sudo apt-get install python-pytest
 
 # Others
 sudo pip install jedi --upgrade
