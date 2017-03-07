@@ -6,6 +6,7 @@ import numpy as np
 print(np.arange(0, 100, 5, np.int32))
 
 a = np.linspace(0, 50, 5)
+
 b = np.linspace(0, 50, 5, endpoint=False)
 print(a.dtype)
 print(a)
@@ -48,4 +49,12 @@ def func2(i, j):
 
 h2 = np.fromfunction(func2, shape=(3, 5))
 print(h2)
+
+
+# 9x9乘法表
+def func3(x, y):
+    return (x + 1) * (y + 1)
+
+t = np.fromfunction(func3, (9, 9))
+print t
 
