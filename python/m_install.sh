@@ -3,6 +3,7 @@ sudo apt-get install python
 
 # 基础开发环境
 sudo apt-get install python-dev
+sudo apt-get install python3-dev
 
 # 管理工具
 sudo apt-get install python-pip
@@ -72,3 +73,4 @@ sudo apt-get install python-pytest
 
 # Others
 sudo pip install jedi --upgrade
+sudo pip install tox pytest
