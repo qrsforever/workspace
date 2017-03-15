@@ -57,4 +57,3 @@ def func3(x, y):
 
 t = np.fromfunction(func3, (9, 9))
 print t
-
