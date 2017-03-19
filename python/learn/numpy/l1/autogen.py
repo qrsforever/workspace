@@ -50,10 +50,9 @@ def func2(i, j):
 h2 = np.fromfunction(func2, shape=(3, 5))
 print(h2)
 
-
 # 9x9乘法表
 def func3(x, y):
     return (x + 1) * (y + 1)
 
 t = np.fromfunction(func3, (9, 9))
-print t
+print (t)
