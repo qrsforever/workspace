@@ -1,25 +1,45 @@
 #!/usr/bin/python2.7
 #coding:utf-8
 
-print dir(list)
+from itertools import zip_longest
+
+print(dir(list))
 
 l = [x for x in range(10)]
 
-print l.__class__
+print(l.__class__)
 
 l.append('d')
 l.insert(0, 0)
 l.insert(3, 'a')
-print l
-print l.count('a')
+print(l)
+print(l.count('a'))
 l.pop() # 最后一个
-print l
+print(l)
 l.pop(0)
-print l
+print(l)
 l.remove('a')
-print l
+print(l)
 l.reverse()
-print l
+print(l)
 l.sort(reverse=True)
 for x in l:
-    print x,
+    print(x, end=',')
+
+
+print("-------------- enumerate")
+
+for i, x in enumerate(l, 0):
+    print(i, x)
+
+print("-------------- zip")
+
+a = [1, 2, 3]
+b = [4, 5, 6, 7]
+for x, y in zip(a, b):
+    print(x, y) # 7 not output
+
+print("-------------- zip_longest")
+
+for x, y in zip_longest(a, b, fillvalue=0):
+    print(x, y) 

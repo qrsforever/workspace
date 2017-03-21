@@ -73,3 +73,66 @@ root.add_child(Node2(22))
 
 for x in root:
     print(x)
+
+class Node3():
+    def __init__(self, value):
+        self._value = value
+        self._children = []
+        self._idx = 0
+
+    def __repr__(self):
+        return 'Node3({!r})'.format(self._value)
+
+    def add_child(self, node):
+        self._children.append(node)
+
+    def has_children(self):
+        return len(self._children) != 0
+
+    def __iter__(self):
+        self._idx = 0
+        return self   # 返回自己， 说明自己是迭代器，须实现__next__()
+
+    def __next__(self):
+        if self._idx < len(self._children):
+            idx = self._idx
+            self._idx += 1
+            return self._children[idx]
+        raise StopIteration
+
+def recur_show(root):
+    print(root)
+    if root.has_children():
+        for node in root:
+            recur_show(node)
+
+def recur_show2(root):
+    if root.has_children():
+        for node in root:
+            recur_show2(node)
+    print(root)
+
+#             0
+#     
+#    10      20      30
+# 
+# 11   12          31
+
+root = Node3(0)
+c1 = Node3(10)
+c2 = Node3(20)
+c3 = Node3(30)
+c11 = Node3(11)
+c12 = Node3(12)
+c31 = Node3(31)
+root.add_child(c1)
+root.add_child(c2)
+root.add_child(c3)
+c1.add_child(c11)
+c1.add_child(c12)
+c3.add_child(c31)
+
+print("==================")
+recur_show(root)
+print("==================")
+recur_show2(root)
