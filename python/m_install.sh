@@ -1,9 +1,9 @@
 #!/bin/bash
+
 sudo apt-get install python
 
 # 基础开发环境
 sudo apt-get install python-dev
-sudo apt-get install python3-dev
 
 # 管理工具
 sudo apt-get install python-pip
@@ -74,3 +74,11 @@ sudo apt-get install python-pytest
 # Others
 sudo pip install jedi --upgrade
 sudo pip install tox pytest
+
+# 代码规范 需要vpn
+sudo pip install flake8
+
+# sudo apt-get install python3-dev
+# sudo apt-get install python3-pip
+# sudo apt-get install python3-tk
+# sudo pip3 install pylint flake8 pyflakes
