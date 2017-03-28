@@ -43,18 +43,46 @@ keymap['O'] = 86
 
 class RemoteContrl(tk.Frame):
     """docstring for RemoteContrl"""
-    def __init__(self, screen):
+    def __init__(self, width, height):
+        self.width=width
+        self.height=height
         super(RemoteContrl, self).__init__()
         self.pack(expand=tk.YES, fill=tk.BOTH)
         self.master.title("TV Remote")
-        self.master.geometry(screen)
+        self.master.geometry(self.width+"x"+self.height)
+
+        tk.Label(
+                master=self,
+                text="Leeco", 
+                bg="white", 
+                font=("Arial", 12), 
+                width=40, 
+                height=2).pack(side=tk.TOP, pady=8)
+
         self._fill_digit_frame(tk.Frame(self)).pack()
         self._fill_middle_frame(tk.Frame(self)).pack()
         self._fill_direct_frame(tk.Frame(self)).pack()
         self._fill_media_frame(tk.Frame(self)).pack()
 
-    def _input_btn_enter(self, c):
+        tk.Label(
+                master=self,
+                text="----------割线-----------",
+                bg="gray",
+                font=("Arial", 12),
+                width=self.width,
+                height=2
+                ).pack(anchor=(tk.N+tk.W), pady=8)
+
+        self._make_text_frame(tk.Frame(self)).pack()
+
+
+    def _input_event_btn_enter(self, c):
         cmd="adb shell input keyevent {}".format(keymap[c])
+        print(cmd)
+        os.system(cmd)
+
+    def _input_text_btn_enter(self, o):
+        cmd="adb shell input text {}".format(o.get())
         print(cmd)
         os.system(cmd)
 
@@ -67,7 +95,7 @@ class RemoteContrl(tk.Frame):
                     text=txt,
                     width=10,
                     height=2, # 如果为text， 是指字符的宽高, 不是像素
-                    command=lambda c=txt:self._input_btn_enter(c)
+                    command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(
                             row=int(i/3),
                             column=j%3,
@@ -93,7 +121,7 @@ class RemoteContrl(tk.Frame):
                     text=strs_zh[j],
                     width=10,
                     height=2,
-                    command=lambda c=txt:self._input_btn_enter(c)
+                    command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
             i += 1
             j += 1
@@ -112,7 +140,7 @@ class RemoteContrl(tk.Frame):
                     text=strs_zh[j],
                     width=10,
                     height=2,
-                    command=lambda c=txt:self._input_btn_enter(c)
+                    command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
             i += 1
             j += 1
@@ -128,7 +156,7 @@ class RemoteContrl(tk.Frame):
                     text=txt,
                     width=10,
                     height=2,
-                    command=lambda c=txt:self._input_btn_enter(c)
+                    command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=0, column=i, padx=6, pady=6)
             i += 1
 
@@ -141,11 +169,30 @@ class RemoteContrl(tk.Frame):
                     text=txt,
                     width=6,
                     height=2,
-                    command=lambda c=txt:self._input_btn_enter(c)
+                    command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=1, column=j, padx=6, pady=6)
             j += 1
         return ifr
 
+    def _make_text_frame(self, ifr):
+        content = tk.StringVar()
+        e = tk.Entry(
+                master=ifr, 
+                textvariable=content,
+                font=("Arial", 16), 
+                justify=tk.LEFT
+                )
+        e.pack(side=tk.LEFT, padx=5)
+        tk.Button(
+                master=ifr,
+                text="Send",
+                command=lambda o=e:self._input_text_btn_enter(e)
+                ).pack(side=tk.RIGHT, padx=5)
+        return ifr
+
 
 if __name__ == "__main__":
-    RemoteContrl("420x800").mainloop()
+    RemoteContrl("420", "800").mainloop()
+
+# Learn more see: http://effbot.org/tkinterbook/
+
