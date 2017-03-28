@@ -87,9 +87,7 @@ class RemoteContrl(tk.Frame):
         os.system(cmd)
 
     def _fill_digit_frame(self, ifr):
-        i = 0
-        j = 0
-        for txt in ('123456789'):
+        for idx, txt in enumerate('123456789'):
             tk.Button( 
                     master=ifr, 
                     text=txt,
@@ -97,81 +95,67 @@ class RemoteContrl(tk.Frame):
                     height=2, # 如果为text， 是指字符的宽高, 不是像素
                     command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(
-                            row=int(i/3),
-                            column=j%3,
+                            row=int(idx/3),
+                            column=idx%3,
                             rowspan=1,
                             columnspan=1,
                             padx=6,
                             pady=6
                             )
-            i += 1
-            j += 1
         return ifr
     
     def _fill_middle_frame(self, ifr):
         strs_zh = ["回看", "0", "列表", "音量+", "静音", "频道+",  "音量-",  "设置", "频道-"]
         strs_en = ["vod", "0", "list", "vol+", "mute", "chl+", "vol-", "set", "chl-"]
-        i = 0
-        j = 0
-        for txt in strs_en:
-            m = int(i / 3)
-            n = j % 3
+        for idx, txt in enumerate(strs_en):
+            m = int(idx / 3)
+            n = idx % 3
             tk.Button(
                     master=ifr,
-                    text=strs_zh[j],
+                    text=strs_zh[idx],
                     width=10,
                     height=2,
                     command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
-            i += 1
-            j += 1
         return ifr
 
     def _fill_direct_frame(self, ifr):
         strs_zh = ["显示", "上", "信号源", "左", "确定", "右", "菜单", "下", "返回"]
         strs_en = ["display", "up", "signal", "left", "enter", "right", "menu", "down", "back"]
-        i = 0
-        j = 0
-        for txt in strs_en:
-            m = int(i / 3)
-            n = j % 3
+        for idx, txt in enumerate(strs_en):
+            m = int(idx / 3)
+            n = idx % 3
             tk.Button(
                     master=ifr,
-                    text=strs_zh[j],
+                    text=strs_zh[idx],
                     width=10,
                     height=2,
                     command=lambda c=txt:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
-            i += 1
-            j += 1
         return ifr
 
     def _fill_media_frame(self, ifr):
         top = tk.Frame(ifr)
         top.pack()
-        i = 0
-        for txt in ["|<<", "HOME", ">>|"]:
+        for idx, txt in enumerate(["|<<", "HOME", ">>|"]):
             tk.Button(
                     master=top,
                     text=txt,
                     width=10,
                     height=2,
                     command=lambda c=txt:self._input_event_btn_enter(c)
-                    ).grid(row=0, column=i, padx=6, pady=6)
-            i += 1
+                    ).grid(row=0, column=idx, padx=6, pady=6)
 
         bottom = tk.Frame(ifr)
         bottom.pack()
-        j = 0
-        for txt in ["<<", ">/||", "O", ">>"]:
+        for idx, txt in enumerate(["<<", ">/||", "O", ">>"]):
             tk.Button(
                     master=bottom,
                     text=txt,
                     width=6,
                     height=2,
                     command=lambda c=txt:self._input_event_btn_enter(c)
-                    ).grid(row=1, column=j, padx=6, pady=6)
-            j += 1
+                    ).grid(row=1, column=idx, padx=6, pady=6)
         return ifr
 
     def _make_text_frame(self, ifr):
