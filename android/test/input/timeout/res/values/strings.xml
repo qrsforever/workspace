@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, InputTimeoutActivity!</string>
     <string name="app_name">InputTimeout</string>
+    <string name="b1">AAAAA</string>
+    <string name="b2">BBBBB</string>
 
 </resources>
