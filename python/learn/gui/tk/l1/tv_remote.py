@@ -107,30 +107,30 @@ class RemoteContrl(tk.Frame):
     def _fill_middle_frame(self, ifr):
         strs_zh = ["回看", "0", "列表", "音量+", "静音", "频道+",  "音量-",  "设置", "频道-"]
         strs_en = ["vod", "0", "list", "vol+", "mute", "chl+", "vol-", "set", "chl-"]
-        for idx, txt in enumerate(strs_en):
+        for idx, (txt_zh, txt_en) in enumerate(zip(strs_zh,strs_en)):
             m = int(idx / 3)
             n = idx % 3
             tk.Button(
                     master=ifr,
-                    text=strs_zh[idx],
+                    text=txt_zh,
                     width=10,
                     height=2,
-                    command=lambda c=txt:self._input_event_btn_enter(c)
+                    command=lambda c=txt_en:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
         return ifr
 
     def _fill_direct_frame(self, ifr):
-        strs_zh = ["显示", "上", "信号源", "左", "确定", "右", "菜单", "下", "返回"]
-        strs_en = ["display", "up", "signal", "left", "enter", "right", "menu", "down", "back"]
-        for idx, txt in enumerate(strs_en):
+        strs = [("显示", "display"), ("上", "up"), ("信号源", "signal"), ("左", "left"),
+                ("确定", "enter"), ("右", "right"), ("菜单", "menu"), ("下", "down"), ("返回", "back")]
+        for idx, (txt_zh, txt_en) in enumerate(strs):
             m = int(idx / 3)
             n = idx % 3
             tk.Button(
                     master=ifr,
-                    text=strs_zh[idx],
+                    text=txt_zh,
                     width=10,
                     height=2,
-                    command=lambda c=txt:self._input_event_btn_enter(c)
+                    command=lambda c=txt_en:self._input_event_btn_enter(c)
                     ).grid(row=m, column=n, padx=6, pady=6)
         return ifr
 
@@ -179,4 +179,3 @@ if __name__ == "__main__":
     RemoteContrl("420", "800").mainloop()
 
 # Learn more see: http://effbot.org/tkinterbook/
-
