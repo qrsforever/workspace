@@ -47,25 +47,94 @@ class RemoteContrl(tk.Frame):
         self.width=width
         self.height=height
         super(RemoteContrl, self).__init__()
-        self.pack(expand=tk.YES, fill=tk.BOTH)
-        self.master.title("TV Remote")
+        self.label=tk.StringVar()
+        self.maindev="unkown"
+        self.master.title("TV Leeco Remote")
         self.master.geometry(self.width+"x"+self.height)
-
-        tk.Label(
+        tk.Button(
                 master=self,
-                text="Leeco", 
                 bg="white", 
                 font=("Arial", 12), 
-                width=40, 
-                height=2).pack(side=tk.TOP, pady=8)
+                textvariable=self.label, 
+                width=40,
+                height=2,
+                command=lambda:self._init_or_reload(1)
+                ).pack(side=tk.TOP, pady=8)
+        self._init_or_reload()
 
-        self._fill_digit_frame(tk.Frame(self)).pack()
-        self._fill_middle_frame(tk.Frame(self)).pack()
-        self._fill_direct_frame(tk.Frame(self)).pack()
-        self._fill_media_frame(tk.Frame(self)).pack()
+    def _init_or_reload(self, reload=0):
+        if reload == 1:
+            self.prptFm.destroy()
+            self.mainFm.destroy()
+
+        self.prptFm = self._check_devices()
+        self.mainFm = self._init_main_gui()
+        self.prptFm.pack()
+        self.pack(expand=tk.YES, fill=tk.BOTH)
+
+    def _radio_select_btn_enter(self, var):
+        self.maindev = var.get()
+        self.label.set("当前设备: "+self.maindev)
+        #  self.prptFm.pack_forget()
+        self.prptFm.destroy()
+        self.mainFm.pack()
+        pass
+
+    def _input_event_btn_enter(self, c):
+        d = "-s " + self.maindev
+        cmd="adb {} shell input keyevent {}".format(d, keymap[c])
+        print(cmd)
+        os.system(cmd)
+
+    def _input_text_btn_enter(self, o):
+        d = "-s " + self.maindev
+        cmd="adb {} shell input text {}".format(d, o.get())
+        print(cmd)
+        os.system(cmd)
+
+    def _check_devices(self):
+        res = os.popen("adb devices", 'r')
+        devices=[]
+        lineit = iter(res)
+        next(lineit)
+        for line in lineit:
+            if (line is not None and len(line) > 2):
+                devices.append(line.split('\t')[0])
+        res.close() 
+
+        prptFm = tk.Frame(self)
+
+        v = tk.StringVar()
+        v.set("")
+
+        for text in devices:
+            tk.Radiobutton(
+                    master=prptFm, 
+                    font=("Arial", 12), 
+                    text=text,
+                    variable=v, 
+                    value=text,
+                    #  indicatoron=0,
+                    command=lambda v=v:self._radio_select_btn_enter(v)
+                    ).pack(anchor=tk.W)
+        if len(devices) > 0:
+            self.maindev = devices[0]
+
+        self.label.set("选择设备")
+        return prptFm
+
+
+    def _init_main_gui(self):
+
+        mainFm = tk.Frame(self)
+
+        self._fill_digit_frame(tk.Frame(mainFm)).pack()
+        self._fill_middle_frame(tk.Frame(mainFm)).pack()
+        self._fill_direct_frame(tk.Frame(mainFm)).pack()
+        self._fill_media_frame(tk.Frame(mainFm)).pack()
 
         tk.Label(
-                master=self,
+                master=mainFm,
                 text="----------割线-----------",
                 bg="gray",
                 font=("Arial", 12),
@@ -73,18 +142,8 @@ class RemoteContrl(tk.Frame):
                 height=2
                 ).pack(anchor=(tk.N+tk.W), pady=8)
 
-        self._make_text_frame(tk.Frame(self)).pack()
-
-
-    def _input_event_btn_enter(self, c):
-        cmd="adb shell input keyevent {}".format(keymap[c])
-        print(cmd)
-        os.system(cmd)
-
-    def _input_text_btn_enter(self, o):
-        cmd="adb shell input text {}".format(o.get())
-        print(cmd)
-        os.system(cmd)
+        self._make_text_frame(tk.Frame(mainFm)).pack()
+        return mainFm
 
     def _fill_digit_frame(self, ifr):
         for idx, txt in enumerate('123456789'):
