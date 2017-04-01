@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name"> 内存泄漏分析 </string>
+    <string name="inner_thread_demo">内部线程引发泄漏</string>
+    <string name="static_varible_demo">静态变量引发泄漏</string>
+    <string name="handler_class_demo">非静态Handler类引发泄漏</string>
+
+</resources>
