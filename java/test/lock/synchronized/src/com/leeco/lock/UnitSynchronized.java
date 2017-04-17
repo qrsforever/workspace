@@ -3,7 +3,7 @@ package com.leeco.lock;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class TestUnitSynchronized {
+public class UnitSynchronized {
     private Object mO = new Object();
     private static int mNum = 0;
     private static int mNum2 = 0;

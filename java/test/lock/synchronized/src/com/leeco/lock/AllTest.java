@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
 {
-    TestUnitSynchronized.class
+    // UnitSynchronized.class,
+    UnitThreadWait.class
 })
 public class AllTest {
     
