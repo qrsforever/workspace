@@ -12,7 +12,7 @@ public class LockMain {
         synchronized(this) {
             try {
                 System.out.println("wait [" + name + "]");
-                this.wait(); // 释放对象锁
+                this.wait(); // 释放对象锁   (首先必须握有对象锁，即synchronized(x) then x.wait())
                 System.out.println("wakeup [" + name + "]");
             } catch(Exception e){
                 e.printStackTrace();
@@ -35,7 +35,7 @@ public class LockMain {
     public void doNotify() {
         synchronized(this) {
             try {
-                this.notifyAll();
+                this.notifyAll();  // 首先必须握有对象锁x， 在x.notifyAll
             } catch(Exception e){
                 e.printStackTrace();
             }
