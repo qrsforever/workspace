@@ -17,10 +17,15 @@ def timethis(func):
 
 @timethis
 def countdown(n):
+    """This is countdown func """
     while n > 0:
         n -= 1
 
 countdown(10000)
+
+# 如果把@wraps(func)去掉则不会保留原函数的信息了， 这个wraps有copy信息的作用
+print(countdown.__name__)
+print(countdown.__doc__)
 
 
 # 原理: @timethis 对元函数countdown进行封装
