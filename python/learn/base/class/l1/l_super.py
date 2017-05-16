@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
 
@@ -74,3 +74,8 @@ a = LeecoA()
 l.callB_from_A() # 正确： 混类
 
 # 建议： LeecoC这样的子类把所有接口列出实现
+
+#  super() -> same as super(__class__, <first argument>) # <first argument>指的是调用super的函数的第一个参数
+#  super(type) -> unbound super object
+#  super(type, obj) -> bound super object; requires isinstance(obj, type)
+#  super(type, type2) -> bound super object; requires issubclass(type2, type)
