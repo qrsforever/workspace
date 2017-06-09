@@ -18,9 +18,9 @@ do
         if [[ -f $root/etc/hadoop/${file}.bak ]]
         then
             echo $file
-            rm -f $root/etc/hadoop/$file
             mv $root/etc/hadoop/${file}.bak $root/etc/hadoop/$file
         fi
+        rm -f $root/etc/hadoop/$file
     fi
 done
 

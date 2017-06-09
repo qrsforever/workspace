@@ -7,8 +7,6 @@ then
 fi
 
 $HADOOP_HOME/bin/hdfs namenode -format -nonInteractive
-
-# Start NameNode daemon and DataNode daemon
 $HADOOP_HOME/sbin/start-dfs.sh 
 
 # Test:
@@ -16,9 +14,14 @@ $HADOOP_HOME/sbin/start-dfs.sh
 # hdfs dfs -mkdir -p /user/$USER
 # hdfs dfs -ls /
 
+# Start ResourceManager daemon and NodeManager daemon
+$HADOOP_HOME/sbin/start-yarn.sh 
+# ResourceManager - http://localhost:8088/
+
 # hdfs dfs 所有命令的相对路径是 /user/$USER
 # hdfs://localhost:9000/user/$USER/input
 # hdfs dfs -put etc/ input
+# hdfs dfs -rm -r output
 # hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.0.jar grep input output 'jdk[0-9._]+'
 # 使用绝对路径
 # hdfs dfs -cat /user/lidong8/output/*
