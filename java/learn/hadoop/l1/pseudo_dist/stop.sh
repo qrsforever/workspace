@@ -7,3 +7,5 @@ then
 fi
 
 $HADOOP_HOME/sbin/stop-dfs.sh 
+
+# 最后执行 ../../post-stop.sh

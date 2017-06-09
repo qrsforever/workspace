@@ -6,6 +6,8 @@ then
     exit 0
 fi
 
+# 先执行 ../../pre-start.sh
+
 $HADOOP_HOME/bin/hdfs namenode -format -nonInteractive
 
 # Start NameNode daemon and DataNode daemon
