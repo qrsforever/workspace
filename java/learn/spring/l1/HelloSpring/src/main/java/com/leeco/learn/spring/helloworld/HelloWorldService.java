@@ -8,6 +8,7 @@ public class HelloWorldService {
 	}
 
 	public void setHelloWorld(HelloWorld helloWorld) {
+		System.out.println("setHeloWorld");
 		this.helloWorld = helloWorld;
 	}
 
