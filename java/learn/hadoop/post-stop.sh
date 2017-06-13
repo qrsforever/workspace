@@ -25,3 +25,4 @@ do
 done
 
 rm -rf $root/logs
+rm -f index.html

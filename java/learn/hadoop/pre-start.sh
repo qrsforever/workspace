@@ -42,3 +42,4 @@ then
 fi
 
 ln -s $curdir/logs $root/logs
+ln -s $root/share/doc/hadoop/index.html index.html
