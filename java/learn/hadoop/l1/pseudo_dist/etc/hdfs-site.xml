@@ -18,6 +18,7 @@
 
 <configuration>
     <property>
+        <!-- 单独一个数据节点 设置为1， 默认为3 -->
         <name>dfs.replication</name>
         <value>1</value>
     </property>
