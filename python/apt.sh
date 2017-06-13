@@ -46,7 +46,13 @@ sudo pip install cython
 sudo apt-get -y install swig
 
 # 数据分析
-sudo apt-get -y python-pandas
+sudo apt-get -y install python-pandas
+
+#机器学习
+sudo pip install sklearn-pandas
+
+#文本处理工具
+sudo pip install gensim
 
 # 工具套装ETS
 sudo apt-get -y install libxtst-dev scons python-vtk pyqt4-dev-tools 
@@ -85,5 +91,14 @@ sudo apt-get -y install python3-tk
 sudo apt-get -y install python3-numpy
 sudo apt-get -y install python3-scipy
 sudo apt-get -y install python3-matplotlib
+sudo apt-get -y install python3-pandas
 
 sudo pip3 install pylint flake8 pyflakes
+
+#机器学习
+sudo pip3 install sklearn-pandas
+
+#文本处理工具
+sudo pip3 install gensim
+
+# pip3 list

@@ -3,6 +3,8 @@
 
 import numpy as np
 
+#  [[0 1 2 3 4]
+#   [5 6 7 8 9]]
 a = np.arange(10).reshape(2, 5)
 print(a)
 
@@ -28,3 +30,9 @@ print(h)
 
 i = d[0][0]
 print(i)
+
+# [ True False False  True]
+j = np.array(['aa', 'bb', 'cc', 'aa'])
+k = (j == 'aa')
+print(k)
+
