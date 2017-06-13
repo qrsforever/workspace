@@ -63,7 +63,7 @@ def ftp_get_data(tid, n, step):
                 formatdoc = "ish-format-document.pdf"
                 doc = output + "/" + formatdoc
                 if not os.path.exists(doc):
-                   with open(doc) as f:
+                   with open(doc, "wb") as f:
                        ftp.retrbinary("RETR " + formatdoc, f.write, 1024)
                 break
         except Exception as err:
