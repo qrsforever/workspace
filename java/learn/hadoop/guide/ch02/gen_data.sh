@@ -10,6 +10,12 @@ then
     exit 0
 fi
 
+if [[ -f bj_data.txt ]]
+then
+    echo "Alreay exists."
+    exit 0
+fi
+
 start_year=2000
 
 for year in `ls $factory_dir/bj`
