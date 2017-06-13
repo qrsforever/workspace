@@ -1,2 +1,2 @@
 # workspace
-my learning and projects
+个人学习及练习平台
