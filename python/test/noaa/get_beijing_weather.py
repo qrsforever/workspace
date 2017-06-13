@@ -11,7 +11,7 @@ import threading
 from ftplib import FTP  
 from time import sleep
 
-def ftp_get_data(n, step):
+def ftp_get_data(tid, n, step):
     # year: 1901 - 2017
     #  pattern = r"[12][09][0-9]{2}"
     start = n
@@ -46,14 +46,14 @@ def ftp_get_data(n, step):
                     result = match_year.match(name)
                     if result is not None:
                         for gzfile in ftp.nlst(name):
-                            print(gzfile)
+                            print("[thread-{}] check {}".format(tid, gzfile))
                             ret = re.search(bj_id, gzfile)
                             if ret is None:
                                 continue
                             year_dir = output + "/" + name
                             if not os.path.exists(year_dir):
                                 os.mkdir(year_dir)
-                            print("Downloading ", gzfile)
+                            print("[thread-{}]Downloading:{} ".format(tid, gzfile))
                             outfile = output + "/" + gzfile
                             if os.path.exists(outfile):
                                 continue
@@ -61,7 +61,7 @@ def ftp_get_data(n, step):
                                 ftp.retrbinary("RETR " + gzfile, f.write, 2048)
                 # 下载气候文件格式说明文档
                 formatdoc = "ish-format-document.pdf"
-                doc = output + formatdoc
+                doc = output + "/" + formatdoc
                 if not os.path.exists(doc):
                    with open(doc) as f:
                        ftp.retrbinary("RETR " + formatdoc, f.write, 1024)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     step = 5
     nloops = range(0, 9, step)
     for i in nloops:
-       t = threading.Thread(target=ftp_get_data, args = (i, step))
+       t = threading.Thread(target=ftp_get_data, args = (i, i, step))
        threads.append(t)
     for t in threads:
        t.start()
