@@ -13,7 +13,13 @@ then
     rm -rf output
 fi
 
-hadoop MaxTemperature ../bj_data.txt output
+data_file=../bj_data.txt
+
+cd ../
+./gen_data.sh
+cd -
+
+hadoop MaxTemperature $data_file output
 
 if [[ -f output/part-r-00000 ]]
 then

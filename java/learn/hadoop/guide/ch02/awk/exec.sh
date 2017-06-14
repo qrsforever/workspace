@@ -2,6 +2,10 @@
 
 data_file=../bj_data.txt
 
+cd ../
+./gen_data.sh
+cd -
+
 cat $data_file | \
     awk '{
             temp = substr($0, 88, 5) + 0;

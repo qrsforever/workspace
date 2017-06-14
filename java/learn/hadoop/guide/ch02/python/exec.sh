@@ -1,3 +1,9 @@
 #!/bin/bash
 
-cat ../bj_data.txt | ./map.py | sort | ./reduce.py
+data_file=../bj_data.txt
+
+cd ../
+./gen_data.sh
+cd -
+
+cat $data_file | ./map.py | sort | ./reduce.py
