@@ -8,8 +8,6 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-    # 启动的虚拟box (hadoopv2 是执行vagrant box add hadoopv2 /path)
-    node.vm.box = "hadoopv2"
 
     # 启动超时100秒
     config.vm.boot_timeout = 100
@@ -25,6 +23,8 @@ Vagrant.configure("2") do |config|
 
     (1..5).each do |i|
         config.vm.define "node#{i}" do |node|
+            # 启动的虚拟box
+            node.vm.box = "hadoopv2"
 
             # 主机名
             node.vm.hostname = "node#{i}"
@@ -47,10 +47,6 @@ Vagrant.configure("2") do |config|
         end
     end
 
-    # 共享目录, 先保证当前路径下又vagrant目录
-    # config.vm.synced_folder "vagrant", "/home/lidong/hadoop", owner: "lidong", group: "lidong"
-
-    # config.vm.provision "shell", inline: "hadoop/remote_script.sh"
-    # 保证vagrant/script.sh
-    # config.vm.provision "shell", path: "vagrant/script.sh"
+    config.vm.synced_folder "remote", "/home/lidong/hadoop", owner: "lidong", group: "lidong"
+    config.vm.provision "shell", path: "remote/script.sh"
 end

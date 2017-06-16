@@ -28,11 +28,17 @@
 # cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
 # ssh-copy-id -i $HOME/.ssh/id_rsa.pub lidong8@192.168.1.201 or (slave)
 
-# 配置remote
-echo "ssh slave 'mkdir -p ~/hadoop/edureka/etc/' "
-echo "scp etc/remote/* slave:~/hadoop/edureka/etc"
-echo "scp ../pre-start.sh slave:~/hadoop"
-echo "scp ../post-stop.sh slave:~/hadoop"
+echo -e "\n"
+
+#废除(配置remote),  使用vagrant搭建智能环境
+# echo "ssh slave 'mkdir -p ~/hadoop/edureka/etc/' "
+# echo "scp etc/remote/* slave:~/hadoop/edureka/etc"
+# echo "scp ../pre-start.sh slave:~/hadoop"
+# echo "scp ../post-stop.sh slave:~/hadoop"
+
+# 本机上所有的vm机到install在/system/vagrant, 多个工程共享
+echo "export VAGRANT_DOTFILE_PATH=/system/vagrant"
+echo "vagrant up node1"
 
 echo -e "\n"
 echo "../pre-start.sh"
@@ -47,5 +53,7 @@ echo -e "\n"
 
 echo "$HADOOP_HOME/sbin/stop-dfs.sh"
 echo "$HADOOP_HOME/sbin/stop-yarn.sh"
+echo "vagrant halt node1"
+
 echo -e "\n"
 echo "../post-stop.sh"
