@@ -11,12 +11,12 @@
 # sudo useradd -m lidong8 -s /bin/bash
 # sudo passwd lidong8 # passwd:1
 
-# 设置master slave hosts
+# 设置master node1 hosts
 # /etc/hosts
 # 192.168.1.102  	master
-# 192.168.1.201  	slave
+# 192.168.1.201  	node1
 
-# slave: cat /etc/network/interfaces
+# node1: cat /etc/network/interfaces
 # iface enp0s3 inet static
 # address 192.168.1.201
 # gateway 192.168.1.1
@@ -26,13 +26,19 @@
 
 # ssh-keygen -t rsa -P ""
 # cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-# ssh-copy-id -i $HOME/.ssh/id_rsa.pub lidong8@192.168.1.201 or (slave)
+# ssh-copy-id -i $HOME/.ssh/id_rsa.pub lidong8@192.168.1.201 or (node1)
 
-# 配置remote
-echo "ssh slave 'mkdir -p ~/hadoop/edureka/etc/' "
-echo "scp etc/remote/* slave:~/hadoop/edureka/etc"
-echo "scp ../pre-start.sh slave:~/hadoop"
-echo "scp ../post-stop.sh slave:~/hadoop"
+echo -e "\n"
+
+#废除(配置remote),  使用vagrant搭建智能环境
+# echo "ssh node1 'mkdir -p ~/hadoop/edureka/etc/' "
+# echo "scp etc/remote/* node1:~/hadoop/edureka/etc"
+# echo "scp ../pre-start.sh node1:~/hadoop"
+# echo "scp ../post-stop.sh node1:~/hadoop"
+
+# 本机上所有的vm机到install在/system/vagrant, 多个工程共享
+echo "export VAGRANT_DOTFILE_PATH=/system/vagrant"
+echo "vagrant up node1"
 
 echo -e "\n"
 echo "../pre-start.sh"
@@ -47,5 +53,7 @@ echo -e "\n"
 
 echo "$HADOOP_HOME/sbin/stop-dfs.sh"
 echo "$HADOOP_HOME/sbin/stop-yarn.sh"
+echo "vagrant halt node1"
+
 echo -e "\n"
 echo "../post-stop.sh"

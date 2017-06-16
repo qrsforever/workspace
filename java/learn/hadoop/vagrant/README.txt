@@ -7,6 +7,21 @@ sudo apt-get install linux-headers-$(uname -r) build-essential dkms
 sudo mount /dev/cdrom /media/cdrom
 sudo sh /media/cdrom/VBoxLinuxAdditions.run
 
+# 配置sudo免密权限
+# vi /etc/sudoers
+# lidong	ALL=(ALL:ALL) NOPASSWD:ALL
+# %lidong	ALL=(ALL:ALL) NOPASSWD:ALL
+
+# 给root用户加密码(1)
+# sudo passwd root
+
+# 删除防火墙
+# sudo apt-get remove iptables
+# or 
+# sudo ufw disable
+# or 
+# sudo iptables -P INPUT ACCEPT; sudo iptables -P FORWARD ACCEPT; sudo iptables -P OUTPUT ACCEPT; sudo iptables -F
+
 # 配置一个NAT网络(vagrant)， 一个桥接网络
 
 # Host机, 从VirtualBox导出
@@ -40,3 +55,18 @@ sudo sh /media/cdrom/VBoxLinuxAdditions.run
 # vagrant up node1
 # 启动2个
 # vagrant up node1 node2
+
+# 显示状态
+vagrant status [node1|node2|node3]
+
+# 重启并执行provision （比如 shell）
+# vagrant reload --provision
+
+# 启动执行provision， 当需要重新需要在vm机执行脚本时，很方便
+# vagrant up --provision node1
+
+# 环境变量：
+# 修改配置文件的名字
+# VAGRANT_VAGRANTFILE 
+# 找一个大的硬盘存放
+# export VAGRANT_DOTFILE_PATH = /system/vagrant
