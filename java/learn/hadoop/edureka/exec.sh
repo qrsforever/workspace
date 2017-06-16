@@ -16,6 +16,14 @@
 # 192.168.1.102  	master
 # 192.168.1.201  	slave
 
+# slave: cat /etc/network/interfaces
+# iface enp0s3 inet static
+# address 192.168.1.201
+# gateway 192.168.1.1
+# netmask 255.255.255.0
+# network 192.168.1.0
+# broadcast 192.168.1.255
+
 # ssh-keygen -t rsa -P ""
 # cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
 # ssh-copy-id -i $HOME/.ssh/id_rsa.pub lidong8@192.168.1.201 or (slave)
