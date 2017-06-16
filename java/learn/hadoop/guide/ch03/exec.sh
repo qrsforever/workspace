@@ -39,7 +39,6 @@ fi
 if [[ x$arg == x0 ]]
 then
     rm -f $datafile
-    rm -rf bin logs target
     stop-dfs.sh
     ../../post-stop.sh
 fi
