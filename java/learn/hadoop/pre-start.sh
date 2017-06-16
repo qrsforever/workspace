@@ -8,11 +8,16 @@ fi
 
 root=$HADOOP_HOME 
 curdir=`pwd`
-files=`ls etc`
+files=`ls etc/ 2>/dev/null`
 
 # 软链接配置
 for file in $files
 do
+    if [[ -d $file ]]
+    then
+        # 文件目录skip
+        continue
+    fi
     echo "$file"
     if [[ -f $root/etc/hadoop/$file ]]
     then
@@ -42,4 +47,3 @@ then
 fi
 
 ln -s $curdir/logs $root/logs
-ln -s $root/share/doc/hadoop/index.html index.html

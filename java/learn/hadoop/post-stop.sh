@@ -15,14 +15,21 @@ for file in $files
 do
     if [[ -L $root/etc/hadoop/$file ]]
     then
+        rm -f $root/etc/hadoop/$file
         if [[ -f $root/etc/hadoop/${file}.bak ]]
         then
             echo $file
             mv $root/etc/hadoop/${file}.bak $root/etc/hadoop/$file
         fi
-        rm -f $root/etc/hadoop/$file
     fi
 done
 
-rm -rf $root/logs
-rm -f index.html
+if [[ -L $root/logs ]]
+then
+    rm -f $root/logs
+fi
+
+if [[ -d logs ]]
+then
+    rm -rf logs
+fi
