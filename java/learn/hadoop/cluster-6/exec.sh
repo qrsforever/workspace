@@ -18,6 +18,7 @@ echo "vagrant up node1 node2 node3 node4 node5"
 export HADOOP_HOME=/data/opt/hadoop/hadoop-2.8.0
 export REMOTE_DIR=$PWD/remote
 
+# master机 Hadoop配置
 cd $HADOOP_HOME
 
 if [[ ! -f etc.tar.gz ]]
