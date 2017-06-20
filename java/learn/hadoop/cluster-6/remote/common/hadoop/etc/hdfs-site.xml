@@ -44,7 +44,7 @@
     <!--这是JournalNode进程保持逻辑状态的路径。这是在linux服务器文件的绝对路径-->
     <property>
       <name>dfs.journalnode.edits.dir</name>
-      <value>/home/lidong/tmp/hadoop/journal/</value>
+      <value>/home/lidong/workspace/hadoop/journal/</value>
     </property>
 
     <!-- 开启namenode失败后自动切换 -->

@@ -3,7 +3,7 @@
     <!-- 指定hadoop运行时产生文件的存储路径 -->
     <property>
         <name>hadoop.tmp.dir</name>
-        <value>/home/lidong/tmp/hadoop</value>
+        <value>/home/lidong/workspace/hadoop/tmp</value>
     </property>
 
     <!-- 指定hdfs的nameservice为ns1 -->

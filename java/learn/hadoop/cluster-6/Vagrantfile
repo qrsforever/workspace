@@ -47,24 +47,24 @@ Vagrant.configure("2") do |config|
 
             if File.directory?("remote/node#{i}/zookeeper")
                 node.vm.provision "shell", inline: <<-SHELL
-                    if [[ ! -d zookeeper ]]
+                    if [[ ! -d nfs/zookeeper ]]
                     then
-                        mkdir -p zookeeper
-                        chown lidong:lidong zookeeper
+                        mkdir -p nfs/zookeeper
+                        chown lidong:lidong nfs/zookeeper
                     fi
                 SHELL
-                node.vm.synced_folder "remote/node#{i}/zookeeper", "/home/lidong/zookeeper", owner: "lidong", group: "lidong"
+                node.vm.synced_folder "remote/node#{i}/zookeeper", "/home/lidong/nfs/zookeeper", owner: "lidong", group: "lidong"
             end
 
             if File.directory?("remote/node#{i}/hadoop")
                 node.vm.provision "shell", inline: <<-SHELL
-                    if [[ ! -d hadoop ]]
+                    if [[ ! -d nfs/hadoop ]]
                     then
-                        mkdir -p hadoop
-                        chown lidong:lidong hadoop
+                        mkdir -p nfs/hadoop
+                        chown lidong:lidong nfs/hadoop
                     fi
                 SHELL
-                node.vm.synced_folder "remote/node#{i}/hadoop", "/home/lidong/handoop", owner: "lidong", group: "lidong"
+                node.vm.synced_folder "remote/node#{i}/hadoop", "/home/lidong/nfs/handoop", owner: "lidong", group: "lidong"
             end
 
             # 远端node执行脚本 (path 方式执行时间上先与inline)
@@ -79,12 +79,12 @@ Vagrant.configure("2") do |config|
 
     if File.directory?("remote/common")
         config.vm.provision "shell", inline: <<-SHELL
-            if [[ ! -d common ]]
+            if [[ ! -d nfs/common ]]
                 then
-                    mkdir -p common
-                    chown lidong:lidong common
+                    mkdir -p nfs/common
+                    chown lidong:lidong nfs/common
                 fi
         SHELL
-        config.vm.synced_folder "remote/common", "/home/lidong/common", owner: "lidong", group: "lidong"
+        config.vm.synced_folder "remote/common", "/home/lidong/nfs/common", owner: "lidong", group: "lidong"
     end
 end
