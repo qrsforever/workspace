@@ -106,7 +106,7 @@ __do_hadoop $hn
 if [ $hn == "node3" -o $hn == "node4" -o $hn == "node5" ]
 then
     __do_zookeeper $hn
-    $ZOOKEEPER_HOME/bin/zkServer.sh restart
-    $HADOOP_HOME/sbin/hadoop-daemon.sh stop journalnode
-    $HADOOP_HOME/sbin/hadoop-daemon.sh start journalnode
+    # $ZOOKEEPER_HOME/bin/zkServer.sh restart
+    # $HADOOP_HOME/sbin/hadoop-daemon.sh stop journalnode
+    # $HADOOP_HOME/sbin/hadoop-daemon.sh start journalnode
 fi

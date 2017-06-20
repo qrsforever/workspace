@@ -3,14 +3,13 @@
 # 参考
 # http://blog.csdn.net/uq_jin/article/details/51487439
 
-# master: /etc/hosts
-# 192.168.1.102     master
-# 192.168.1.201     node1
-# 192.168.1.202     node2
-# 192.168.1.203     node3
-# 192.168.1.204     node4
-# 192.168.1.205     node5
-# 192.168.1.206     node6
+# 主机名	      ip	          安装的软件	            进程
+# master	192.168.1.102	jdk、hadoop	            NN、DFSZKFailoverController
+# node1	    192.168.1.201	jdk、hadoop	            NN、DFSZKFailoverController
+# node2	    192.168.1.202	jdk、hadoop	            RM
+# node3	    192.168.1.203	jdk、hadoop、zookeeper	DN、NM、journalnode
+# node4	    192.168.1.204	jdk、hadoop、zookeeper	DN、NM、journalnode
+# node5	    192.168.1.205	jdk、hadoop、zookeeper	DN、NM、journalnode
 
 # 拷贝公钥到其他机器
 # ssh-copy-id ip
