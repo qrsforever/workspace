@@ -27,6 +27,7 @@
             <!-- classifier从top-meta继承不下来 -->
             <classifier>hadoop2</classifier>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -120,8 +121,13 @@
                                 </java>
                             </target>
                             <target name="hadoop">
+                                <delete dir="output" />
                                 <exec dir="." executable="hadoop">
-
+                                    <arg value = "jar" />
+                                    <arg value = "${project.build.directory}/${artifactId}-${version}.jar" />
+                                    <arg value = "${groupId}.AvroGenericMaxTemperature" />
+                                    <arg value = "sample.txt" />
+                                    <arg value = "output" />
                                 </exec>
                             </target>
                         </configuration>
@@ -141,11 +147,12 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.java.learn.App</mainClass>
+                            <!-- 临时去掉， 影响hadoop执行 -->
+                            <!-- <mainClass>com.java.learn.App</mainClass> -->
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
+            </plugin>  
         </plugins>
     </build>
 
