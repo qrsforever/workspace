@@ -89,7 +89,7 @@
                 <executions>
                     <execution>
                         <!-- 唯一标识 -->
-                        <id>antgo</id>
+                        <id>ant-exec1</id>
                         <!-- 执行mvn package后会执行java目标 -->
                         <phase>package</phase>
                         <configuration>
@@ -120,6 +120,18 @@
                                     </classpath>
                                 </java>
                             </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <!-- 唯一标识 -->
+                        <id>ant-exec2</id>
+                        <!-- 执行mvn package后会执行java目标 -->
+                        <phase>package</phase>
+                        <configuration>
                             <target name="hadoop">
                                 <delete dir="output" />
                                 <exec dir="." executable="hadoop">
