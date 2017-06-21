@@ -84,6 +84,15 @@ sudo pip install tox pytest
 # 代码规范 需要vpn
 sudo pip install flake8
 
+# avro 序列化反序列化
+sudo pip install avro
+
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+
 sudo apt-get -y install python3-dev
 sudo apt-get -y install python3-pip
 sudo apt-get -y install python3-tk
@@ -100,5 +109,8 @@ sudo pip3 install sklearn-pandas
 
 #文本处理工具
 sudo pip3 install gensim
+
+# avro 序列化反序列化
+sudo pip3 install avro
 
 # pip3 list
