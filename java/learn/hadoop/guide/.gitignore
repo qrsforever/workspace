@@ -1,4 +1,5 @@
 **/bin
 **/hdfs
 **/target
+ch12/learn-avro/employees.avro
 ch02/bj_data.txt

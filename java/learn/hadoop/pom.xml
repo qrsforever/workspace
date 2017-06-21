@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.java.learn</groupId>
+        <artifactId>top-meta</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../project/mvn/pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.java.learn</groupId>
+    <artifactId>hadoop-meta</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <name>hadoop-meta</name>
+
+    <dependencies>
+        <!-- 版本等信息继承parent pom -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

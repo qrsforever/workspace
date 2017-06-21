@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.java.learn</groupId>
+        <artifactId>hadoop-meta</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.java.learn</groupId>
+    <artifactId>learn-avro</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>learn-avro</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-mapred</artifactId>
+            <!-- classifier从top-meta继承不下来 -->
+            <classifier>hadoop2</classifier>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>schemas</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>employee.avsc</include>
+                            </includes>
+                            <stringType>String</stringType>
+                            <sourceDirectory>src/main/resources</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources/java
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 运行 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- 执行mvn compile后执行main函数 -->
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration/>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 执行 mvn exec:java 若此处注释掉执行:mvn exec:java -Dexec.mainClass="com.java.learn.App" -Dexec.args="" -->
+                    <mainClass>com.java.learn.App</mainClass>
+                    <arguments>
+                        <argument>See antrun</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+
+            <!-- anttask -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- 唯一标识 -->
+                        <id>antgo</id>
+                        <!-- 执行mvn package后会执行java目标 -->
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="run">
+                                <!-- <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                   - <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                                   - <property name="test_classpath" refid="maven.test.classpath"/>
+                                   - <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                   - <echo message="compile classpath: ${compile_classpath}"/>
+                                   - <echo message="runtime classpath: ${runtime_classpath}"/>
+                                   - <echo message="test classpath:    ${test_classpath}"/>
+                                   - <echo message="plugin classpath:  ${plugin_classpath}"/> -->
+                                <echo message="======> run App.class"/>
+                                <java fork="flase" classname="com.java.learn.App">
+                                    <classpath>
+                                        <path refid="maven.runtime.classpath"/>
+                                    </classpath>
+                                </java>
+                                <echo message="======> run GenerateDataWithoutCode.class"/>
+                                <java fork="flase" classname="com.java.learn.GenerateDataWithoutCode">
+                                    <classpath>
+                                        <path refid="maven.runtime.classpath"/>
+                                    </classpath>
+                                </java>
+                                <java fork="flase" classname="com.java.learn.DeserializeWithoutCode">
+                                    <classpath>
+                                        <path refid="maven.runtime.classpath"/>
+                                    </classpath>
+                                </java>
+                                
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 打包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.java.learn.App</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

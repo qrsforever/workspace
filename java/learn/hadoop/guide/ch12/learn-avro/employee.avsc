@@ -1,0 +1,11 @@
+{ "type": "record",
+  "name": "Employee_Record",
+  "namespace": "example.avro",
+  "fields" : [
+              {"name": "name", "type": "string"},
+              {"name": "joining_date", "type": "string"},
+              {"name": "role", "type": "string"},
+              {"name": "dept", "type": ["null", "string"]},
+              {"name": "salary", "type": "float"}
+             ]
+}
