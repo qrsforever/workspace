@@ -118,7 +118,11 @@
                                         <path refid="maven.runtime.classpath"/>
                                     </classpath>
                                 </java>
-                                
+                            </target>
+                            <target name="hadoop">
+                                <exec dir="." executable="hadoop">
+
+                                </exec>
                             </target>
                         </configuration>
                         <goals>
