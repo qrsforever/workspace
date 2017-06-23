@@ -2,10 +2,6 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- <modules> -->
-        <!-- <module>../guide/common</module> -->
-    <!-- </modules> -->
-
     <parent>
         <groupId>com.java.learn</groupId>
         <artifactId>hadoop-meta</artifactId>
@@ -25,15 +21,17 @@
     </properties>
 
     <dependencies>
-        <!-- <dependency> -->
-            <!-- <groupId>com.java.learn</groupId> -->
-            <!-- <artifactId>common</artifactId> -->
-            <!-- <version>1.0.0</version> -->
-        <!-- </dependency> -->
+        <dependency>
+            <groupId>com.java.learn</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
@@ -92,3 +90,4 @@
         </plugins>
     </build>
 </project>
+

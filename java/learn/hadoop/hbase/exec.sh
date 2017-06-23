@@ -26,6 +26,13 @@ fi
 
 cd -
 
+# 公共库编译
+# cd ../guide/common
+# mvn compile
+# mvn package
+# mvn install
+# cd -
+
 # 启动hbase
 start-hbase.sh
 

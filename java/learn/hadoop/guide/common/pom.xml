@@ -2,16 +2,19 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.java.learn</groupId>
-        <artifactId>hadoop-meta</artifactId>
-        <version>1.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
-
     <groupId>com.java.learn</groupId>
     <artifactId>common</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0</version>
     <name>Common Code</name>
+
+    <dependencies>
+        <!-- 版本等信息继承parent pom -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+    </dependencies>
+
 </project>
