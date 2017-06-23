@@ -132,7 +132,7 @@
                         <!-- 执行mvn package后会执行java目标 -->
                         <phase>package</phase>
                         <configuration>
-                            <target name="hadoop">
+                            <target name="run hadoop">
                                 <delete dir="output" />
                                 <exec dir="." executable="hadoop">
                                     <arg value = "jar" />

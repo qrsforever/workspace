@@ -17,13 +17,13 @@ __exec__()
     hadoop jar target/learn-avro-1.0.0.jar com.java.learn.AvroGenericMaxTemperature sample.txt output
 }
 
-# cd $HADOOP_HOME
-# if [[ -f etc.tar.gz ]]
-# then
-#     rm -rf etc
-#     tar zxf etc.tar.gz 
-# fi
-# cd -
+cd $HADOOP_HOME
+if [[ -f etc.tar.gz ]]
+then
+    rm -rf etc
+    tar zxf etc.tar.gz 
+fi
+cd -
 
 if [ x$proname == x"exec.sh" ]
 then

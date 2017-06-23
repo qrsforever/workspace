@@ -1,2 +1,6 @@
 学习网:
 http://hadooptutorial.info/
+
+数据库 行vs列
+https://www.ibm.com/developerworks/community/blogs/IBMi/entry/database?lang=en
+
