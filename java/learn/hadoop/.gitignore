@@ -1,3 +1,5 @@
 logs
 output
+avro/employees.avro
+avro/target
 **/.vagrant
