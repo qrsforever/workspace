@@ -5,6 +5,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FirstKeyOnlyFilter;
+// import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
@@ -35,7 +36,10 @@ public class SimpleRowCounter extends Configured implements Tool {
         }
         String tableName = args[0];
         Scan scan = new Scan();
+        // 返回的结果集中只包含第一列的数据
         scan.setFilter(new FirstKeyOnlyFilter());
+        // 返回每行的行键，值全部为空
+        // scan.setFilter(new KeyOnlyFilter());
 
         // 设置作业的类 Hadoop会根据这个类找到其所在的jar包
         // getConf <== HBaseConfiguration.create()
