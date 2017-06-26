@@ -46,7 +46,6 @@
                 <configuration>
                     <excludes>
                         <exclude>**/App.java</exclude>
-                        <exclude>**/HBaseStation*.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -60,6 +59,7 @@
                         <phase>package</phase>
                         <configuration>
                             <target name="run:ExampleClient">
+                                <echo message=">>>>>>>>>> HBase表(test)的基本操作"/>
                                 <exec dir="." executable="hbase">
                                     <arg value = "${project.groupId}.ExampleClient" />
                                 </exec>
@@ -75,9 +75,78 @@
                         <phase>package</phase>
                         <configuration>
                             <target name="run:SimpleRowCounter">
+                                <echo message=">>>>>>>>>> Scan HBase表(test)， 计算行号"/>
                                 <exec dir="." executable="hbase">
                                     <arg value = "${project.groupId}.SimpleRowCounter" />
                                     <arg value = "test" />
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <!-- <goal>run</goal> -->
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>ant-run-3</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="run:HBaseStationImporter">
+                                <echo message=">>>>>>>>>> 将数据导入到HBase表(stations)中"/>
+                                <exec dir="." executable="hbase">
+                                    <arg value = "${project.groupId}.HBaseStationImporter" />
+                                    <arg value = "../guide/input/ncdc/metadata/stations-fixed-width.txt" />
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <!-- <goal>run</goal> -->
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>ant-run-4</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="run:HBaseTemperatureImporter">
+                                <echo message=">>>>>>>>>> 将数据导入HBase表(observations)之前进行map处理"/>
+                                <exec dir="." executable="hbase">
+                                    <arg value = "${project.groupId}.HBaseTemperatureImporter" />
+                                    <arg value = "../guide/input/ncdc/all" />
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <!-- <goal>run</goal> -->
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>ant-run-5</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="run:HBaseStationQuery">
+                                <echo message=">>>>>>>>>> 从HBase表(stations)查询数据Key=011990-99999"/>
+                                <exec dir="." executable="hbase">
+                                    <arg value = "${project.groupId}.HBaseStationQuery" />
+                                    <arg value = "011990-99999" />
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <!-- <goal>run</goal> -->
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>ant-run-6</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target name="run:HBaseTemperatureQuery.">
+                                <echo message=">>>>>>>>>> 从HBase表(observations)查询数据Key=011990-99999站点的温度"/>
+                                <exec dir="." executable="hbase">
+                                    <arg value = "${project.groupId}.HBaseTemperatureQuery" />
+                                    <arg value = "011990-99999" />
                                 </exec>
                             </target>
                         </configuration>

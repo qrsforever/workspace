@@ -27,7 +27,7 @@
 export JAVA_HOME=/opt/jdk
 
 # Extra Java CLASSPATH elements.  Optional.
-export HBASE_CLASSPATH=target/learn-hbase-1.0.0.jar
+export HBASE_CLASSPATH=../guide/common/target/common-1.0.0.jar:target/learn-hbase-1.0.0.jar
 
 # The maximum amount of heap to use. Default is left to JVM default.
 # export HBASE_HEAPSIZE=1G

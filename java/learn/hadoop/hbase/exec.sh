@@ -27,11 +27,13 @@ fi
 cd -
 
 # 公共库编译
+echo "Check common jar compile"
 # cd ../guide/common
 # mvn compile
 # mvn package
 # mvn install
 # cd -
+# 修改hbase-evn.sh append: ../guide/common/target/common-1.0.0.jar 
 
 # 启动hbase
 start-hbase.sh
@@ -52,6 +54,10 @@ start-hbase.sh
 # drop 'test'
 # list
 # quit
+
+# create 'stations', {NAME => 'info'}
+# create 'observations', {NAME => 'data'}
+
 # ============================== HBASE SHELL ===============
 
 # mvn package

@@ -41,6 +41,7 @@ public class SimpleRowCounter extends Configured implements Tool {
         // getConf <== HBaseConfiguration.create()
         Job job = Job.getInstance(getConf(), getClass().getSimpleName());
         job.setJarByClass(getClass());
+        // scan Hbase表， 输出Key-Value : ImmutableBytesWritable - Result 
         TableMapReduceUtil.initTableMapperJob(tableName, scan,
                 RowCounterMapper.class, ImmutableBytesWritable.class, Result.class, job);
         job.setNumReduceTasks(0);
