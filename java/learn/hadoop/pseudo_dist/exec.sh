@@ -19,6 +19,8 @@ rm etc -rf
 tar zxf etc.tar.gz
 cp -aprf $cur_dir/etc/* etc/hadoop/
 
+cd -
+
 $HADOOP_HOME/bin/hdfs namenode -format -nonInteractive
 
 # Start NameNode daemon and DataNode daemon

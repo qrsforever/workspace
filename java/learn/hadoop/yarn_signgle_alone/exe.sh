@@ -19,6 +19,8 @@ rm etc -rf
 tar zxf etc.tar.gz
 cp -aprf $cur_dir/etc/* etc/hadoop/
 
+cd -
+
 $HADOOP_HOME/bin/hdfs namenode -format -nonInteractive
 $HADOOP_HOME/sbin/start-dfs.sh 
 
@@ -42,5 +44,5 @@ $HADOOP_HOME/sbin/start-yarn.sh
 # hdfs dfs -cat output/*
 # hdfs dfs -get output
 
-$HADOOP_HOME/sbin/stop-yarn.sh 
-$HADOOP_HOME/sbin/stop-dfs.sh 
+# $HADOOP_HOME/sbin/stop-yarn.sh 
+# $HADOOP_HOME/sbin/stop-dfs.sh 
