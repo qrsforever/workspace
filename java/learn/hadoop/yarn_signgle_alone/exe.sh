@@ -6,7 +6,18 @@ then
     exit 0
 fi
 
-# 先执行 ../../pre-start.sh
+cur_dir=`pwd`
+
+cd $HADOOP_HOME
+
+if [[ ! -f etc.tar.gz ]]
+then
+    tar zcf etc.tar.gz etc
+fi
+
+rm etc -rf
+tar zxf etc.tar.gz
+cp -aprf $cur_dir/etc/* etc/hadoop/
 
 $HADOOP_HOME/bin/hdfs namenode -format -nonInteractive
 $HADOOP_HOME/sbin/start-dfs.sh 
@@ -30,3 +41,6 @@ $HADOOP_HOME/sbin/start-yarn.sh
 # 使用工作路径
 # hdfs dfs -cat output/*
 # hdfs dfs -get output
+
+$HADOOP_HOME/sbin/stop-yarn.sh 
+$HADOOP_HOME/sbin/stop-dfs.sh 
