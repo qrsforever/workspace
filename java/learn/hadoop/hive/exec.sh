@@ -12,9 +12,10 @@ dtype=mysql
 if [[ x$1 != x ]]
 then
     dtype=derby
-if
+fi
 
 cur_dir=`pwd`
+
 
 cd $HADOOP_HOME
 
@@ -49,9 +50,16 @@ $HADOOP_HOME/sbin/start-dfs.sh
 
 # schema模式版本校验
 echo "====================> dbtype: $dtype"
+
+# mysql创建/删除数据库 (initSchema 会自动创建)
+# mysql -uroot -p123456 -h localhost -e "create database hive"
+# 如果mysql方式有问题， 需要删除hive数据库，重新初始化
+# mysql -uroot -p123456 -h localhost -e "drop database hive"
 # derby：单实例， 不能存在多个hive实例
-# 这个第一次必须执行
+# 初始化数据库
 schematool -initSchema -dbType $dtype
+# 查看初始化结果
+schematool -info -dbType $dtype
 
 # lean-1
 
@@ -76,3 +84,28 @@ schematool -initSchema -dbType $dtype
 # hive> set; 
 # 查看单一个属性，如job引擎
 # set hive.execution.engine;
+
+# learn-4
+# hive> show functions
+# hive> describe function sum
+
+# learn-5
+mkdir tmp
+echo "3105007001,192.168.1.1" >  tmp/login.txt 
+echo "3105007002,192.168.1.2" >> tmp/login.txt 
+echo "3105007003,192.168.1.3" >  tmp/login2.txt 
+echo "3105007004,192.168.1.4" >> tmp/login2.txt 
+# hive -f src/main/hive/partition.sql
+
+echo "192.168.1.1,3105007001|3105007002|3105007003" >  tmp/login_array.txt 
+echo "192.168.1.2,3105007004|3105007005" >> tmp/login_array.txt 
+
+echo "192.168.1.1,aa:11|bb:22|cc:33" >  tmp/login_map.txt
+echo "192.168.1.2,aa:11|bb:22" >> tmp/login_map.txt
+
+echo "192.168.1.1,user1:0001" >  tmp/login_struct.txt
+echo "192.168.1.2,user2:0002" >> tmp/login_struct.txt
+
+echo "192.168.1.1,user1:0001|user2:0002|user3:0003" >  tmp/login_complex.txt
+echo "192.168.1.2,user1:0001" >> tmp/login_complex.txt
+# hive -f src/main/hive/complex.sql
