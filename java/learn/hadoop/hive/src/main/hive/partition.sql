@@ -1,3 +1,6 @@
+-- ============ partition: 粗粒度的划分
+
+
 -- 设置打印列名
 set hive.cli.print.header=true;
 

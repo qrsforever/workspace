@@ -54,6 +54,7 @@ echo "====================> dbtype: $dtype"
 # mysql创建/删除数据库 (initSchema 会自动创建)
 # mysql -uroot -p123456 -h localhost -e "create database hive"
 # 如果mysql方式有问题， 需要删除hive数据库，重新初始化
+# hive由javax.jdo.option.ConnectionURL路径指定
 mysql -uroot -p123456 -h localhost -e "drop database if exists hive"
 
 # derby：单实例， 不能存在多个hive实例
@@ -111,3 +112,26 @@ echo "192.168.1.2,user2:0002" >> tmp/login_struct.txt
 echo "192.168.1.1,user1:0001|user2:0002|user3:0003" >  tmp/login_complex.txt
 echo "192.168.1.2,user1:0001" >> tmp/login_complex.txt
 # hive -f src/main/hive/complex.sql
+
+# learn-6
+function random()
+{
+    min=$1;
+    max=$2-$1;
+    # %s:获得时间戳 %N:获得当前时间的纳秒数据，精确到亿分之一秒
+    # num=$(date +%s+%N);
+    num=$(date +%N);
+    ((retnum=num%max+min));
+    echo $retnum;
+}
+
+for i in {1..200}
+do
+    age=$(random 15 35)
+    if (( i < 100 ))
+    then
+        echo "$i,$age,20170620" >> tmp/login_bucket.txt
+    else
+        echo "$i,$age,20170621" >> tmp/login_bucket.txt
+    fi
+done
