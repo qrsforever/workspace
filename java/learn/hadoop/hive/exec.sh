@@ -54,7 +54,8 @@ echo "====================> dbtype: $dtype"
 # mysql创建/删除数据库 (initSchema 会自动创建)
 # mysql -uroot -p123456 -h localhost -e "create database hive"
 # 如果mysql方式有问题， 需要删除hive数据库，重新初始化
-# mysql -uroot -p123456 -h localhost -e "drop database hive"
+mysql -uroot -p123456 -h localhost -e "drop database if exists hive"
+
 # derby：单实例， 不能存在多个hive实例
 # 初始化数据库
 schematool -initSchema -dbType $dtype
@@ -90,6 +91,7 @@ schematool -info -dbType $dtype
 # hive> describe function sum
 
 # learn-5
+rm tmp -rf
 mkdir tmp
 echo "3105007001,192.168.1.1" >  tmp/login.txt 
 echo "3105007002,192.168.1.2" >> tmp/login.txt 
