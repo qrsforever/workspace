@@ -1,5 +1,6 @@
 <configuration>
     <!-- dfs.nameservices 命名空间的逻辑名称，多个用,分割 -->
+    <!-- 多个ns形成Federation -->
     <property>
       <name>dfs.nameservices</name>
       <value>ns1</value>

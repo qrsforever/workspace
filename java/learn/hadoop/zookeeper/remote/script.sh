@@ -64,9 +64,9 @@ ZOOKEEPER_HOME=/data/opt/zookeeper/zookeeper-3.4.10
 ZOOKEEPER_NFS=/home/lidong/nfs/zookeeper
 ZOOKEEPER_TDIR=$WS_DIR/zookeeper
 
-cd $ZOOKEEPER_HOME
-
 __do_zookeeper() {
+    cd $ZOOKEEPER_HOME
+
     if [[ ! -f conf.tar.gz ]]
     then
         tar zcf conf.tar.gz conf

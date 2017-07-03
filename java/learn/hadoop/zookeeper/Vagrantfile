@@ -10,7 +10,7 @@
 Vagrant.configure("2") do |config|
 
     # 启动的虚拟box
-    config.vm.box = "hadoopv3"
+    config.vm.box = "hadoop-vm"
 
     # 启动超时100秒
     config.vm.boot_timeout = 100

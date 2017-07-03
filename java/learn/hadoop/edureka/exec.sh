@@ -6,6 +6,9 @@
 # sudo iptables -P INPUT ACCEPT
 # sudo iptables -P OUTPUT ACCEPT
 
+# selinux: /etc/selinux/config
+# SELINUX=permissive
+
 # hadoop的安装路径也必须一致
 # master 和 slave 的用户名必须一致， hadoop代码中无法修改
 # sudo useradd -m lidong8 -s /bin/bash
