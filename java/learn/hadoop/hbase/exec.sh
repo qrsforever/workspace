@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 集群HBase搭建
+# http://blog.csdn.net/u011414200/article/details/50383512
+
 if [[ x"$HBASE_HOME" == x ]]
 then
     echo "Please set: export HBASE_HOME"

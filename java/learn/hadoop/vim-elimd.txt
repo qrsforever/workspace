@@ -1,4 +1,10 @@
+生成pom.xml
 mvn archetype:generate
+下载源码
+mvn dependency:sources
+下载doc
+mvn dependency:resolve -Dclassifier=javadoc
+
 vim:
 :MvnRepo --> 生成.classpath
 mvn eclipse:eclipse
