@@ -14,3 +14,10 @@
 
 5. StackOverlowTest
     栈溢出
+
+6. HeapOverflowTest
+    堆溢出
+
+7. PermGenOverflowTest
+    方法区溢出, 其中动态代理和动态加载class并没能模拟出方法区溢出
+
