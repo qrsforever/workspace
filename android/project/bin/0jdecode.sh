@@ -2,7 +2,7 @@
 
 if (( $# < 1 ))
 then
-   echo "Use: 0apk.sh a.apk" 
+   echo "Use: $0 a.apk/a.jar" 
    exit
 fi
 
