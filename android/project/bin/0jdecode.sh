@@ -2,7 +2,7 @@
 
 if (( $# < 1 ))
 then
-   echo "Use: $0 a.apk/a.jar" 
+   echo "Use: $0 a.apk/a.jar/a.class"
    exit
 fi
 
@@ -33,7 +33,7 @@ then
     ln -s $TOOLS_HOME/jd-gui/jd-gui-1.4.0.jar $output_dir/jd-gui.jar
 fi
 
-if [ ${file##*.} == "jar" ]
+if [ ${file##*.} == "jar" -o ${file##*.} == "class" ]
 then
     ln -s $TOOLS_HOME/jd-gui/jd-gui-1.4.0.jar $output_dir/jd-gui.jar
     java -jar $output_dir/jd-gui.jar $file
