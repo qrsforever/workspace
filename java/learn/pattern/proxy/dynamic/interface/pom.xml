@@ -20,4 +20,30 @@
             <version>1.2.17</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <!-- 执行mvn compile后执行main函数 -->
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration/>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 执行 mvn exec:java 若此处注释掉执行:mvn exec:java -Dexec.mainClass="com.java.learn.App" -Dexec.args="" -->
+                    <mainClass>com.java.learn.App</mainClass>
+                    <arguments>
+                        <argument>todo</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

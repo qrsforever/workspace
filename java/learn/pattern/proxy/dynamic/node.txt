@@ -1,5 +1,5 @@
 interface:
-    使用定义功能接口的方式实现动态代理, 让Proxy和RealSubject实现
+    采用接口的方式实现动态代理, 让Proxy和RealSubject实现
 
 extend:
-    通过继承方式(cglib), Proxy继承自RealSubject, 拥有RealSubject所有功能 
+    采用继承方式(cglib), Proxy继承自RealSubject, 拥有RealSubject所有功能 
