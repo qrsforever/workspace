@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+# jira日志下载: http://pan.baidu.com/s/1nvn2A3R
 import re
 import os
 
