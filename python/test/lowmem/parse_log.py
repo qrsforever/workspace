@@ -94,6 +94,7 @@ def file_lastnum(fname):
     
 if __name__ == "__main__":
     rootdir = '/home/lidong/Downloads/jira/HERACLES/19165/testPlayHot_20170803_203235/Log.0/'
+    #  rootdir = '/home/lidong/Downloads/jira/HERACLES/19165/testMenuView_20170803_203005/Log.0/'
     listfiles = os.walk(rootdir)
     logfiles=[]
     for root, dirs, files in listfiles:
