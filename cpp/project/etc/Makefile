@@ -25,7 +25,8 @@ HDREXTS := h H hh hpp HPP h++ hxx hp
 # 指定源文件目录, 以及目标文件生成目录
 SRC_DIR = . src
 INC_DIR = . src
-OBJ_DIR = out/target
+OUT_DIR = out
+OBJ_DIR = $(OUT_DIR)/target
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC := 
@@ -97,7 +98,7 @@ endif
 	@if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
 
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET_NAME)
+	rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
 	@$(TARGET_NAME)
