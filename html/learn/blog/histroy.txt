@@ -1,0 +1,58 @@
+# hexo https://hexo.io/
+
+# 初始化
+hexo init blog
+cd blog
+
+# 安装依赖
+npm install
+
+# git
+npm install hexo-deployer-git --save
+# 插入图片
+npm install https://github.com/CodeFalling/hexo-asset-image --save
+
+# 主题prontera需要
+npm install hexo-renderer-jade --save
+npm install hexo-generator-feed --save
+
+# 主题hexo-theme-indigo
+npm install hexo-renderer-less --save
+
+# 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹
+hexo g
+
+# 启动本地web服务，用于博客的预览
+hexo s # 可以在http://localhost:4000/
+
+# 部署播客到远端
+hexo d
+
+# 新建文章
+hexo n "postName"
+
+# 新建页面
+hexo n page "pageName" 
+
+# clean
+hexo clean
+
+# 更换主题
+# https://hexo.io/themes/
+# https://github.com/hexojs/hexo/wiki/Themes
+git clone git@github.com:yscoder/hexo-theme-indigo.git
+
+# 针对Hacker主题
+hexo new page categories
+hexo new page tags
+# menu:
+#     Home: /
+#     Archives: /archives
+#     Categories: /categories
+#     Tags: /tags
+
+# indigo主题使用说明: https://github.com/yscoder/hexo-theme-indigo/wiki/
+npm i -S hexo-generator-json-content
+npm install hexo-helper-qrcode --save
+
+# 主题设置: https://github.com/iissnan/hexo-theme-next/wiki
