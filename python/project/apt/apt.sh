@@ -5,8 +5,8 @@ __apt_install() {
 }
 
 __pip_install() {
-    sudo pip install $*
-    sudo pip3 install $*
+    sudo pip  install -U $*
+    sudo pip3 install -U $*
 }
 
 __apt_install python python3
@@ -107,3 +107,14 @@ __pip_install Celery
 
 # avro 序列化反序列化
 __pip_install avro
+
+# 自动化测试 chromiumdriver: https://sites.google.com/a/chromium.org/chromedriver/downloads
+__pip_install selenium
+
+# 美化页面
+__pip_install beautifulsoup4
+
+# 爬虫框架
+__pip_install scrapy
+
+# anaconda : https://www.continuum.io/
