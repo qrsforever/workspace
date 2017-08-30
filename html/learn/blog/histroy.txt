@@ -12,12 +12,12 @@ npm install hexo-deployer-git --save
 # 插入图片
 npm install https://github.com/CodeFalling/hexo-asset-image --save
 
-# 主题prontera需要
+# ------------------------插件-----------------
+npm install hexo-generator-feed -save
+npm install hexo-generator-sitemap -save
 npm install hexo-renderer-jade --save
-npm install hexo-generator-feed --save
-
-# 主题hexo-theme-indigo
 npm install hexo-renderer-less --save
+npm install hexo-generator-cname --save
 
 # 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹
 hexo g
@@ -58,3 +58,17 @@ npm i -S hexo-generator-json-content
 npm install hexo-helper-qrcode --save
 
 # 主题设置: https://github.com/iissnan/hexo-theme-next/wiki
+
+# 多个PC编辑
+A. gitblog
+git init
+git remote add origin git@github.com:qrsforever/gitblog.git
+git add .
+git commit -m "xxx"
+git push -u origin master
+
+B. gitblog
+git init
+git remote add origin git@github.com:qrsforever/gitblog.git
+git fetch --all
+git reset --hard origin/master
