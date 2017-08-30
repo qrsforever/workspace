@@ -1,0 +1,17 @@
+# download hexo https://hexo.io/
+hexo init lanrenflower
+npm install hexo-deployer-git --save
+npm install hexo-renderer-less --save 
+
+# 到themes目录下
+git clone git@github.com:qrsforever/hexo-theme-indigo.git
+
+# 域名CNAME 自动生成 或者是将CNAME放到source目录下(推荐)
+npm install hexo-generator-cname --save
+
+# 替换github上的文件
+rm _config.yml # lanrenflower目录下的
+rm source # lanrenflower目录下的 或者修改_config.yml中source目录指定
+git clone git@github.com:qrsforever/hexo-blog.git
+ln -s hexo-blog/_config.yml _config.yml
+ln -s hexo-blog/source source

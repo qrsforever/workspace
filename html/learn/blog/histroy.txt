@@ -41,6 +41,8 @@ hexo clean
 # https://hexo.io/themes/
 # https://github.com/hexojs/hexo/wiki/Themes
 git clone git@github.com:yscoder/hexo-theme-indigo.git
+# fork 
+git clone git@github.com:qrsforever/hexo-theme-indigo.git
 
 # 针对Hacker主题
 hexo new page categories
