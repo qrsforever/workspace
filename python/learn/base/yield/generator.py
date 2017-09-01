@@ -69,9 +69,9 @@ if __name__ == '__main__':
     print("------yield func(){ yield }-------- ")
     ret = gen_example3()
     print(ret, type(ret))
-    print(ret.__next__())       # 1 x = None
-    print(ret.__next__())       # 1 x = None
-    try:
-        print(ret.__next__())
-    except Exception as e:
-        pass
+    #  print(ret.__next__())       # 1 x = None
+    #  print(ret.__next__())       # 1 x = None
+    #  try:
+        #  print(ret.__next__())
+    #  except Exception as e:
+        #  pass
