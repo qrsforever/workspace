@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 #coding:utf-8
 
 from itertools import zip_longest
@@ -43,3 +43,12 @@ print("-------------- zip_longest")
 
 for x, y in zip_longest(a, b, fillvalue=0):
     print(x, y) 
+
+
+print("-------------- ")
+
+data = [1, 2 , 3, 4, 5]
+
+print(data[:-2]) # 1,2,3
+print(data[-1])  # 5
+print(data[-2])  # 4
