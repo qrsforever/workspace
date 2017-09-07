@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import logging
+#  import logging
 import traceback
 
 def testPrintStackInfo():  
@@ -24,3 +24,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+## lidong 
+#import traceback
+#print(traceback.format_exc())
