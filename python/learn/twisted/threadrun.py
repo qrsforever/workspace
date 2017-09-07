@@ -3,8 +3,11 @@
 
 from twisted.internet.defer import Deferred
 from twisted.internet import reactor
+
+#  import time
  
 def loadRemoteData(callback, errback, url):
+    print("url = " , url)
     callback('url数据')
 
 def getRemoteData():
@@ -21,3 +24,5 @@ if __name__ == '__main__':
 
     reactor.callLater(4, reactor.stop); 
     reactor.run()
+
+    #  time.sleep(100)
