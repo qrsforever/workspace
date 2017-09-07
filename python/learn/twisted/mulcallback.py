@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from twisted.internet import reactor, defer
+import threading
 
 class Getter:
     def gotResults(self, x):
@@ -17,6 +18,7 @@ class Getter:
             print("Nowhere to put results")
             return
 
+        print("gotResults thread name: %s" % threading.current_thread().name)
         d = self.d
         self.d = None
         if x % 2 == 0:
@@ -32,7 +34,7 @@ class Getter:
         order to demonstrate how a callback passes its own result
         to the next callback
         """
-        return "Result: %s" % r
+        return "_toHTML Result: %s" % r
 
     def getDummyData(self, x):
         """
@@ -52,11 +54,11 @@ class Getter:
         return self.d
 
 def cbPrintData(result):
-    print(" cbPrintData: ", result)
+    print("thread name: %s cbPrintData: %s" % (threading.current_thread().name, result))
 
 def ebPrintError(failure):
     import sys
-    print(" ebPrintError")
+    print("thread name: %s ebPrintError" % threading.current_thread().name)
     sys.stderr.write(str(failure))
 
 # this series of callbacks and errbacks will print an error message
