@@ -10,14 +10,21 @@ class Bar(object):
         print("do.task")
         task()
 
+    def report(self, bug):
+        print("report.txt")
+        bug()
 
 def justdo(task):
     print("just do")
     bar = Bar()
     @bar.do
     def doWork():
-        print("show before task")
+        print("doWork")
         task()
+        @bar.report
+        def doReport():
+            print("<------report---->")
+
 
 def task():
     print("I am worker, now do...")
