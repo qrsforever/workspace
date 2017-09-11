@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from crawl51job.items import Crawl51JobItem
@@ -16,7 +15,7 @@ class S51jobSpider(CrawlSpider):
             Rule(LinkExtractor(
                 allow = "http:\/\/search.51job.com\/list\/",
                 restrict_xpaths = "//div[@class='p_in']"),
-                callback = "paser_item",
+                callback = "parse_item",
                 follow = True),
             )
 
@@ -26,8 +25,8 @@ class S51jobSpider(CrawlSpider):
 
     def parse_item(self, response):
         divs = response.xpath("//div[@class='el']")
-        print("####")
         item = Crawl51JobItem()
+        print("#### item = ", item)
         for div in divs:
             try:
                 item['duty'] = div.xpath("./p/span/a/text()")[0].extract().strip()

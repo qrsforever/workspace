@@ -49,9 +49,7 @@ class Crawl51JobSpiderMiddleware(object):
         # that it doesn’t have a response associated.
 
         # Must return only requests (not items).
-        print("###reqs===")
         for r in start_requests:
-            print("###reqs ", r)
             yield r
 
     def spider_opened(self, spider):
