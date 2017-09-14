@@ -10,6 +10,7 @@ class MyClass(object):
         """TODO: to be defined1. """
         
     def __call__(self):
+        print("__call_ called")
         pass
 
 
@@ -21,7 +22,7 @@ def function(f):
 
     """
     print("callable: ", callable(f))
-    pass
+    f()
 
 
 function(MyClass())
