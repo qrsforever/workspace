@@ -118,3 +118,7 @@ __pip_install beautifulsoup4
 __pip_install scrapy
 
 # anaconda : https://www.continuum.io/
+
+
+# vim-plugin
+__pip_install jedi
