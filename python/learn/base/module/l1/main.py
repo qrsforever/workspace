@@ -5,7 +5,10 @@ def main():
     """
     TODO main
     """
-    print dir(m1)
+    #  print dir(m1)
+    for key in dir(m1):
+        print key, getattr(m1, key)
+
     # print dir(m2) # 错误 m2模块对象并没有导入该符号表中
     f1 = m1.fun1
     f2 = m1.fun2
