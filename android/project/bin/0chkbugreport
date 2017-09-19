@@ -12,4 +12,5 @@ cmd_dir=`dirname $cmd_dir`
 
 TOOLS_HOME="$cmd_dir/../tools"
 
+# adb shell bugreport > bugreport.txt
 java -jar $TOOLS_HOME/chkbugreport.jar $1
