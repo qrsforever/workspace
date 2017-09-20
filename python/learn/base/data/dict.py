@@ -5,6 +5,13 @@ print dir(dict)
 
 d = { 'a' : 1, 'b' : 2, 'c' : 3 }
 
+# setdefault()
+print("-------------- ")
+# 返回实际值
+print(d.setdefault('a', 0))
+print(d['a'])
+print("-------------- ")
+
 for x, y in d.items():
     print x, ':' , y
 
