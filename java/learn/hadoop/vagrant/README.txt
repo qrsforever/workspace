@@ -25,11 +25,11 @@ sudo sh /media/cdrom/VBoxLinuxAdditions.run
 # 配置一个NAT网络(vagrant)， 一个桥接网络
 
 # Host机, 从VirtualBox导出
-# vagrant package --base vbox-name (hadoop)
-# vagrant box add hadoop /path/to/the/new.box
+# vagrant package --base vbox-name (hadoop-vm)
+# vagrant box add hadoop-vm /path/to/the/new.box
 # vagrant box list
 # 只有在没有Vagrantfile文件时执行vagrant init
-# vagrant init hadoop (在当前路径下生成Vagrantfile文件)
+# vagrant init hadoop-vm (在当前路径下生成Vagrantfile文件)
 # 配置好Vagrantfile启动虚拟机
 # vagrant up
 # 登录
@@ -46,6 +46,8 @@ sudo sh /media/cdrom/VBoxLinuxAdditions.run
 
 # 打包当前配置
 # vagrant package --output backup.box
+
+# vagrant box repackage hadoop-vm virtualbox 0
 
 # 多台集群启动
 # http://kiwenlau.com/2016/07/03/vagrant-vm-cluster/
