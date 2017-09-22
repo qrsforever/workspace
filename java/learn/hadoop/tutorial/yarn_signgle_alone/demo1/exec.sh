@@ -28,7 +28,11 @@ $HADOOP_HOME/bin/hdfs dfs -mkdir -p /user/$USER
 $HADOOP_HOME/bin/hdfs dfs -chmod g+w /user/$USER
 $HADOOP_HOME/bin/hdfs dfs -ls /
 
+# Start ResourceManager daemon and NodeManager daemon
+$HADOOP_HOME/sbin/start-yarn.sh
+
 # 浏览namenode: http://localhost:50070/
+# 浏览ResourceManager: http://localhost:8088/
 
 # hdfs dfs 所有命令的相对路径是 /user/$USER
 # hdfs://localhost:9000/user/$USER/input
@@ -44,4 +48,5 @@ $HADOOP_HOME/bin/hdfs dfs -cat /user/$USER/output/*
 $HADOOP_HOME/bin/hdfs dfs -cat output/*
 $HADOOP_HOME/bin/hdfs dfs -get output
 
+$HADOOP_HOME/sbin/stop-yarn.sh
 $HADOOP_HOME/sbin/stop-dfs.sh

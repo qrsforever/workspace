@@ -1,0 +1,20 @@
+问题： could only be replicated to 0 nodes
+日志：
+    17/09/22 10:14:19 WARN hdfs.DFSClient: DataStreamer Exception
+    org.apache.hadoop.ipc.RemoteException(java.io.IOException): File /user/lidong/input/yarn-env.cmd._COPYING_ could only be replicated to 0 nodes instead of minReplication (=1).  There are 0 datanode(s) running and no node(s) are excluded in this operation.
+    	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:1571)
+    	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getNewBlockTargets(FSNamesystem.java:3107)
+    	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:3031)
+    	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:725)
+    	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:492)
+    	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+    	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:616)
+    	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:982)
+    	at org.apache.hadoop.ipc.Server$Handler$1.run(Server.java:2049)
+    	at org.apache.hadoop.ipc.Server$Handler$1.run(Server.java:2045)
+    	at java.security.AccessController.doPrivileged(Native Method)
+    	at javax.security.auth.Subject.doAs(Subject.java:422)
+    	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
+    	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2043)
+解决:
+     rm -rf {hadoop.tmp.dir}
