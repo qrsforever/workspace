@@ -1,6 +1,5 @@
 logs
 output
 avro/employees.avro
-avro/target
-hbase/target
+**/**/target
 **/.vagrant

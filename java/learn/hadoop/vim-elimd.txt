@@ -5,6 +5,8 @@ mvn dependency:sources
 下载doc
 mvn dependency:resolve -Dclassifier=javadoc
 
+mvn xxx -DskipTests
+
 vim:
 :MvnRepo --> 生成.classpath
 mvn eclipse:eclipse
