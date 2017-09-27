@@ -17,9 +17,11 @@ def Mode(hist):
 
 # 编写一个 AllModes 函数,参数还是 Hist 对象,但返回的是按频数降序排列的值—频数对
 def AllModes(hist):
+    #  return sorted(hist.Items(), key = lambda item: item[1], reverse = True)
     return sorted(hist.Items(), key = operator.itemgetter(1), reverse = True)
 
 if __name__ == "__main__":
     hist = Pmf.MakeHistFromList([5, 2, 5, 3, 2, 5, 7, 2], name='test')
     print("Mode(hist) = ", Mode(hist))
     print("AllModes(hist) = ", AllModes(hist))
+    #  print("Render(hist) = ", hist.Render())

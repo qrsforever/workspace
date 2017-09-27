@@ -4,6 +4,10 @@
 数据下载(res):
     https://pan.baidu.com/s/1slPqZvB
 
+习题答案:
+    https://github.com/grahaminn/thinkstats
+    https://github.com/lloyd-dong/lab/tree/5ff5897739f4808d5386f5fde31b40cf0ebe9513/think_stats
+
 国外其他数据:
     http://www.wolframalpha.com/
 
@@ -16,3 +20,8 @@
     纵贯研究(Longitudinal Study)
         http://wikipedia.org/wiki/Longitudinal_study
         在一段时间内反复观察同一群人。
+
+
+其他:
+    Hist: 直方图, 频数
+    Pmf; 概率质量函数, 概率(0 - 1)
