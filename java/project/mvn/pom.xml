@@ -153,7 +153,19 @@
                     </compilerArgs>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
+                    <!-- 跳过编译Test -->
+                    <!-- <skip>true</skip> -->
                 </configuration>
+            </plugin>
+
+            <plugin>    
+                <groupId>org.apache.maven.plugins</groupId>    
+                <artifactId>maven-surefire-plugin</artifactId>    
+                <version>2.5</version>    
+                <configuration>    
+                    <!-- <skip>true</skip>     -->
+                    <!-- <skipTests>true</skipTests>  -->
+                </configuration>    
             </plugin>
 
         </plugins>

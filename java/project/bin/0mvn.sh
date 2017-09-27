@@ -45,6 +45,7 @@ __main() {
     echo "2. dependency:sources"
     echo "3. dependency:resolve -Dclassifier=javadoc"
     echo "4. eclipse:eclipse"
+    echo "5. package without test" 
     echo -n "Select: "
     read n
 
@@ -60,6 +61,9 @@ __main() {
             ;;
         '4')
             mvn eclipse:eclipse
+            ;;  
+        '5')
+            mvn package -Dmaven.test.skip=true
             ;;
     esac
 }
