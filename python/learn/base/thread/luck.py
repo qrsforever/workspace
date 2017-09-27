@@ -27,6 +27,7 @@ t2 = threading.Thread(target = loop, name = 'LoopThread2')
 t1.start()
 t2.start()
 
+x
 t1.join()
 t2.join()
 print('thread %s ended.' % threading.current_thread().name)

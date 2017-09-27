@@ -19,3 +19,4 @@ print("2.randint: ", random.randint(7, 9))
 
 print("1.random float: ", random.random())
 print("2.random float: ", random.random())
+import os 
