@@ -26,18 +26,18 @@ def testPdf():
 
 def testRvs():
     """
-    模拟1000个随机变量。scale参数表示λ的倒数。函数np.std中，参数ddof等于标准偏差除以n-1的值。 
+    模拟1000个随机变量。scale参数表示λ的倒数。函数np.std中，参数ddof等于标准偏差除以n-1的值。
     """
 
     lambd = 0.5
-    exponsim = stats.expon.rvs(scale=1/lambd, size=1000)  
+    exponsim = stats.expon.rvs(scale=1/lambd, size=1000)
     print("np.mean(exponsim): %g" % np.mean(exponsim))
     print("np.std(exponsim): %g" % np.std(exponsim, ddof=1))
-  
-    plt.hist(exponsim, bins=20, normed=True)  
-    plt.xlim(0, 15)  
-    plt.title('Simulating Exponential Random Variables')  
-    plt.show()  
+
+    plt.hist(exponsim, bins=20, normed=True)
+    plt.xlim(0, 15)
+    plt.title('Simulating Exponential Random Variables')
+    plt.show()
 
 
 if __name__ == "__main__":

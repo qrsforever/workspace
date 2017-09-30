@@ -9,7 +9,7 @@ import myplot
 import erf
 
 def CmpNormalModelWithDataSample():
-    firsts, others, babies = Babies.PartitionBabies() 
+    firsts, others, babies = Babies.PartitionBabies()
     weights = Babies.GetWightList(babies)
     pmf = Pmf.MakePmfFromList(weights)
     mu = pmf.Mean()
@@ -28,8 +28,7 @@ def CmpNormalModelWithDataSample():
     myplot.Show()
     myplot.Clf()
 
-def main():
-    CmpNormalModelWithDataSample()
+
 
 if __name__ == "__main__":
-    main()
+    CmpNormalModelWithDataSample()

@@ -3,9 +3,9 @@
 
 # Normal Distribution (正态分布)
 
-import numpy as np  
-from scipy import stats  
-import matplotlib.pyplot as plt  
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
 
 def testPdf():
     """
@@ -15,13 +15,13 @@ def testPdf():
 
     mu = 0
     sigma = 1
-    xs = np.arange(-5, 5, 0.1)  
-    ys = stats.norm.pdf(xs, 0, 1)  
-    plt.plot(xs, ys)  
-    plt.title('Normal: $\mu$=%.1f, $\sigma^2$=%.1f' % (mu,sigma))  
-    plt.xlabel('x')  
-    plt.ylabel('Probability density', fontsize=15)  
-    plt.show()  
+    xs = np.arange(-5, 5, 0.1)
+    ys = stats.norm.pdf(xs, 0, 1)
+    plt.plot(xs, ys)
+    plt.title('Normal: $\mu$=%.1f, $\sigma^2$=%.1f' % (mu,sigma))
+    plt.xlabel('x')
+    plt.ylabel('Probability density', fontsize=15)
+    plt.show()
 
 if __name__ == "__main__":
     testPdf()
