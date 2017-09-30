@@ -18,7 +18,7 @@ def main():
     myplot.Plot(xs, ys, label='formular')
 
     # 通过累计统计F(X) ---> 经验CDF
-    cdf = Cdf.MakeCdfFromList(xs, name='expovariate') 
+    cdf = Cdf.MakeCdfFromList(xs, name='expovariate')
     myplot.Cdf(cdf, complement=False, transform=None)
     myplot.Show()
 

@@ -11,6 +11,9 @@
 国外其他数据:
     http://www.wolframalpha.com/
 
+分布实例:
+    http://blog.csdn.net/yan456jie/article/details/52170481
+
 名词:
 
     横断面研究(Cross-Sectional Study)

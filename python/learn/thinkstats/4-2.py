@@ -17,7 +17,7 @@ def main():
     for item in babies.records:
         interval.append(item.minutes - lastmin)
         lastmin = item.minutes
-    
+
     cdf = Cdf.MakeCdfFromList(interval, name='baby interval')
     myplot.Cdf(cdf, complement=False, transform=None)
     myplot.Show()
