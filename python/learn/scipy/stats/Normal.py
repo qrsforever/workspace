@@ -16,7 +16,7 @@ def testPdf():
     mu = 0
     sigma = 1
     xs = np.arange(-5, 5, 0.1)
-    ys = stats.norm.pdf(xs, mu, sigma)
+    ys = stats.norm.pdf(xs, 0, 1)
     plt.plot(xs, ys)
     plt.title('Normal: $\mu$=%.1f, $\sigma^2$=%.1f' % (mu,sigma))
     plt.xlabel('x')
