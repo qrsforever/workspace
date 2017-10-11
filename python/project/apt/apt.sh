@@ -111,6 +111,10 @@ __pip_install avro
 # 自动化测试 chromiumdriver: https://sites.google.com/a/chromium.org/chromedriver/downloads
 __pip_install selenium
 
+# 验证码识别
+__pip install pytesseract
+sudo apt install tesseract
+
 # 美化页面
 __pip_install beautifulsoup4
 
