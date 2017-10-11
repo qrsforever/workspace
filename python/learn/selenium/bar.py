@@ -95,8 +95,8 @@ def UserLogin(driver):
     password = driver.find_element_by_xpath('//*[@id="Window1_SimpleForm1_tbxPassword-inputEl"]')
     tcaptcha = driver.find_element_by_xpath('//*[@id="Window1_SimpleForm1_tbxCaptcha-inputEl"]')
 
-    username.send_keys('cszhanghl')
-    password.send_keys('cnhtc4088081')
+    username.send_keys('xxx')
+    password.send_keys('xxx')
     tcaptcha.send_keys(captcha)
     
     try:
