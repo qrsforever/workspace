@@ -118,6 +118,39 @@ class Cdf(object):
             old_p = new_p
         return total
 
+    def Var(self, mu=None):
+        """Computes the variance of a PMF.
+
+        Args:
+            mu: the point around which the variance is computed;
+                if omitted, computes the mean
+
+        Returns:
+            float variance
+        """
+        if mu is None:
+            mu = self.Mean()
+            
+        var = 0.0        
+        old_p = 0        
+        for x, new_p in zip(self.xs, self.ps):
+            p = new_p - old_p
+            var += p * (x - mu)**2
+            old_p = new_p
+        return var
+
+    def cubed_variance(self,mu=None):
+        if mu is None:
+            mu = self.Mean()
+            
+        var = 0.0        
+        old_p = 0        
+        for x, new_p in zip(self.xs, self.ps):
+            p = new_p - old_p
+            var += p * pow(x - mu, 3)
+            old_p = new_p
+        return var
+
     def _Round(self, multiplier=1000.0):
         """
         An entry is added to the cdf only if the percentile differs
