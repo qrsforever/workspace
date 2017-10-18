@@ -15,7 +15,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS :=
+LDFLAGS := -lprotobuf
 INCLUDE :=
 
 # 源文件可能的后缀
@@ -30,12 +30,12 @@ OBJ_DIR = $(OUT_DIR)/obj
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC := 
-EXCLUDE_SRC := 
+EXCLUDE_SRC := ./write.cc
 
 # 设置目标类型(app, ar, so), 及目标名字
 TARGET_TYPE := app
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME := $(OUT_DIR)/$(shell basename $(PWD))
+TARGET_NAME := $(OUT_DIR)/read
 
 ifeq ($(TARGET_TYPE), so)
 	TARGET_NAME := $(OUT_DIR)/lib$(shell basename $(PWD).so)
@@ -98,7 +98,7 @@ endif
 	@if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
 
 clean:
-	rm -rf $(OUT_DIR)
+	@$(rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
 	@$(TARGET_NAME)

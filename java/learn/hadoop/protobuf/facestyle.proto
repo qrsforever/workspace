@@ -1,0 +1,9 @@
+package tutorial;
+
+option java_package = "com.learn.proto";
+
+// 没设置java_outer_classname, 文件名作为outer类
+
+message FaceStyle {
+    required string name = 1;
+}

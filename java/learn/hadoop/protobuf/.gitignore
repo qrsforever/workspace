@@ -1,0 +1,9 @@
+cpp/addressbook*
+cpp/facestyle*
+cpp/target
+java/**/**/OuterAddressBook.java
+java/**/**/Facestyle.java
+java/**/**/addressbook.bin
+java/bin
+python/addressbook*
+python/facestyle*
