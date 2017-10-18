@@ -10,7 +10,6 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
 import descriptive
-import Pmf
 
 
 def ProbRange(pmf, low, high):

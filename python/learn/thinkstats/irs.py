@@ -92,7 +92,7 @@ def MakeIncomeDist(data):
         # add to the histogram
         x = midpoint(low, high)
         hist.Incr(x, number)
-        print(x, number)
+        #  print(x, number)
 
     pmf = Pmf.MakePmfFromHist(hist)
     cdf = Cdf.MakeCdfFromDict(pmf.GetDict())
@@ -107,7 +107,7 @@ def main(script, *args):
     # plot the CDF on a log-x scale
     myplot.Clf()
     myplot.Cdf(cdf)
-    myplot.Save(root='income_logx',
+    myplot.Show(root='income_logx',
                 xscale='log',
                 xlabel='income',
                 ylabel='CDF')
@@ -115,7 +115,7 @@ def main(script, *args):
     # plot the complementary CDF on a log-log scale
     myplot.Clf()
     myplot.Cdf(cdf, complement=True)
-    myplot.Save(root='income_loglog',
+    myplot.Show(root='income_loglog',
                 complement=True,
                 xscale='log',
                 yscale='log',

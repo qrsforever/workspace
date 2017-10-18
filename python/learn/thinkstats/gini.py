@@ -10,11 +10,8 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 
 import math
 import sys
-
 import irs
-
 import Pmf
-import Cdf
 
 
 def PmfMean(pmf):
@@ -35,6 +32,9 @@ def PmfMoment(pmf, mean=None, exponent=2):
 
 
 def RelativeMeanDifference(pmf, mean=None):
+    """
+    相对平均差
+    """
     if mean is None:
         mean = PmfMean(pmf)
 

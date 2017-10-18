@@ -89,10 +89,10 @@ def observe_data(l, name=None, show=False):
 		myplot.Cdf(cdf)
 		myplot.Show()
 
-def show_skewness(l=None, name=None):
+def show_skewness(l=None, name=None, show=False):
 	print('%s skewness:%4.2f, p skewness:%4.2f' % \
 	        (name, skewness(l), pearson_skewness(l)))
-	observe_data(l, name)
+	observe_data(l, name, show)
 
 
 def example():
