@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 def testPmf():
     """
-    为离散分布
+    为离散分布discrete 
     二项分布的例子：抛掷10次硬币，恰好两次正面朝上的概率是多少？
     """
 

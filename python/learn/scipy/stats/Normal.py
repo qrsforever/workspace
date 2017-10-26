@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+# scipy模块stats文档
+# http://www.cnblogs.com/ttrrpp/p/6822214.html
+
 # Normal Distribution (正态分布)
 
 import numpy as np

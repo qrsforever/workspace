@@ -39,7 +39,9 @@ def SamplesWithReplacement(t, n):
     sample = [ random.choice(t) for i in range(n) ]
     return sample
 
-show = 1
+show = 0
+p = 1
+v = 0.05
 def main():
     random.seed(time.clock()) 
     firsts, others, babies = Babies.PartitionBabies()
@@ -48,9 +50,15 @@ def main():
     s = len(babies)
     print("n = %d, m = %d, s = %d" % (n, m, s))
 
-    firsts_wtlist = Babies.GetWightList(firsts)
-    others_wtlist = Babies.GetWightList(others)
-    babies_wtlist = Babies.GetWightList(babies)
+    if p == 0:
+        firsts_wtlist = Babies.GetWightList(firsts)
+        others_wtlist = Babies.GetWightList(others)
+        babies_wtlist = Babies.GetWightList(babies)
+    else:
+        firsts_wtlist = Babies.GetPregnacyList(firsts)
+        others_wtlist = Babies.GetPregnacyList(others)
+        babies_wtlist = Babies.GetPregnacyList(babies)
+
     print('(Mean, Var) of babies data', thinkstats.MeanVar(babies_wtlist))
     #  babies_wtlist.extend(firsts_wtlist)
     #  babies_wtlist.extend(others_wtlist)
@@ -69,6 +77,10 @@ def main():
     pright = 1.0 - cdf.Prob(delta)
     pvalue = pleft + pright
     print("pleft = %.2f, pright = %.2f, pvalue = %.2f" % (pleft, pright, pvalue))
+    if pvalue < v:
+        print("Overturn H0")
+    else:
+        print("Support H0")
 
     # plot
     if show:

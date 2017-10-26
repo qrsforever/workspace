@@ -20,13 +20,12 @@ class S51jobSpider(CrawlSpider):
             )
 
     def __init__(self, *a, **kw):
-        print("####S51jobSpider start")
+        print("####S51jobSpider create")
         super(S51jobSpider, self).__init__(*a, **kw)
 
     def parse_item(self, response):
         divs = response.xpath("//div[@class='el']")
         item = Crawl51JobItem()
-        print("#### item = ", item)
         for div in divs:
             try:
                 item['duty'] = div.xpath("./p/span/a/text()")[0].extract().strip()

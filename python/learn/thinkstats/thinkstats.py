@@ -38,6 +38,17 @@ def MeanVar(t):
     var = Var(t, mu)
     return mu, var
 
+def Median(t, flg=1):
+    m = len(t)
+    if m <= 1:
+        return 0
+    st = sorted(t)
+    n = int(m/2)
+    if n % 2:
+        return st[n]
+    if flg == 1:
+        return (st[n-1] + st[n])/2
+    return st[n-1]
 
 def Trim(t, p=0.01):
     """Trims the largest and smallest elements of t.
@@ -134,7 +145,6 @@ def Binom(n, k, d={}):
         res = Binom(n-1, k) + Binom(n-1, k-1)
         d[n, k] = res
         return res
-
 
 class Interpolator(object):
     """Represents a mapping between sorted sequences; performs linear interp.

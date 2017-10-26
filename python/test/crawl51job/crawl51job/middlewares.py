@@ -43,6 +43,7 @@ class Crawl51JobSpiderMiddleware(object):
         # or Item objects.
         pass
 
+    # callback 可以是个生成器
     def process_start_requests(self, start_requests, spider):
         # Called with the start requests of the spider, and works
         # similarly to the process_spider_output() method, except

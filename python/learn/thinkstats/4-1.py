@@ -19,6 +19,8 @@ def main():
 
     # 通过累计统计F(X) ---> 经验CDF
     cdf = Cdf.MakeCdfFromList(xs, name='expovariate')
+    print("mu = ", cdf.Mean())
+    print("median = ", cdf.Percentile(50))
     myplot.Cdf(cdf, complement=False, transform=None)
     myplot.Show()
 

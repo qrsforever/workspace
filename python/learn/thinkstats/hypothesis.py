@@ -56,17 +56,17 @@ def RunTest(root,
     # P(E|H0)
     peh0 = Test(root + '_deltas_cdf',
                 actual1, actual2, pool, pool,
-                iters, plot=True)
+                iters, plot=False)
 
     # P(E|Ha)
- #    peha = Test(root + '_deltas_ha_cdf',
- #               actual1, actual2, model1, model2,
- #               iters)
+    peha = Test(root + '_deltas_ha_cdf',
+            actual1, actual2, model1, model2,
+            iters, plot=False)
 
- #    prior = 0.5
- #    pe = prior*peha + (1-prior)*peh0
- #    posterior = prior*peha / pe
- #    print('Posterior', posterior)
+    prior = 0.5
+    pe = prior*peha + (1-prior)*peh0
+    posterior = prior*peha / pe
+    print('Posterior = %.3f' % posterior)
 
 
 def Test(root, actual1, actual2, model1, model2, iters=1000, plot=False):
@@ -90,10 +90,10 @@ def Test(root, actual1, actual2, model1, model2, iters=1000, plot=False):
     cdf, pvalue = PValue(model1, model2, n, m, delta, iters)
     print('n:', n)
     print('m:', m)
-    print('mu1', mu1)
-    print('mu2', mu2)
-    print('delta', delta)
-    print('p-value', pvalue)
+    print('mu1 = %.3f' % mu1)
+    print('mu2 = %.3f' % mu2)
+    print('delta = %.3f' % delta)
+    print('p-value = %.3f' % pvalue)
 
     if plot:
         PlotCdf(root, cdf, delta)
@@ -142,7 +142,7 @@ def PValue(model1, model2, n, m, delta, iters=1000):
     
     pvalue = left + right
     #  print('Tails (left, right, total):', left, right, left+right)
-    print("pleft = %.2f, pright = %.2f, pvalue = %.2f" % (left, right, left+right))
+    print("pleft = %.3f, pright = %.3f, pvalue = %.3f" % (left, right, left+right))
 
     return cdf, pvalue
 
@@ -240,8 +240,8 @@ def SampleWithoutReplacement(t, n):
     """    
     return random.sample(t, n)
  
-lengths = 0
-weight = 1
+lengths = 1
+weight = 0
  
 def main():
     random.seed(time.clock())
