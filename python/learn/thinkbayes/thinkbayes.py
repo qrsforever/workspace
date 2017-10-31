@@ -122,6 +122,7 @@ class _DictWrapper(object):
         if values is None:
             return
 
+        # 这种初始化方式够高明!!! 间接实现了函数重载的功能
         init_methods = [
             self.InitPmf,
             self.InitMapping,
@@ -152,7 +153,7 @@ class _DictWrapper(object):
 
         values: map from value to probability
         """
-        for value, prob in values.iteritems():
+        for value, prob in values.items():
             self.Set(value, prob)
 
     def InitPmf(self, values):
@@ -160,7 +161,9 @@ class _DictWrapper(object):
 
         values: Pmf object
         """
+
         for value, prob in values.Items():
+            print(value, prob)
             self.Set(value, prob)
 
     def InitFailure(self, values):
@@ -221,7 +224,7 @@ class _DictWrapper(object):
         if m is None:
             m = self.MaxLike()
 
-        for x, p in self.d.iteritems():
+        for x, p in self.d.items():
             if p:
                 self.Set(x, math.log(p / m))
             else:
@@ -241,7 +244,7 @@ class _DictWrapper(object):
         if m is None:
             m = self.MaxLike()
 
-        for x, p in self.d.iteritems():
+        for x, p in self.d.items():
             self.Set(x, math.exp(p - m))
 
     def GetDict(self):
@@ -275,8 +278,8 @@ class _DictWrapper(object):
 
     def Print(self):
         """Prints the values and freqs/probs in ascending order."""
-        for val, prob in sorted(self.d.iteritems()):
-            print(val, prob)
+        for val, prob in sorted(self.d.items()):
+            print("%s %.3f" % (val, prob))
 
     def Set(self, x, y=0):
         """Sets the freq/prob associated with the value x.
@@ -388,11 +391,11 @@ class Pmf(_DictWrapper):
         return MakeCdfFromPmf(self, name=name)
 
     def ProbGreater(self, x):
-        t = [prob for (val, prob) in self.d.iteritems() if val > x]
+        t = [prob for (val, prob) in self.d.items() if val > x]
         return sum(t)
 
     def ProbLess(self, x):
-        t = [prob for (val, prob) in self.d.iteritems() if val < x]
+        t = [prob for (val, prob) in self.d.items() if val < x]
         return sum(t)
 
     def Normalize(self, fraction=1.0):
@@ -429,7 +432,7 @@ class Pmf(_DictWrapper):
 
         target = random.random()
         total = 0.0
-        for x, p in self.d.iteritems():
+        for x, p in self.d.items():
             total += p
             if total >= target:
                 return x
@@ -462,7 +465,7 @@ class Pmf(_DictWrapper):
             mu = self.Mean()
 
         var = 0.0
-        for x, p in self.d.iteritems():
+        for x, p in self.d.items():
             var += p * (x - mu) ** 2
         return var
 
@@ -1011,7 +1014,7 @@ def MakeCdfFromDict(d, name=''):
     Returns:
         Cdf object
     """
-    return MakeCdfFromItems(d.iteritems(), name)
+    return MakeCdfFromItems(d.items(), name)
 
 
 def MakeCdfFromHist(hist, name=''):
@@ -1141,7 +1144,7 @@ class Suite(Pmf):
     def Print(self):
         """Prints the hypotheses and their probabilities."""
         for hypo, prob in sorted(self.Items()):
-            print(hypo, prob)
+            print("%s: %.3f" % (hypo, prob))
 
     def MakeOdds(self):
         """Transforms from probabilities to odds.

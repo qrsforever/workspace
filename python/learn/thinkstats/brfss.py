@@ -18,11 +18,11 @@ debug = 0
 class Respondents(survey.Table):
     """Represents the respondent table."""
 
-    def ReadRecords(self, data_dir='.', n=None):
+    def ReadRecords(self, data_dir='res', n=None):
         filename = self.GetFilename()
         self.ReadFile(data_dir,
                       filename,
-                      self.GetFields(), 
+                      self.GetFields(),
                       survey.Respondent,
                       n)
         self.Recode()
@@ -39,8 +39,8 @@ class Respondents(survey.Table):
 
     def GetFields(self):
         """Returns a tuple specifying the fields to extract.
-        
-        BRFSS codebook 
+
+        BRFSS codebook
         http://www.cdc.gov/brfss/technical_infodata/surveydata/2008.htm (废掉)
         https://www.cdc.gov/brfss/annual_data/2008/pdf/codebook08.pdf
 
@@ -105,7 +105,7 @@ class Respondents(survey.Table):
         d = {1:[], 2:[], 'all':[]}
         [d[r.sex].append(r.htm3) for r in self.records if r.htm3 != 'NA']
         [d['all'].append(r.htm3) for r in self.records if r.htm3 != 'NA']
-        
+
         if debug == 1:
             print('Height (cm):')
             print('key n     mean     var    sigma     cv')
@@ -139,22 +139,29 @@ class Respondents(survey.Table):
 
     def SummarizeWeightChange(self):
         """Print the mean reported change in weight in kg."""
-        
+
         data = [(r.weight2, r.wtyrago) for r in self.records
                 if r.weight2 != 'NA' and r.wtyrago != 'NA']
-        
+
         changes = [(curr - prev) for curr, prev in data]
-            
+
         print('Mean change', thinkstats.Mean(changes))
-        
-    
+
+    def GetHeightAndWeight(self):
+        d = {'h':[], 'w':[]}
+        for r in self.records:
+            if r.htm3 != 'NA' and r.weight2 != 'NA':
+                d['h'].append(r.htm3)
+                d['w'].append(r.weight2)
+        return d['h'], d['w']
+
 def main(name, data_dir='res'):
     resp = Respondents()
     resp.ReadRecords(data_dir)
     resp.SummarizeHeight()
     resp.SummarizeWeight()
     resp.SummarizeWeightChange()
-    
+
 if __name__ == '__main__':
     debug = 1
     main(*sys.argv)
