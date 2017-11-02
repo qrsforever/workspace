@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="projectname" default="run" basedir=".">
+<project name="FileTransmit" default="jar" basedir=".">
 
     <!--加载工程自定义属性-->
     <property file="build.properties"/>
@@ -86,9 +86,9 @@
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}-${DSTAMP}${TSTAMP}.jar" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
+            <!-- <manifest> -->
+                <!-- <attribute name="Main-Class" value="${main-class}"/> -->
+            <!-- </manifest> -->
             <!-- 排除单元测试 -->
             <exclude name="**/*Test.*" />
             <exclude name="**/Test*.*" />
