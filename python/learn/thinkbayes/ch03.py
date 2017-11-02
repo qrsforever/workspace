@@ -5,8 +5,12 @@
 """
 
 from thinkbayes import Suite, Pmf
+import thinkbayes
 import thinkplot
 
+"""
+数字作为假设
+"""
 
 class Dice(Suite):
     def Likelihood(self, data, hypo):
@@ -73,6 +77,17 @@ def CH3_2():
     有一天看到一个编号60的火车头经过, 论共有多少个火车头?
     假设 上限 N = 1000, 500, 2000
     猜测结果对上限敏感
+
+    实际N个火车头, 假设看到了60号火车头
+    
+    1       1/N      0
+    2       1/N      0
+    ...     ...     ...
+    59      1/N      0
+    60      1/N     1/60
+    61      1/N     1/61
+    ...     ...     ...
+    1000    1/N     1/1000
     """
 
     # 假设有1 - 1000个编号的火车头
@@ -118,9 +133,31 @@ def CH3_4():
     不同先验计算后验
     Train: 先验概率为 均匀分布uniform
     Train2: 先验概率为 指数分布power law
+
+    alpha = 1:
+    +-------------------------------------+
+    |    先验概率(未归一化)               |
+    | 1       1/1              0          |
+    | 2       1/2              0          |
+    | ...     ...             ...         |
+    | 59      1/59             0          |
+    | 60      1/60            1/60        |
+    | 61      1/61            1/61        |
+    | ...     ...                         |
+    | 1000    1/1000          1/1000      |  
+    +-------------------------------------+
     """
     dataset = [60]
     N = 1000
+
+    def _makePosterior(uppernum, constructor, dataset):
+        """
+        根据构造器函数和数据集, 生成后验概率suite
+        """
+        suite = constructor(range(1, uppernum))
+        for data in dataset:
+            suite.Update(data)
+        return suite
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=2)
@@ -128,13 +165,28 @@ def CH3_4():
     labels = ['uniform', 'power law']
 
     for constructor, label in zip(constructors, labels):
-        suite = constructor(range(1, N))
+        suite = _makePosterior(N, constructor, dataset)
         suite.name = label
-        for data in dataset:
-            suite.Update(data)
         thinkplot.Pmf(suite)
 
     thinkplot.Show(title='compare priors', xlabel='Number of trains', ylabel='prob')
+
+    dataset = [60, 30, 90]
+    for constructor, label in zip(constructors, labels):
+        for n in [500, 1000, 2000]:
+            suite = _makePosterior(n, constructor, dataset)
+            # 单点估计
+            print("%s: n = %d, mu = %.3f" % (label, n, suite.Mean()))
+            # 后验概率的置信区间5% - 95% (see CH3_5)
+            interval = thinkbayes.Percentile(suite, 5), thinkbayes.Percentile(suite, 95)
+            print(interval)
+
+            # CH3_6, 累计分布函数计算百分位数
+            if n == 2000:
+                cdf = thinkbayes.MakeCdfFromPmf(suite)
+                interval = cdf.Percentile(5), cdf.Percentile(95)
+                print("MakeCdfFromPmf:", interval)
+            
 
 def main():
     #  CH3_1()
@@ -142,7 +194,7 @@ def main():
     #  CH3_2()
     #  print("-------------- ")
     #  CH3_3()
-    print("-------------- ")
+    #  print("-------------- ")
     CH3_4()
     print("-------------- ")
 
