@@ -40,6 +40,7 @@ public class NioClient
             Iterator<SelectionKey> itkeys = selector.selectedKeys().iterator();
             while(itkeys.hasNext()) {
                 SelectionKey key = itkeys.next();
+                itkeys.remove();
                 if (key.isConnectable()) {
                     channel = (SocketChannel)key.channel(); 
                     // 在等待一下, 使其真正连接上
@@ -57,7 +58,6 @@ public class NioClient
                     String msg  = new String(data);
                     System.out.println("From Server: " + msg);
                 }
-                itkeys.remove();
             }
         }
         // selector.close();

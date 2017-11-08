@@ -45,6 +45,7 @@ public class NioServer
             while(itkeys.hasNext()) {
                 SelectionKey key = itkeys.next();
                 // 删除该key防止重复
+                itkeys.remove();
                 if (key.isAcceptable()) {
                     ServerSocketChannel ss = (ServerSocketChannel)key.channel();
                     // 获取Client端的连接通道
@@ -73,7 +74,6 @@ public class NioServer
                         channel.close();
                     }
                 }
-                itkeys.remove();
             }
         }
         // selector.close();
