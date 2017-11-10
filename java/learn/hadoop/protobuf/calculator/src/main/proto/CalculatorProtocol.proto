@@ -1,0 +1,19 @@
+option java_package = "com.java.learn.proto";  
+option java_outer_classname = "CalculatorProtocolProtos";  
+option java_generic_services = true;  
+option java_generate_equals_and_hash = true;  
+
+message CalculatorRequestProto {  
+    /* required string methodname = 1; */
+    required int32 num1 = 2;  
+    required int32 num2 = 3;  
+}
+
+message CalculatorResponseProto {  
+    required int32 result = 1;  
+}
+
+service CalculatorProtocolService {  
+    rpc add(CalculatorRequestProto) returns (CalculatorResponseProto);  
+    rpc minus(CalculatorRequestProto) returns (CalculatorResponseProto);  
+}

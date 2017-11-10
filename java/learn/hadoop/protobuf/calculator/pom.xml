@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.java.learn</groupId>
+        <artifactId>hadoop-meta</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.java.learn</groupId>
+    <artifactId>calculator</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>calculator</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 生成proto代码 -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile-protoc</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.build.directory}/generated-sources/java" />
+                                <path id="proto.path">
+                                    <fileset dir="src/main/proto">
+                                        <include name="**/*.proto" />
+                                    </fileset>
+                                </path>
+                                <pathconvert pathsep=" " property="proto.files" refid="proto.path" />
+                                <exec executable="protoc">
+                                    <arg value="--java_out=${project.build.directory}/generated-sources/java" />
+                                    <arg value="-I${project.basedir}/src/main/proto" />
+                                    <arg line="${proto.files}" />
+                                </exec>
+                            </tasks>
+                            <sourceRoot>${project.build.directory}/generated-sources/java</sourceRoot>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 删除 -->
+            <plugin>  
+                <artifactId>maven-clean-plugin</artifactId>  
+                <configuration>  
+                    <verbose>true</verbose>  
+                    <filesets>  
+                        <fileset>  
+                            <directory>tmp</directory>  
+                        </fileset>  
+                    </filesets>
+                </configuration>  
+            </plugin>   
+        </plugins>
+    </build>
+</project>
