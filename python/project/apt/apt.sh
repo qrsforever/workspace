@@ -17,6 +17,9 @@ __apt_install python-dev python3-dev
 # 管理工具
 __apt_install python-pip python3-pip
 
+# Python Data Analysis Library 
+__apt_install python-pandas python3-pandas
+
 # 增强Shell
 __apt_install ipython
 sudo pip install wcwidth
