@@ -163,7 +163,7 @@ class _DictWrapper(object):
         """
 
         for value, prob in values.Items():
-            print(value, prob)
+            #  print(value, prob)
             self.Set(value, prob)
 
     def InitFailure(self, values):
