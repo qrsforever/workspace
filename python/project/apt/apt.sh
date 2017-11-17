@@ -86,10 +86,6 @@ __apt_install libhighgui-dev opencv-doc python-opencv
 __apt_install python-nose
 __apt_install python-pytest
 
-# Others
-sudo pip install jedi --upgrade
-sudo pip install tox pytest
-
 #==============================================================
 #==============================================================
 #==============================================================
@@ -129,3 +125,10 @@ __pip_install scrapy
 
 # vim-plugin
 __pip_install jedi
+
+# Others
+__pip_install tox pytest
+
+# sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
+# sudo apt-get install python3-numpy python3-scipy python3-matplotlib ipython3 ipython3-notebook python3-pandas python3-nose
+
