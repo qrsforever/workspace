@@ -4,20 +4,19 @@
 """This file contains code used in "Think Bayes",
 by Allen B. Downey, available from greenteapress.com
 
-Copyright 2012 Allen B. Downey
+Copyright 2014 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-import thinkbayes
-
-import matplotlib.pyplot as pyplot
-import thinkplot
+from __future__ import print_function, division
 
 import math
 import sys
 
+import thinkbayes2
+import thinkplot
 
-FORMATS = ['pdf', 'eps', 'png']
+FORMATS = ['png']
 
 
 def StrafingSpeed(alpha, beta, x):
@@ -47,7 +46,7 @@ def MakeLocationPmf(alpha, beta, locations):
 
     Returns: Pmf object
     """
-    pmf = thinkbayes.Pmf()
+    pmf = thinkbayes2.Pmf()
     for x in locations:
         prob = 1.0 / StrafingSpeed(alpha, beta, x)
         pmf.Set(x, prob)
@@ -55,7 +54,7 @@ def MakeLocationPmf(alpha, beta, locations):
     return pmf
 
 
-class Paintball(thinkbayes.Suite, thinkbayes.Joint):
+class Paintball(thinkbayes2.Suite, thinkbayes2.Joint):
     """Represents hypotheses about the location of an opponent."""
 
     def __init__(self, alphas, betas, locations):
@@ -72,7 +71,7 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         pairs = [(alpha, beta) 
                  for alpha in alphas 
                  for beta in betas]
-        thinkbayes.Suite.__init__(self, pairs)
+        thinkbayes2.Suite.__init__(self, pairs)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -99,7 +98,7 @@ def MakePmfPlot(alpha = 10):
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
         pmf.name = 'beta = %d' % beta
-        thinkplot.Pmf(pmf)
+        thinkplot.Pdf(pmf)
 
     thinkplot.Save('paintball1',
                 xlabel='Distance',
@@ -125,8 +124,8 @@ def MakePosteriorPlot(suite):
     #thinkplot.Pmf(marginal_alpha)
     #thinkplot.Pmf(marginal_beta)
     
-    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_alpha))
-    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_beta))
+    thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_alpha))
+    thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_beta))
     
     thinkplot.Save('paintball2',
                 xlabel='Distance',
@@ -146,7 +145,7 @@ def MakeConditionalPlot(suite):
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
         cond.name = 'beta = %d' % beta
-        thinkplot.Pmf(cond)
+        thinkplot.Pdf(cond)
 
     thinkplot.Save('paintball3',
                 xlabel='Distance',
@@ -182,14 +181,15 @@ def MakeCrediblePlot(suite):
             d[pair] += 1
 
     thinkplot.Contour(d, contour=False, pcolor=True)
-    pyplot.text(17, 4, '25', color='white')
-    pyplot.text(17, 15, '50', color='white')
-    pyplot.text(17, 30, '75')
+    thinkplot.Text(17, 4, '25', color='white')
+    thinkplot.Text(17, 15, '50', color='white')
+    thinkplot.Text(17, 30, '75')
 
     thinkplot.Save('paintball5',
-                xlabel='alpha',
-                ylabel='beta',
-                formats=FORMATS)
+                   xlabel='alpha',
+                   ylabel='beta',
+                   formats=FORMATS,
+                   legend=False)
 
 
 def main(script):

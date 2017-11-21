@@ -1,5 +1,6 @@
 书名:
     <<统计思维:程序员数学之概率统计>>
+    git clone git@github.com:AllenDowney/ThinkStats2.git
 
 数据下载(res):
     https://pan.baidu.com/s/1slPqZvB

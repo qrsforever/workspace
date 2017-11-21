@@ -68,8 +68,8 @@ def main():
 
     """
     # [(price1, price2, bid1, bid2, diff1, diff2), (), () ..]
-    data2011 = price.ReadData(filename='showcases.2011.csv')
-    data2012 = price.ReadData(filename='showcases.2012.csv')
+    data2011 = price.ReadData(filename='ThinkBayes2/code/showcases.2011.csv')
+    data2012 = price.ReadData(filename='ThinkBayes2/code/showcases.2012.csv')
     data = list(data2011) + list(data2012)
     cols = zip(*data)
 
