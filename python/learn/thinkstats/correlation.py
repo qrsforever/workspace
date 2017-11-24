@@ -51,8 +51,11 @@ def Corr(xs, ys):
     xbar, varx = thinkstats.MeanVar(xs)
     ybar, vary = thinkstats.MeanVar(ys)
 
-    corr = Cov(xs, ys, xbar, ybar) / math.sqrt(varx * vary)
-
+    try:
+        corr = Cov(xs, ys, xbar, ybar) / math.sqrt(varx * vary)
+    except ZeroDivisionError as e:
+        #  print(xs, ys)
+        return 0
     return corr
 
 

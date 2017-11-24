@@ -2398,14 +2398,16 @@ def NormalProbability(ys, jitter=0):
 
 def Jitter(values, jitter=0.5):
     """Jitters the values by adding a uniform variate in (-jitter, jitter).
-
+    Jitter(抖动)
     values: sequence
     jitter: scalar magnitude of jitter
     
     returns: new numpy array
     """
     n = len(values)
-    return np.random.normal(0, jitter, n) + values
+    # lidong change
+    #  return np.random.normal(0, jitter, n) + values
+    return np.random.uniform(-jitter, jitter, n) + values
 
 
 def NormalProbabilityPlot(sample, fit_color='0.8', **options):

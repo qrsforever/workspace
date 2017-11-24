@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 """This file contains code used in "Think Bayes",
 by Allen B. Downey, available from greenteapress.com
 
@@ -9,8 +12,8 @@ from __future__ import print_function, division
 
 import math
 import numpy
-import pickle
-import numpy
+#  import pickle
+#  import numpy
 import random
 import scipy
 
@@ -320,8 +323,10 @@ def ReadHeights(nrows=None):
     """Read the BRFSS dataset, extract the heights and pickle them.
 
     nrows: number of rows to read
+
+    return: {1:[], 2:[]}
     """
-    resp = brfss.ReadBrfss(nrows=nrows).dropna(subset=['sex', 'htm3'])
+    resp = brfss.ReadBrfss(nrows=100).dropna(subset=['sex', 'htm3'])
     groups = resp.groupby('sex')
 
     d = {}
