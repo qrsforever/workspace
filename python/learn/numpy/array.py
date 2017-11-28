@@ -43,6 +43,7 @@ def test2():
     l = [(1, 1.0, 'Hello'), (2, 2.0, 'World')]
     d1 = np.zeros((2,), dtype=('i4, f4, a10'))
     d1[:] = l
+    print(d1.shape)
     print(d1, d1.dtype.names, d1['f1'])
     d1.dtype.names = ( 'Integers', 'Floats', 'String' )
     print(d1['Integers'])
@@ -58,9 +59,12 @@ def test3():
     """
     indexing and slicing
     """
-    alist = [[1,2], [3,4], [5,6]]
+    #  alist = [[1,2], [3,4], [5,6]]
+    #  结果相同
+    alist = [(1,2), (3,4), (5,6)]
     print(alist, alist[1][0])
     arr = np.array(alist) 
+    print("shape:", arr.shape)
     print(arr, arr[1,0])
     # 所有行列
     print(arr[::])

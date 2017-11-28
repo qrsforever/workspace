@@ -3,7 +3,7 @@
 
 import numpy as np
 
-def knn_classify(inX, dataSet, labels, k = 3):
+def knnClassify(inX, dataSet, labels, k = 3):
     """
     KNN k-邻近算法
     """
@@ -40,12 +40,28 @@ def createDataSet():
     labels = ['A','A','B','B']
     return group, labels
 
+def file2matrix(filename):
+    #  file = open(filename, 'r')
+    #  allRows = file.readlines()
+    #  matrix = np.zeros((len(allRows), 3))
+    fullMatrix = np.loadtxt(filename, 
+            dtype={
+                'names':('flyermiles', 'videotime', 'icecream', 'labels'), 
+                'formats':('i4', 'f4', 'f4', 'S12')
+                })
+    print(fullMatrix.shape)
+    print(fullMatrix[:][0])
+    return fullMatrix, fullMatrix['labels']
+
 def main():
-    inXs = np.array([[0.5, 0.5], [0.2, 0.2], [0.7, 0.7]])
-    dataSet, labels = createDataSet()
-    for i in range(inXs.shape[0]):
-        label = knn_classify(inXs[i], dataSet, labels)
-        print(inXs[i], ":", label)
+    #  inXs = np.array([[0.5, 0.5], [0.2, 0.2], [0.7, 0.7]])
+    #  dataSet, labels = createDataSet()
+    #  for i in range(inXs.shape[0]):
+        #  label = knnClassify(inXs[i], dataSet, labels)
+        #  print(inXs[i], ":", label)
+
+    matrix, labels = file2matrix("./machinelearninginaction/Ch02/datingTestSet.txt")
+    #  print(matrix)
 
 if __name__ == "__main__":
     main()
