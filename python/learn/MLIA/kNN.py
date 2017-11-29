@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import matplotlib.pylab as plt
 
 def knnClassify(inX, dataSet, labels, k = 3):
     """
@@ -40,28 +41,29 @@ def createDataSet():
     labels = ['A','A','B','B']
     return group, labels
 
+def simpleTest():
+    inXs = np.array([[0.5, 0.5], [0.2, 0.2], [0.7, 0.7]])
+    dataSet, labels = createDataSet()
+    for i in range(inXs.shape[0]):
+        label = knnClassify(inXs[i], dataSet, labels)
+        print(inXs[i], ":", label)
+
 def file2matrix(filename):
-    #  file = open(filename, 'r')
-    #  allRows = file.readlines()
-    #  matrix = np.zeros((len(allRows), 3))
-    fullMatrix = np.loadtxt(filename, 
-            dtype={
-                'names':('flyermiles', 'videotime', 'icecream', 'labels'), 
-                'formats':('i4', 'f4', 'f4', 'S12')
-                })
-    print(fullMatrix.shape)
-    print(fullMatrix[:][0])
-    return fullMatrix, fullMatrix['labels']
+    # 以字符串类型读取文件, 方便二维处理
+    fullMatrix = np.loadtxt(filename, dtype='S')
+    # 提取Data
+    dataMatrix = fullMatrix[:, 0:3].astype(np.float)
+    # 提取Labels (datingTestSet.txt里面是字符串)
+    labelsVec = fullMatrix[:, -1]
+    return dataMatrix, labelsVec
+
+def datingClassTest():
+    dataMatrix, labelsVec = file2matrix("./machinelearninginaction/Ch02/datingTestSet2.txt")
+    fig = plt.figure()
 
 def main():
-    #  inXs = np.array([[0.5, 0.5], [0.2, 0.2], [0.7, 0.7]])
-    #  dataSet, labels = createDataSet()
-    #  for i in range(inXs.shape[0]):
-        #  label = knnClassify(inXs[i], dataSet, labels)
-        #  print(inXs[i], ":", label)
-
-    matrix, labels = file2matrix("./machinelearninginaction/Ch02/datingTestSet.txt")
-    #  print(matrix)
+    #  simpleTest()
+    datingClassTest()
 
 if __name__ == "__main__":
     main()
