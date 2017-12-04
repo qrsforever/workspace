@@ -172,10 +172,13 @@ def main():
         thinkplot.Pmf(suite)
         print(suite.MaximumLikelihood())
 
-    thinkplot.Save(root='jaynes1',
+    thinkplot.Show(
                    xlabel='Number of particles (n)',
-                   ylabel='PMF',
-                   formats=FORMATS)
+                   ylabel='PMF'
+                   )
+
+    return
+
 
     # plot the posterior distributions of r and n
     hypos = range(1, 501, 5)

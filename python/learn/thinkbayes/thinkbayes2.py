@@ -630,6 +630,15 @@ class Pmf(_DictWrapper):
     # maximum likelihood estimator.
     MaximumLikelihood = Mode
 
+
+    def MaximumLikelihood(self):
+        """Returns the value with the highest probability.
+
+        Returns: float probability
+        """
+        prob, val = max((prob, val) for val, prob in self.Items())
+        return val
+
     def CredibleInterval(self, percentage=90):
         """Computes the central credible interval.
 

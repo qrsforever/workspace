@@ -114,6 +114,8 @@ class _DictWrapper(object):
         hypos: sequence of hypotheses
         """
         self.name = name
+        # 兼容一下thinkbayes2版本
+        self.label = name
         self.d = {}
 
         # flag whether the distribution is under a log transform
