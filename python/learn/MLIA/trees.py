@@ -105,6 +105,8 @@ def chooseBestFeatureToSplit(dataSet):# {{{
     选择最好的特征（列）进行分类，分别划分每个特征（列）
     计算划分后的信息熵（唯一特征值对应熵的和）
     信息增益：划分前后熵的差
+
+    什么是最好的: 选择的特征划分后, 使信息增益最大
     
     Parameters
     ----------
@@ -158,12 +160,57 @@ def chooseBestFeatureToSplit(dataSet):# {{{
 
 # }}}
 
+def createTree(dataSet, labels):# {{{
+    """
+    递归构建决策树
+    
+    Parameters
+    ----------
+    dataSet: 数据集, 约定最后一列为分类
+    labels: 特征对应的标签名字(用来显示, 非必须)
+    
+    Returns
+    -------
+    myTree:
+    
+    Notes
+    -----
+    
+    """
+
+    # 构建树的终止条件(2个)
+    # 虽然特征还有剩余要split的, 但是分类相同, dataSet的熵为0(1)
+    classList = [d[-1] for d in dataSet]
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    # 没有特征要split, 但是分类还有几个(2)
+    if len(dataSet[0]) == 1:
+        return majorityCnt(classList)
+
+    # 选择一个最好的特征去split数据集
+    featIndex = chooseBestFeatureToSplit(dataSet)
+    featLabel = labels[featIndex] 
+    myTree = {featLabel: {}}
+    del(labels[featIndex])
+
+    # 该特征里按特征值分组
+    featValues = [d[featIndex] for d in dataSet]
+    featValues = set(featValues)
+    # 按照特征值分组, 每个组对应一个dataSet子集
+    for value in featValues:
+        subLabels = labels[:]
+        # 使用子集继续构建tree
+        myTree[featLabel][value] = createTree(splitDataSet(dataSet, featIndex, value), subLabels)
+
+    return myTree
+# }}}
+
 def createDataSet(s=0):# {{{
     """
     生成测试数据
     """
-    if s == 0:
-        arr = [
+    if s == 2:
+        dataSet = [
                 [1, 2, 'A'],
                 [3, 4, 'B'],
                 [1, 3, 'E'],
@@ -172,6 +219,7 @@ def createDataSet(s=0):# {{{
                 [4, 9, 'B'],
                 [4, 3, 'D'],
                 [8, 1, 'A']]
+        labels = ['first', 'second']
     elif s == 1:
         """
         第2特征:
@@ -179,7 +227,7 @@ def createDataSet(s=0):# {{{
         2 --> B
         3 --> C
         """
-        arr = [
+        dataSet = [
                 [1, 1, 'A'],
                 [2, 2, 'B'],
                 [0, 3, 'C'],
@@ -188,15 +236,27 @@ def createDataSet(s=0):# {{{
                 [1, 1, 'A'],
                 [2, 2, 'B'],
                 [1, 1, 'A']]
+        labels = ['first', 'second']
+    else:
+        dataSet = [
+                [1, 1, 'yes'],
+                [1, 1, 'yes'],
+                [1, 0, 'no'],
+                [0, 1, 'no'],
+                [0, 1, 'no']]
+        labels = ['no surfacing','flippers']
 
-    return arr
+    return dataSet, labels
 # }}}
 
 def main():
-    #  print(cacShannonEntropy(createDataSet()))
-    #  print(splitDataSet(createDataSet(), 1, 3))
-    #  print(chooseBestFeatureToSplit(createDataSet(1)))
-    print(majorityCnt(['a', 'b', 'a', 'a', 'b', 'c', 'c']))
+    dataSet, labels = createDataSet()
+    #  print(cacShannonEntropy(datqaSet))
+    #  print(splitDataSet(dataSet, 1, 3))
+    #  print(chooseBestFeatureToSplit(dataSet))
+    #  print(majorityCnt(['a', 'b', 'a', 'a', 'b', 'c', 'c']))
+    tree = createTree(dataSet, labels)
+    print(tree)
 
 
 if __name__ == "__main__":
