@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import os
+import re
+import random
 
 def loadDataSet():# {{{
     """
@@ -32,7 +35,7 @@ def generateVocabList(dataSet):# {{{
     return list(vocabuSet)
 # }}}
 
-def setOfWord2Vec(vocabuList, documents):# {{{
+def setOfWords2Vec(vocabuList, documents):# {{{
     """
     将参数documents中的单词映射到0,1的向量中
     单词转换为数字
@@ -50,7 +53,7 @@ def setOfWord2Vec(vocabuList, documents):# {{{
     return vecs
 # }}}
 
-def bagOfWord2Vec(vocabuList, documents):# {{{
+def bagOfWords2Vec(vocabuList, documents):# {{{
     """
     词袋转换: 有重复的单词
     """
@@ -163,27 +166,104 @@ def testingNB():# {{{
     vocabuList = generateVocabList(dataSet)
     trainMatrix = []
     for it in dataSet:
-        trainMatrix.append(setOfWord2Vec(vocabuList, it))
+        trainMatrix.append(setOfWords2Vec(vocabuList, it))
     pVectC0, pVectC1, pAbusive = trainingNaiveBayes(trainMatrix, dataClass)
 
     # 测试NB: 词集测试
     #  testEntry = ['love', 'my', 'dalmation']
-    #  thisDoc = np.array(setOfWord2Vec(vocabuList, testEntry))
+    #  thisDoc = np.array(setOfWords2Vec(vocabuList, testEntry))
     #  print(classifyNaiveBayes(thisDoc, pVectC0, pVectC1, pAbusive))
 
     testEntry = ['stupid', 'garbage']
-    thisDoc = np.array(setOfWord2Vec(vocabuList, testEntry))
+    thisDoc = np.array(setOfWords2Vec(vocabuList, testEntry))
     print(testEntry, classifyNaiveBayes(thisDoc, pVectC0, pVectC1, pAbusive))
 
     # 测试NB: 词袋测试
     #  testEntry = np.tile(['love', 'my', 'dalmation'], 5)
-    #  thisDoc = np.array(setOfWord2Vec(vocabuList, testEntry))
+    #  thisDoc = np.array(setOfWords2Vec(vocabuList, testEntry))
     #  print(classifyNaiveBayes(thisDoc, pVectC0, pVectC1, pAbusive))
 
     testEntry = np.tile(['stupid', 'garbage'], 5)
-    thisDoc = np.array(bagOfWord2Vec(vocabuList, testEntry))
+    thisDoc = np.array(bagOfWords2Vec(vocabuList, testEntry))
     print(testEntry, classifyNaiveBayes(thisDoc, pVectC0, pVectC1, pAbusive))
+# }}}
+
+def parseWordsFromText(text):# {{{
+    """
+    从文档数据中解析出单词
+
+    忽略小于3个字符的单词, 字符统一转变为小写
+    """
+
+    wordsList = re.split(r'\W*', text)
+    return [word.lower() for word in wordsList if len(word) > 2]
+
+# }}}
+
+def testSpamMail():# {{{
+    """
+    过滤垃圾邮件 
+
+    Notes
+    -----
+    """
+    emailRootDir = "machinelearninginaction/Ch04/email"
+    emailHamDir = os.path.join(emailRootDir, "ham")
+    emailSpamDir = os.path.join(emailRootDir, "spam")
+    
+    dataSet = []
+    classesList = []
+    for i in range(1, 26):
+        wordsList = parseWordsFromText(open("%s/%i.txt" % (emailHamDir, i), encoding="ISO-8859-1").read())
+        dataSet.append(wordsList)
+        classesList.append(0)  # 正常邮件
+        wordsList = parseWordsFromText(open("%s/%i.txt" % (emailSpamDir, i), encoding="ISO-8859-1").read())
+        dataSet.append(wordsList)
+        classesList.append(1)  # 垃圾邮件
+
+    # 去重, 生成一个词汇集合List, 可以删除一些常用单词
+    vocabuList =  generateVocabList(dataSet)
+
+    # 将dataSet集合中的数据转换为词汇向量形式
+    #  dataMatrix = []
+    #  for doc in dataSet:
+        #  dataMatrix.append(bagOfWords2Vec(vocabuList, doc))
+    #  N = len(dataMatrix)
+
+    # 将dataSet分为训练集和测试集(10)
+    trainingIndexSet = [i for i in range(50)]
+    testIndexSet = []; testClasses = []
+    for i in range(10):
+        idx = int(random.uniform(0, len(trainingIndexSet)))
+        testIndexSet.append(idx)
+        del(trainingIndexSet[idx])
+
+    # 训练集
+    trainingMatrix = []; trainingClasses = []
+    for idx in trainingIndexSet:
+        trainingMatrix.append(bagOfWords2Vec(vocabuList, dataSet[idx]))
+        trainingClasses.append(classesList[idx])
+
+    # 测试集
+    testMatrix = []; testClasses = []
+    for idx in testIndexSet:
+        testMatrix.append(bagOfWords2Vec(vocabuList, dataSet[idx]))
+        testClasses.append(classesList[idx])
+    
+    # 分别计算出 垃圾(1)/正常(0) 两类邮件词汇使用的频率向量
+    # pSpam: 垃圾邮件的先验概率
+    p0, p1, pSpam = trainingNaiveBayes(trainingMatrix, trainingClasses)
+
+    # 测试
+    errCount = 0
+    for i in range(len(testMatrix)):
+        isSpam = classifyNaiveBayes(testMatrix[i], p0, p1, pSpam)
+        if isSpam != testClasses[i]:
+            errCount += 1
+    print("errCount = %d, errRate = %.2f%%" % (errCount, errCount*100/len(testMatrix)))
+
 # }}}
 
 if __name__ == "__main__":
      testingNB()
+     testSpamMail()
