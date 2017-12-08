@@ -1,57 +1,54 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Poisson Distribution (泊松分布)
 
 import numpy as np
-from scipy import stats
+from scipy.stats import poisson
 import matplotlib.pyplot as plt
 
-def testPmf():
+def testPoisson():# {{{
     """
+    Poisson Distribution (泊松分布)
     泊松分布的例子：已知某路口发生事故的比率是每天2次，那么在此处一天内发生n次事故的概率是多少？
     """
+    # 准备数据: 已知lam:单位时间内发生某件事的平均次数
+    # X轴: 单位时间内该事件发生的次数
+    # Y轴: 次数对应的概率
+    lam = 10  # p = 1/lam
+    xs = np.arange(
+            poisson.ppf(0.01, mu=lam), 
+            poisson.ppf(0.99, mu=lam),
+            step=1)
 
-    # 发生事故的均值
-    rate = 2
-    # 该天发生0 - 10的事故的概率
-    # 泊松分布的输出是一个数列，包含了发生0次、1次、2次，直到10次事故的概率。
-    k = np.arange(0, 10)
-    y = stats.poisson.pmf(k=k, mu=rate)
+    # E(X) = lam, D(X) = lam
+    mean, var, skew, kurt = poisson.stats(mu=lam, loc=0, moments='mvsk')
+    print("mean: %.2f, var: %.2f, skew: %.2f, kurt: %.2f" % (mean, var, skew, kurt))
 
-    plt.plot(k, y, 'o-')
-    plt.title('Poisson: rate=%i' % (rate), fontsize=15)
-    plt.xlabel('Number of accidents')
-    plt.ylabel('Probability of number accidents', fontsize=15)
+    fig, axs = plt.subplots(1, 3)
+
+    # 显示pmf
+    ys = poisson.pmf(xs, mu=lam)
+    axs[0].plot(xs, ys, 'bo', markersize=5, label='poisson pmf')
+    axs[0].legend()
+
+    # 显示cdf
+    ys = poisson.cdf(xs, mu=lam)
+    axs[1].plot(xs, ys, 'bo', markersize=5, label='poisson cdf')
+    axs[1].legend()
+
+    # 随机变量RVS
+    data = poisson.rvs(mu=lam, size=1000)
+    import sys
+    sys.path.append("../../thinkstats")
+    import Pmf
+    pmf = Pmf.MakePmfFromList(data)
+    xs, ys = pmf.Render()
+    axs[2].plot(xs, ys, 'bo', markersize=5, label='rvs pmf')
+    axs[2].legend()
+        
     plt.show()
-
-def testRvs():
-    """
-    模拟1000个服从泊松分布的随机变量
-    """
-
-    rate = 2
-    poissonsim = stats.poisson.rvs(mu=rate, loc=0, size=1000)
-
-    d = {}
-    for i in poissonsim:
-        d[i] = d.get(i, 0) + 1
-
-    for x, y in d.items():
-        print("Count(%d) = %d" % (x, y))
-
-    print("np.mean(poissonsim): %g" % np.mean(poissonsim))
-    print("np.std(poissonsim): %g" % np.std(poissonsim, ddof=1))
-
-    xs, ys = zip(*sorted(d.items()))
-
-    plt.plot(xs, ys, 'o-')
-    plt.title('Poisson: rate=%i' % (rate), fontsize=15)
-    plt.xlabel('Number of accidents')
-    plt.ylabel('Probability of number accidents', fontsize=15)
-    plt.show()
-
+    
+# }}}
 
 if __name__ == "__main__":
-    testPmf()
-    testRvs()
+    testPoisson()
