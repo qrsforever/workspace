@@ -32,6 +32,7 @@ __archetype_generate() {
     then
         interactiveMode=$default_interactiveMode
     fi
+    echo -e "mvn archetype:generate\n\t-DgroupId=$groupId\n\t-DartifactId=$artifactId\n\t-DpacakgeName=$packageName\n\t-DinteractiveMode=$interactiveMode"
     echo -n "Conform(y/n): "
     read n
     if [[ x$n == xy ]]
@@ -41,13 +42,18 @@ __archetype_generate() {
 }
 
 __main() {
-    echo "1. archetype:generate"
-    echo "2. dependency:sources"
-    echo "3. dependency:resolve -Dclassifier=javadoc"
-    echo "4. eclipse:eclipse"
-    echo "5. package without test" 
-    echo -n "Select: "
-    read n
+    if [[ x$1 == x ]]
+    then
+        echo "1. archetype:generate"
+        echo "2. dependency:sources"
+        echo "3. dependency:resolve -Dclassifier=javadoc"
+        echo "4. eclipse:eclipse"
+        echo "5. package without test" 
+        echo -n "Select: "
+        read n
+    else
+        n=$1
+    fi
 
     case $n in 
         '1')
@@ -65,7 +71,9 @@ __main() {
         '5')
             mvn package -Dmaven.test.skip=true
             ;;
+        *)
+            echo "error select ($n)"
     esac
 }
 
-__main
+__main $*
