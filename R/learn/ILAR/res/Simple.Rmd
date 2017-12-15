@@ -1,0 +1,76 @@
+Markdown document
+=================
+This is a text-document, with extension ".Rmd" --- R-markdown. 
+
+The point is that the R-code is between lines starting with a line with three single back-quotes followed by {r} and ending with a line of 3 singe back-quotes. When this type of file is processed in R-studio by pressing "Knit HTML" or simply Shift-Ctrl-H, all the R-code will be run, and both the code and the results collected in a final HTML document.
+
+# Here is a section
+
+First we set some relevant prerequisites --- the opts_chunk$set is used to specify whether we want to keep the code - and we indeed do. Also remember to explicitly set the working directory and let R confirm it:
+```{r}
+opts_chunk$set(keep.source=TRUE)
+library( Epi )
+# setwd("c:/bendix/undervis/SPE/Intro")
+```
+
+## Here is a subsection
+
+For documentation we list the folder where it all takes place and the list and version-names(!) of the attached packages, so we know if some of the calculations were done by package versions that later showed to contain errors:
+```{r}
+getwd()
+print( sessionInfo(), l=F )
+```
+
+### Subsub-section
+
+This is as far down as it goes.
+
+# Subject matter
+
+Then we can start the **substance** of the document to show what goes on:
+
+The data are pulled out of thin air:
+```{r}
+xx <- rnorm(9638)
+xx[1:35]
+```
+Note that we have generated `r length(xx)` random numbers from a normal distribution, and `r round(mean(xx>1)*100,1)`% of them are larger than 1.
+
+Note that the listing is changed if you change the width-parameter - this is what you want to customize to fit with your usual printing style:
+```{r}
+options("width")
+options( width=120 )
+options("width")
+xx[1:35]
+options( width=77 )
+```
+Now we can make a simple plot:
+```{r}
+hist( xx, breaks=100, col=gray(0.3), border=gray(0.3) )
+```
+
+Note that the plot is automatically included in the html document. And that you should leave a blank line after the chunk with a plot.
+
+We can make more than one plot, and control the height and width of the plot inside the curly brackets. **Then** we can make the two plots side-by-side:
+```{r, fig.width=8, fig.height=4}
+par( mfrow=c(1,2), mar=c(3,3,1,1), mgp=c(3,1,0)/1.5 )
+hist(         xx  , breaks=100, col=gray(0.4), border=gray(0.4), main="" )
+hist( log(abs(xx)), breaks=100, col=gray(0.2), border=gray(0.2), main="" )
+```
+
+At the end of the document you are writing, it is convenient to have a number of empty code-brackets stashed up, because it is a pain to write all those back-quotes in a Danish keyboard.
+
+Also it is convenient to insert inside long stretches of code where you want to include some comments.
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+```{r}
+```
+

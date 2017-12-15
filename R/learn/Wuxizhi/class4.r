@@ -44,3 +44,58 @@ ys = dnorm(xs)
 plot(xs, ys, type="l", axes=FALSE, xlab="", ylab="", main="Density")
 # 多边形填充
 polygon(c(xs[xs>-4]), c(dnorm(c(xs[xs>-4]))), col="blue")
+
+# eg.4 正态分布 不同值, 形状
+xs = seq(-5, 5, .001)
+par(mfrow=c(1,1))
+ys1 = dnorm(xs, mean=-2, sd = .5)
+ys2 = dnorm(xs, mean=0, sd = 1)
+# lty: line type
+plot(xs, ys1, type="l", lty=2, xlab="", ylab="")
+lines(xs, ys2)
+text(c(-2, 0), c(.3, .2), c("N(-2, 0.5)", "N(0,1)"))
+
+# eg.5 pdf 密度函数积分(r1 --> r2)
+xs = c(seq(-4, 4, length=1000))
+ys = dnorm(xs)
+
+r1 = 0.51
+r2 = 1.57
+
+xs2 = c(r1, r1, xs[xs>r1&xs<r2], r2, r2)
+ys2 = dnorm(c(r1, xs[xs>r1&xs<r2], r2))
+ys2 = c(0, ys2, 0)
+
+par(mfrow=c(1,1))
+plot(xs, ys, type="l", ylab=expression(phi(x)))
+# 画底下一条线
+abline(h = 0)
+polygon(xs2, ys2, col="gray")
+
+
+# eg6. 卡方分布
+xs = seq(0, 10, l=1000)
+ys1 = dchisq(xs, 2)
+ys2 = dchisq(xs, 3)
+ys3 = dchisq(xs, 5)
+
+par(mfrow=c(1,1))
+plot(xs, ys1, type="l", xlab="", ylab="")
+lines(xs, ys2, lty=2)
+lines(xs, ys3, lty=3)
+
+text(c(0, 1, 7), c(.35, .2, .1), 
+     c(
+       expression(chi^2(2)),
+       expression(chi^2(3)),
+       expression(chi^2(5))))
+
+
+# eg7. t分布 -- 标准化过程中没有使用总体的标准差sigma, 而是使用了样本中的标准差s
+xs = seq(-4, 4, l=1000)
+ys1 = dnorm(xs)
+ys2 = dt(xs, 1)
+
+par(mfrow=c(1,1))
+plot(xs, ys1, type="l", xlab="", ylab="")
+lines(xs, ys2, lty=2)
