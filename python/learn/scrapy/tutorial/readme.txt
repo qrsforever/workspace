@@ -46,3 +46,9 @@ cmdline:
 
 注意:
 1. response.css 返回的是selector list, 是个列表
+
+
+# settings.py: 
+# EXTENSIONS = {
+#     'scrapy.extensions.telnet.TelnetConsole': None,
+# }
