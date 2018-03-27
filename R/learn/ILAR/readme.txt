@@ -1,3 +1,5 @@
+推荐先看一下<<理解矩阵>> 20页
+
 Introductory linear Algebra with R
 
 Introduction to Linear Algebra

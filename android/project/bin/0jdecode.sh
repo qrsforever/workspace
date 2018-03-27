@@ -33,6 +33,11 @@ then
     ln -s $TOOLS_HOME/jd-gui/jd-gui-1.4.0.jar $output_dir/jd-gui.jar
 fi
 
+if [ ${file##*.} == "dex" ]
+then
+    $DEX2JAR -f $1 -o $output_dir/dex2jar/classes.jar 
+fi
+
 if [ ${file##*.} == "jar" -o ${file##*.} == "class" ]
 then
     ln -s $TOOLS_HOME/jd-gui/jd-gui-1.4.0.jar $output_dir/jd-gui.jar

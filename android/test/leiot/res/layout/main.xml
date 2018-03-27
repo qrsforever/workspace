@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        tools:context=".SimpleActivity" >
+    <LinearLayout
+            android:id="@+id/ll_signal"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/signal_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightsteelblue"
+                android:textStyle="bold"
+                android:textSize="20dip"
+                android:text="信号源(立即上报):" />
+
+        <RadioGroup
+                android:id="@+id/input_sex_rg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginLeft="60dip"
+                android:orientation="horizontal" >
+
+            <RadioButton
+                    android:id="@+id/input_mm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="MM" />
+            <RadioButton
+                    android:id="@+id/input_hdmi1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="HDMI-1" />
+            <RadioButton
+                    android:id="@+id/input_hdmi2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="HDMI-2" />
+            <RadioButton
+                    android:id="@+id/input_hdmi3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="HDMI-3" />
+            <RadioButton
+                    android:id="@+id/input_digital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="数字电视" />
+            <RadioButton
+                    android:id="@+id/input_analog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="模拟电视" />
+            <RadioButton
+                    android:id="@+id/input_av"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/color_radiobutton"
+                    android:text="AV" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_brightness"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/brightness_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightsteelblue"
+                android:textStyle="bold"
+                android:textSize="20dip"
+                android:gravity="right"
+                android:text="亮度(延缓更新)"/>
+
+        <SeekBar
+                android:id="@+id/brightness_sb"
+                android:layout_width="400dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginLeft="60dip"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:max="100"
+                android:progress="50"
+                android:indeterminate="false" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_volume"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/volume_switch_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dip"
+                android:textColor="@color/lightsteelblue"
+                android:textStyle="bold"
+                android:textSize="20dip"
+                android:gravity="right"
+                android:text="音量控制"/>
+
+        <TextView
+                android:id="@+id/volume_switch_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/azure"
+                android:textSize="20dip"
+                android:gravity="center" 
+                android:background="@drawable/border_write"
+                android:text="Null"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
