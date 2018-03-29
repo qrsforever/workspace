@@ -30,12 +30,13 @@ then
     $APKTOOL d -f $1 -o $output_dir/apk-decode
     unzip -x $1 -d $output_dir/apk-unzip
     $DEX2JAR -f $output_dir/apk-unzip/classes.dex -o $output_dir/dex2jar/classes.jar 
-    ln -s $TOOLS_HOME/jd-gui/jd-gui-1.4.0.jar $output_dir/jd-gui.jar
+    file=$output_dir/dex2jar/classes.jar
 fi
 
 if [ ${file##*.} == "dex" ]
 then
     $DEX2JAR -f $1 -o $output_dir/dex2jar/classes.jar 
+    file=$output_dir/dex2jar/classes.jar
 fi
 
 if [ ${file##*.} == "jar" -o ${file##*.} == "class" ]

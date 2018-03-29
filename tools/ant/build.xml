@@ -9,10 +9,17 @@
     <!-- 配置基本属性:定义变量 -->
     <property name="src.dir" value="src"/>
     <property name="bin.dir" value="bin"/>
-    <property name="lib.dir" value="lib"/>
+    <property name="lib.dir" value="libs"/>
     <property name="jar.dir" value="${bin.dir}/jar"/>
 
     <property name="classes.dir" location="${bin.dir}/classes"/>  <!-- 内部转换为绝对路径 -->
+
+    <!-- 需要集成第三方jar包 -->
+    <path id="lib-classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
 
     <!-- 调试属性 -->
     <property name="junit.dir" value="${bin.dir}/junit"/>
@@ -89,6 +96,10 @@
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
+
+            <!-- 第三方库打包 -->
+            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/xxx.jar" />
+
             <!-- 排除单元测试 -->
             <exclude name="**/*Test.*" />
             <exclude name="**/Test*.*" />
