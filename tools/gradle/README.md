@@ -12,11 +12,14 @@ categories: [ Tools ]
 * [介绍](#介绍)
     * [Gradle和Gradlew区别](#gradle和gradlew区别)
     * [生成gradlew](#生成gradlew)
+    * [执行wrapper任务](#执行wrapper任务)
     * [设置Wrapper版本](#设置wrapper版本)
 * [配置文件](#配置文件)
     * [自动编译配置](#自动编译配置)
     * [运行环境配置](#运行环境配置)
     * [子项目包含配置](#子项目包含配置)
+    * [本地配置文件](#本地配置文件)
+    * [全局配置](#全局配置)
 * [常用命令参数及解释](#常用命令参数及解释)
     * [常用命令](#常用命令)
     * [快速构建命令](#快速构建命令)
@@ -24,6 +27,8 @@ categories: [ Tools ]
     * [构建并安装调试命令](#构建并安装调试命令)
     * [查看包依赖](#查看包依赖)
     * [其他命令](#其他命令)
+* [工程目录](#工程目录)
+    * [Native包](#native包)
 
 <!-- vim-markdown-toc -->
 
@@ -41,6 +46,13 @@ Gradlew = Gradle + Wrapper
 -----------
 
 ```bash:-
+gradle init wrapper
+```
+
+执行wrapper任务
+---------------
+
+```bash:-
 gradle wrapper
 ```
 
@@ -50,7 +62,7 @@ gradle wrapper
 1. 通过命令
 
   ```bash:-
-  gradle wrapper --gradle-version 4.0 --distribution-type all
+  gradle wrapper --gradle-version 4.0 [--distribution-type all|bin]
   ```
 
 2. 通过修改`gradle/wrapper/gradle-wrapper.properties`文件`distributionUrl`来实现
@@ -61,11 +73,13 @@ gradle wrapper
   distributionUrl=file:///data/opt/gradle/gradle-4.6-bin.zip
   ```
 
+*gradlew会把`distributionUrl`指定版本下载到`${USER_HOME/.gradle/wrapper/dists`*
+
 配置文件
 ========
 
 自动编译配置
-----------------
+------------
 
 build.gradle
 
@@ -78,6 +92,32 @@ gradle.properties
 --------------
 
 setting.gradle
+
+  ```:-
+  project
+  ├─── setting.gradle
+  ├─── build.grade
+  ├─── app
+  │    └─── build.gradle
+  └─── libraries
+       ├─── library1
+       │    └─── build.gradle
+       └─── library2
+            └─── build.gradle
+  ```
+
+  `include ':app', ':libraries:library1', ':libraries:library2'`
+
+  ```:-1
+  dependencies {
+         compile project(':libraries:library1')
+  }
+  ```
+
+本地配置文件
+------------
+
+local.properties
 
 全局配置
 --------
@@ -143,7 +183,13 @@ init.gradle
   gradlew clean --refresh-dependencies build
   ```
 
-**注意build命令把 debug、release环境的包都打出来的**
+7. unit测试和instrumentation测试
+
+  ```bash:-
+  gradlew check
+  ```
+
+**注意build = check + assemble: 把debug、release环境的包都打出来的**
 
 
 指定构建目标命令
@@ -223,7 +269,7 @@ init.gradle
 其他命令
 --------
 
-1. 排除任务`-x`  
+1. 排除任务`-x`
 
   ```bash:-
   gradle dist -x test
@@ -265,4 +311,24 @@ init.gradle
 
   ```bash:-
   gradlew clean aDR
+  ```
+
+工程目录
+========
+
+Native包
+--------
+
+  ```:-
+  app
+     ├── AndroidManifest.xml
+     └── jniLibs
+         ├── armeabi
+         │   └── nativelib.so
+         ├── armeabi-v7a
+         │   └── nativelib.so
+         ├── mips
+         │   └── nativelib.so
+         └── x86
+             └── nativelib.so
   ```

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if (( $# < 1 ))
+then
+    echo "Use: 0chkbugreport.sh bugreport.txt"
+    exit
+fi
+
+current_dir=`pwd`
+cmd_dir=`which $0`
+cmd_dir=`dirname $cmd_dir`
+
+LIBS_HOME="$cmd_dir/../libs"
+
+# adb shell bugreport > bugreport.txt
+java -jar $LIBS_HOME/chkbugreport.jar $1

@@ -1,4 +1,6 @@
-// 对当前项目有效
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+// 规定运行环境, 引入com.android.tools.build:gradle并实现扩展
 buildscript {
     repositories {
         // 主仓库
@@ -10,13 +12,11 @@ buildscript {
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
     dependencies {
-        // classpath 'com.android.tools.build:gradle:2.2.3'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }        
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
 }
 
+// 定义软件库
 allprojects {
     repositories {
         // 主仓库
@@ -27,4 +27,63 @@ allprojects {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
+}
+
+// 应用gradle插件
+apply plugin: 'com.android.application'
+
+// 定义任务android
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        // AndroidManifest.xml中的包名
+        applicationId "com.XXX.XXX"
+        minSdkVersion 19
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    // 构建不同版本的app
+    buildTypes {
+        debug {
+            // BuildConfig定义, 代码访问BuildConfig.API_URL
+            buildConfigField "String", "API_URL", "\"http://test.example.com/api\""
+
+            // 资源定义
+            resValue "string", "app_name", "Example DEBUG"
+        }
+
+        release {
+            // 代码中使用BuildConfig.LOG_HTTP
+            buildConfigField "boolean", "LOG_HTTP","false"
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+// 引入依赖
+dependencies {
+    // 本地依赖
+    // compile files('libs/xxx.jar')
+
+    // 多个jar包使用
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // groovy语法
+    // compile 'com.google.code.gson:gson:2.3'
+
+    // 完整形式
+    compile group: 'com.google.code.gson', name: 'gson', version:'2.3'
+
+    // 子工程模块 see settings.gradle
+    compile project(':library')
 }
