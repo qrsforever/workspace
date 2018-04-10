@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">IOT控制端测试</string>
+    <string name="signal_title">设置信号源</string>
+    <string name="btn_signal_txt">进入信号源设置页面</string>
 
 </resources>

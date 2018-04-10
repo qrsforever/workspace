@@ -4,88 +4,23 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        tools:context=".SimpleActivity" >
-    <LinearLayout
-            android:id="@+id/ll_signal"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        tools:context=".MainActivity" >
 
-        <TextView
-                android:id="@+id/signal_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/lightsteelblue"
-                android:textStyle="bold"
-                android:textSize="20dip"
-                android:text="信号源(立即上报):" />
-
-        <RadioGroup
-                android:id="@+id/input_sex_rg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:layout_marginLeft="60dip"
-                android:orientation="horizontal" >
-
-            <RadioButton
-                    android:id="@+id/input_mm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="MM" />
-            <RadioButton
-                    android:id="@+id/input_hdmi1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="HDMI-1" />
-            <RadioButton
-                    android:id="@+id/input_hdmi2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="HDMI-2" />
-            <RadioButton
-                    android:id="@+id/input_hdmi3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="HDMI-3" />
-            <RadioButton
-                    android:id="@+id/input_digital"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="数字电视" />
-            <RadioButton
-                    android:id="@+id/input_analog"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="模拟电视" />
-            <RadioButton
-                    android:id="@+id/input_av"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/color_radiobutton"
-                    android:text="AV" />
-        </RadioGroup>
-    </LinearLayout>
+    <Button
+            android:id="@+id/btn_signal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/btn_signal_txt"
+        />
 
     <LinearLayout
             android:id="@+id/ll_brightness"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            >
 
         <TextView
                 android:id="@+id/brightness_tv"
@@ -95,11 +30,11 @@
                 android:textStyle="bold"
                 android:textSize="20dip"
                 android:gravity="right"
-                android:text="亮度(延缓更新)"/>
+                android:text="亮度设置"/>
 
         <SeekBar
                 android:id="@+id/brightness_sb"
-                android:layout_width="400dip"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dip"
                 android:layout_marginLeft="60dip"
@@ -112,31 +47,35 @@
 
     <LinearLayout
             android:id="@+id/ll_volume"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="30dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
 
-        <TextView
-                android:id="@+id/volume_switch_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dip"
-                android:textColor="@color/lightsteelblue"
-                android:textStyle="bold"
-                android:textSize="20dip"
-                android:gravity="right"
-                android:text="音量控制"/>
 
-        <TextView
-                android:id="@+id/volume_switch_tv"
-                android:layout_width="match_parent"
+        <Button
+                android:id="@+id/btn_volume_down"
+                android:layout_width="100dip"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:layout_marginBottom="10dip"
                 android:textColor="@color/azure"
                 android:textSize="20dip"
-                android:gravity="center" 
-                android:background="@drawable/border_write"
-                android:text="Null"/>
+                android:text="音量-"
+            />
 
+        <Button
+                android:id="@+id/btn_volume_up"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginBottom="10dip"
+                android:textColor="@color/azure"
+                android:textSize="20dip"
+                android:text="音量+"
+            />
     </LinearLayout>
 
 

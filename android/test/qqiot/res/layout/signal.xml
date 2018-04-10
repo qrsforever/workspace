@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        tools:context=".SignalActivity" >
+
+    <RadioGroup
+            android:id="@+id/input_sex_rg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="60dip"
+            android:orientation="vertical" >
+
+        <RadioButton
+                android:id="@+id/input_mm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="MM" />
+        <RadioButton
+                android:id="@+id/input_hdmi1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="HDMI-1" />
+        <RadioButton
+                android:id="@+id/input_hdmi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="HDMI-2" />
+        <RadioButton
+                android:id="@+id/input_hdmi3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="HDMI-3" />
+        <RadioButton
+                android:id="@+id/input_digital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="数字电视" />
+        <RadioButton
+                android:id="@+id/input_analog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="模拟电视" />
+        <RadioButton
+                android:id="@+id/input_av"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/color_radiobutton"
+                android:text="AV" />
+    </RadioGroup>
+
+</LinearLayout>

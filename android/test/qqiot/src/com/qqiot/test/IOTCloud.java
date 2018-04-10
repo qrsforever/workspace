@@ -2,32 +2,31 @@ package com.qqiot.test;
 
 import android.content.Context;
 import android.util.Log;
-import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import android.os.HandlerThread;
+
 import com.qcloud.restapi.iotcore.api.TXIotCloud;
 import com.qcloud.restapi.iotcore.request.*;
 import com.qcloud.restapi.iotcore.response.*;
-import com.qcloud.restapi.iotcore.utils.HttpClient;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
 public class IOTCloud {
     public static final String TAG = IOTCloud.class.getSimpleName();
-    private Context  mContext;
+
+    private static final int UPDATE_PROPERTY = 1;
+    private static final int SEND_COMMAND = 2;
 
     private Map<String, IOTProperty> mProperties = null;
     private Map<String, IOTCommand> mCommands = null;
+
+    private HandlerThread mIotThread;
+    private Handler mIotHandler;
 
     private static IOTCloud mIotProxy = null;
     private TXIotCloud mIotCloud = null;
@@ -37,47 +36,53 @@ public class IOTCloud {
     private static final String SECRET_ID =  "AKIDc9kEZPA20ugHl9R2c2Pgqtsiw5AGq74Y";
     private static final String SECRET_KEY = "Z3Y8qVzJWrAnLn9OT2Uq1Md1XGsIMJ5f";
 
-    public IOTCloud(Context context) {//{{{
-        mContext = context;
+    public IOTCloud() {//{{{
         mProperties = new HashMap<String, IOTProperty>();
         mCommands = new HashMap<String, IOTCommand>();
-        System.getProperties().setProperty("https.proxyHost", "dev-proxy.oa.com");
-        System.getProperties().setProperty("https.proxyPort", "8080");
+        mIotCloud = new TXIotCloud(SECRET_ID, SECRET_KEY);
+        mIotThread = new HandlerThread("iot");
+        mIotThread.start();
+        mIotHandler = new IOTHandler(mIotThread.getLooper());
         iotSetup();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mIotCloud = new TXIotCloud(SECRET_ID, SECRET_KEY);
-
-                // String ret = HttpClient.httpsRequest(null, HttpClient.METHOD_GET, null, 30*1000, 30*1000);
-                // System.out.println("### iot response = " + ret);
-                try {
-                    CloseableHttpClient client = HttpClients.createDefault();
-
-                    String targetUrl = "https://iotcloud.api.qcloud.com/v2/index.php?Action=GetDeviceShadow&Nonce=363650530&Region=gz&SecretId=AKIDc9kEZPA20ugHl9R2c2Pgqtsiw5AGq74Y&Timestamp=1522305679&deviceName=testshadow&productID=38GBCH2FO2&Signature=GKqthTzj31xq2PUpXKJSU%2Bo0DsM%3D";
-                    HttpGet get = new HttpGet(targetUrl);
-
-                    CloseableHttpResponse res = client.execute(get);
-                    System.out.println("### + iot status = " + res.getStatusLine().getStatusCode());
-                    HttpEntity entity = res.getEntity();
-                    String html = EntityUtils.toString(entity);
-                    System.out.println(html);
-                    client.close();
-
-                    Thread.sleep(30000);
-                } catch (Exception e){
-                    e.printStackTrace();
-                    System.out.println("### iot error = " + e);
-                }
-            }
-        }).start();
     }//}}}
 
-    public static IOTCloud getInstance(Context context) {//{{{
+    public static IOTCloud getInstance() {//{{{
         if (mIotProxy  == null) {
-            mIotProxy  = new IOTCloud(context);
+            mIotProxy  = new IOTCloud();
         }
         return mIotProxy;
+    }//}}}
+
+    class IOTHandler extends Handler {//{{{
+        public IOTHandler(Looper looper) {
+            super(looper);
+
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_PROPERTY:
+                    mIotCloud.updateDeviceShadow(
+                            new UpdateDeviceShadowRequest(
+                                mProductID,
+                                mDeviceName,
+                                msg.getData().getString("payload"), 0)
+                            );
+                    return;
+
+                case SEND_COMMAND:
+                    mIotCloud.publish(
+                            new PublishRequest(
+                                mProductID, 
+                                mDeviceName, 
+                                mProductID +"/" + mDeviceName + "/control",
+                                msg.getData().getString("payload"))
+                            );
+                    return;
+            }
+            super.handleMessage(msg);
+        }
     }//}}}
 
     public int iotSetup() {//{{{
@@ -94,8 +99,7 @@ public class IOTCloud {
         return 0;
     }//}}}
 
-    public int testService() {
-        /*
+    public int testService() {//{{{
         Log.i(TAG,  " iot testService ");
         GetDeviceShadowResponse response = mIotCloud.getDeviceShadow(new GetDeviceShadowRequest(mProductID, mDeviceName));
         String data = response.getData();
@@ -105,9 +109,8 @@ public class IOTCloud {
         String version = response.getPayloadVersion();
         Log.i(TAG, "iot version:" + version);
         Log.i(TAG, "iot response:" + response);
-        */
         return 0;
-    }
+    }//}}}
 
     abstract public class IOTProperty {//{{{
         String mKey;
@@ -116,40 +119,54 @@ public class IOTCloud {
             mKey = key;
         }
         public String key() { return mKey; }
-        protected abstract String get();
-        protected abstract int set(String val);
+        // protected abstract String get();
+        // protected abstract int set(String val);
         protected void update(String val) {
             String json = "{\"desired\": {\"" + key() + "\":" + Integer.parseInt(val) +"}}";
-            UpdateDeviceShadowResponse response = mIotCloud.updateDeviceShadow(
-                    new UpdateDeviceShadowRequest(mProductID, mDeviceName, json, 0));
-            Log.i(TAG, "response:" + response);
+            Bundle bundle = new Bundle();
+            bundle.putString("payload", json);
+
+            Message msg = mIotHandler.obtainMessage();
+            msg.what = UPDATE_PROPERTY;
+            msg.setData(bundle);
+            mIotHandler.sendMessage(msg);
         }
     }//}}}
 
     abstract public class IOTCommand {//{{{
-        String mName;
-        protected IOTCommand(String name) {
-            mName = name;
+        String mCmd;
+        protected IOTCommand(String cmd) {
+            mCmd = cmd;
         }
-        public String name() { return mName; }
-        protected abstract int call(String params);
+        public String cmd() { return mCmd; }
+        protected int call(String params) {
+            String json = "{\"command\": \"" + cmd() + "\", \"parameters\":{" + params + "}, \"targetDevice\":\"" + mDeviceName + "\"}";
+            Bundle bundle = new Bundle();
+            bundle.putString("payload", json);
+
+            Message msg = mIotHandler.obtainMessage();
+            msg.what = SEND_COMMAND;
+            msg.setData(bundle);
+            mIotHandler.sendMessage(msg);
+            return 0;
+        }
     }//}}}
 
     public class Power extends IOTProperty {//{{{
         public Power(String key) {
             super(key);
         }
-
-        public String get() {
-            Log.i(TAG, "iot---> get(" + key() + ")");
-            return "";
-        }
-
-        public int set(String val) {
-            Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
-            return 0;
-        }
-
+        
+/*            public String get() {
+ *                Log.i(TAG, "iot---> get(" + key() + ")");
+ *                return "";
+ *            }
+ * 
+ *            public int set(String val) {
+ *                Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
+ *                return 0;
+ *            } */
+          
         public void update(String val) {
             Log.i(TAG, "iot---> update(" + key() + ", " + val + ")");
             super.update(val);
@@ -161,15 +178,15 @@ public class IOTCloud {
             super(key);
         }
 
-        public String get() {
-            Log.i(TAG, "iot---> get(" + key() + ")");
-            return "0";
-        }
-
-        public int set(String val) {
-            Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
-            return 0;
-        }
+/*         public String get() {
+ *             Log.i(TAG, "iot---> get(" + key() + ")");
+ *             return "0";
+ *         }
+ * 
+ *         public int set(String val) {
+ *             Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
+ *             return 0;
+ *         } */
 
         public void update(String val) {
             Log.i(TAG, "iot---> update(" + key() + ", " + val + ")");
@@ -182,15 +199,15 @@ public class IOTCloud {
             super(key);
         }
 
-        public String get() {
-            Log.i(TAG, "iot---> get(" + key() + ")");
-            return "";
-        }
-
-        public int set(String val) {
-            Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
-            return 0;
-        }
+/*         public String get() {
+ *             Log.i(TAG, "iot---> get(" + key() + ")");
+ *             return "";
+ *         }
+ * 
+ *         public int set(String val) {
+ *             Log.i(TAG, "iot---> set(" + key() + ", " + val + ")");
+ *             return 0;
+ *         } */
 
         public void update(String val) {
             Log.i(TAG, "iot---> update(" + key() + ", " + val + ")");
@@ -204,9 +221,8 @@ public class IOTCloud {
         }
 
         public int call(String params) {
-            Log.i(TAG, "iot---> " + name() + "( " + params + ")");
-
-            return 0;
+            Log.i(TAG, "iot---> " + cmd() + "( " + params + ")");
+            return super.call(params);
         }
     }//}}}
 
@@ -216,7 +232,7 @@ public class IOTCloud {
         }
 
         public int call(String params) {
-            Log.i(TAG, "iot---> " + name() + "( " + params + ")");
+            Log.i(TAG, "iot---> " + cmd() + "( " + params + ")");
 
             return 0;
         }
@@ -263,9 +279,18 @@ public class IOTCloud {
     }//}}}
 
     public void updateDeviceShadow(String name, String value) {//{{{
-        IOTProperty iotPro = mProperties.get(name);
+        Log.i(TAG, " updateDeviceShadow(" + name + ", " + value + ")");
+        final IOTProperty iotPro = mProperties.get(name);
         if (iotPro == null)
             return ;
         iotPro.update(value);
+    }//}}}
+
+    public void contrlDeviceShadow(String cmd, String value) {//{{{
+        Log.i(TAG, " contrlDeviceShadow(" + cmd + ")");
+        final IOTCommand iotCmd = mCommands.get(cmd);
+        if (iotCmd == null)
+            return ;
+        iotCmd.call(value);
     }//}}}
 }

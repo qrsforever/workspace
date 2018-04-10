@@ -10,31 +10,22 @@ import android.content.IntentFilter;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 
-public class MainActivity extends Activity implements
-       OnCheckedChangeListener, OnSeekBarChangeListener {
+public class MainActivity extends Activity implements OnClickListener,
+       OnSeekBarChangeListener {
     public static final String TAG = MainActivity.class.getSimpleName();
-
 
     IOTCloud mIot = null;
     IOTReceiver mIotReceiver = null;
 
-    private static RadioGroup mSignalSelectRG = null;
-    private static RadioButton mSignalMM = null;
-    private static RadioButton mSignalHDMI1 = null;
-    private static RadioButton mSignalHDMI2 = null;
-    private static RadioButton mSignalHDMI3 = null;
-    private static RadioButton mSignalDigital = null;
-    private static RadioButton mSignalAnalog = null;
-    private static RadioButton mSignalAV = null;
-    private static TextView mVolumeSwitch = null;
-
+    private static Button mSignalBtn = null;
     private static SeekBar mBrightnessSB = null;
+    private static Button mVolUpBtn = null;
+    private static Button mVolDownBtn = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {//{{{
@@ -43,7 +34,7 @@ public class MainActivity extends Activity implements
         setContentView(R.layout.main);
         initView();
 
-        mIot = IOTCloud.getInstance(this);
+        mIot = IOTCloud.getInstance();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -58,18 +49,14 @@ public class MainActivity extends Activity implements
     }//}}}
 
     private void initView() {//{{{
-        mSignalSelectRG = (RadioGroup)findViewById(R.id.input_sex_rg);
-        mSignalMM = (RadioButton)findViewById(R.id.input_mm);
-        mSignalHDMI1 = (RadioButton)findViewById(R.id.input_hdmi1);
-        mSignalHDMI2 = (RadioButton)findViewById(R.id.input_hdmi2);
-        mSignalHDMI3 = (RadioButton)findViewById(R.id.input_hdmi3);
-        mSignalDigital = (RadioButton)findViewById(R.id.input_digital);
-        mSignalAnalog = (RadioButton)findViewById(R.id.input_analog);
-        mSignalAV = (RadioButton)findViewById(R.id.input_av);
+        mSignalBtn = (Button)findViewById(R.id.btn_signal);
         mBrightnessSB = (SeekBar)findViewById(R.id.brightness_sb);
-        mVolumeSwitch = (TextView)findViewById(R.id.volume_switch_tv);
+        mVolUpBtn = (Button)findViewById(R.id.btn_volume_up);
+        mVolDownBtn = (Button)findViewById(R.id.btn_volume_down);
 
-        mSignalSelectRG.setOnCheckedChangeListener(this);
+        mSignalBtn.setOnClickListener(this);
+        mVolUpBtn.setOnClickListener(this);
+        mVolDownBtn.setOnClickListener(this);
         mBrightnessSB.setOnSeekBarChangeListener(this);
     }//}}}
 
@@ -81,40 +68,29 @@ public class MainActivity extends Activity implements
         }
     }//}}}
 
-    public void onCheckedChanged(RadioGroup rg, int checkedId) {//{{{
-        String val = "0";
-        switch (checkedId) {
-            case R.id.input_mm:
-                val = "0";
-                break;
-            case R.id.input_hdmi1:
-                val = "1";
-                break;
-            case R.id.input_hdmi2:
-                val = "2";
-                break;
-            case R.id.input_hdmi3:
-                val = "3";
-                break;
-            case R.id.input_digital:
-                val = "4";
-                break;
-            case R.id.input_analog:
-                val = "5";
-                break;
-            case R.id.input_av:
-                val = "6";
-                break;
-        }
-        mIot.updateDeviceShadow(Constants.IOT_PRO_SIGNAL, val);
-    }//}}}
-
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {//{{{
+        mIot.updateDeviceShadow(Constants.IOT_PRO_BRIGHTNESS, String.valueOf(progress));
     }//}}}
 
     public void onStartTrackingTouch(SeekBar seekBar) {//{{{
     }//}}}
 
     public void onStopTrackingTouch(SeekBar seekBar) {//{{{
+    }//}}}
+
+    public void onClick(View v) {//{{{
+        switch (v.getId()) {
+            case R.id.btn_signal:
+                startActivity(new Intent(MainActivity.this, SignalActivity.class));
+                break;
+
+            case R.id.btn_volume_up:
+                mIot.contrlDeviceShadow(Constants.IOT_CMD_VOLUME_SWITCH, "\"shift\":\"up\"");
+                break;
+
+            case R.id.btn_volume_down:
+                mIot.contrlDeviceShadow(Constants.IOT_CMD_VOLUME_SWITCH, "\"shift\":\"down\"");
+                break;
+        }
     }//}}}
 }
