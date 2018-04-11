@@ -25,11 +25,18 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         allAppsButton.clickAndWaitForNewWindow();
         UiObject toutiao = new UiObject(new UiSelector().text("惠头条"));
         toutiao.click();
-        sleep(3000);
+        sleep(4000);
     }
 
     @Test
     public void testDemo() throws UiObjectNotFoundException {
+        int i = 0;
+
+        try {
+            doCloseAD();
+        } catch (UiObjectNotFoundException e) {
+        }
+    
         try {
             doRecieve50();
         } catch (UiObjectNotFoundException e) {
@@ -37,14 +44,26 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
         try {
             doNews();
-            doEntertainment();
         } catch (UiObjectNotFoundException e) {
+        }
+
+        for (i = 0; i < 6000; ++i) {
+            try {
+                doEntertainment();
+            } catch (UiObjectNotFoundException e) {
+            }
         }
 
         try {
             doVideo();
         } catch (UiObjectNotFoundException e) {
         }
+    }
+
+    public void doCloseAD() throws UiObjectNotFoundException {
+        UiObject closeAD = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/img_close"));
+        closeAD.click();
+        sleep(1000);
     }
 
     public void doRecieve50() throws UiObjectNotFoundException {
@@ -73,6 +92,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         sleep(1000);
 
         UiScrollable items = new UiScrollable(new UiSelector().resourceId("android:id/list"));
+        items.flingForward();
         UiObject first = items.getChild(new UiSelector().index(0));
         first.click();
         sleep(1000);
