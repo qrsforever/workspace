@@ -21,7 +21,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         mDevice = getUiDevice();
-        doClearApps();
     }
 
     @Test
@@ -107,10 +106,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     }
 
     public void doStartApp() throws UiObjectNotFoundException {
-        mDevice.pressBack();
-        mDevice.pressBack();
-        mDevice.pressBack();
-        sleep(1000);
+        doClearApps();
         mDevice.pressHome();
         // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
         // allAppsButton.clickAndWaitForNewWindow();
