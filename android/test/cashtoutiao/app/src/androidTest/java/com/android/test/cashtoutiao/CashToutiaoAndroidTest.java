@@ -102,10 +102,12 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         //        app.swipeUp(h);
         //     sleep(1000);
         // }
-        mDevice.pressBack();
     }
 
     public void doStartApp() throws UiObjectNotFoundException {
+        mDevice.pressBack();
+        mDevice.pressBack();
+        mDevice.pressBack();
         doClearApps();
         mDevice.pressHome();
         // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
@@ -119,14 +121,14 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     public void doCloseAD() throws UiObjectNotFoundException {
         UiObject closeAD = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/img_close"));
         closeAD.click();
-        sleep(1000);
+        sleep(200);
     }
 
     public void doRecieve50() throws UiObjectNotFoundException {
         /* 领取50金币 */
         UiObject receive50 = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/yes_receive_layout"));
         receive50.click();
-        sleep(1000);
+        sleep(200);
     }
 
     public void doNews() throws UiObjectNotFoundException {
@@ -134,7 +136,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         UiCollection bottomTabs = new UiCollection(new UiSelector().resourceId("com.cashtoutiao:id/tabs"));
         UiObject news = bottomTabs.getChildByText(new UiSelector().className("android.widget.TextView"), "头条");
         news.click();
-        sleep(1000);
+        sleep(200);
         /* UiScrollable items = new UiScrollable(new UiSelector().resourceId("android:id/list"));
          * UiObject first = items.getChild(new UiSelector().index(0));
          * first.click(); */
@@ -155,13 +157,15 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             sleep(1000);
 
             UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
-            for (int i = 0; i < 3; ++i) {
+            for (int i = 0; i < 20; ++i) {
                 webpage.flingForward();
                 sleep(3000);
-            }
-            for (int i = 0; i < 3; ++i) {
+                webpage.flingForward();
+                sleep(3000);
                 webpage.flingBackward();
-                sleep(2000);
+                sleep(3000);
+                webpage.flingBackward();
+                sleep(3000);
             }
             UiObject back = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/iv_back"));
             back.click();
