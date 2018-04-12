@@ -332,3 +332,10 @@ Native包
          └── x86
              └── nativelib.so
   ```
+
+TODO
+====
+
+1. 依赖检测(module:app), 然后使用exclude module排除冲突
+    gradle -q app:dependencies
+    

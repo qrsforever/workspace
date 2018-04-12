@@ -10,12 +10,6 @@ make_link()
     then
         rm -f $tools_dir/$1/$2
     fi
-
-    if [ -f $current_dir/$1/$2 ]
-    then
-        mkdir -p $tools_dir/$1
-        ln -s $current_dir/$1/$2  $tools_dir/$1/$2
-    fi 
 }
 
 make_link ant build.xml
@@ -29,4 +23,3 @@ make_link lib manifest-merger.jar
 make_link lib sdklib.jar
 make_link lib gson-2.2.4.jar
 
-echo "sdkmanager will fail if make_link.sh, so don't forget run make_unlink.sh"
