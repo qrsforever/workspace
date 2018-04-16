@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <sqlite3.h>
-/* #include <sqlite3ext.h> */
 
 #define track() printf("track: %s:%d\n", __func__, __LINE__)
 
@@ -40,11 +39,12 @@ static void onTrigger(sqlite3_context *context, int argc, sqlite3_value **argv)
 int main(int argc, char** argv)
 {
     const char *sSQL1 = "create table users(userid varchar(20) PRIMARY KEY, age int, birthday datetime);";
-    const char *sSQL1_2 = "create table users2(userid varchar(20) PRIMARY KEY, age int, birthday datetime);";
     const char *sSQL2 = "insert into users values('wang', 20, '1989-5-4');";
-    const char *sSQL2_2 = "insert into users2 values('wang', 30, '1989-5-5');";
     const char *sSQL3 = "select * from users;";
     const char *sSQL4 = "select firstchar(\"aa\");";
+
+    const char *sSQL1_2 = "create table users2(userid varchar(20) PRIMARY KEY, age int, birthday datetime);";
+    const char *sSQL2_2 = "insert into users2 values('wang', 30, '1989-5-5');";
 
     const char *sSQL5 = "\
         CREATE TRIGGER update_user_age AFTER UPDATE ON users \
@@ -64,9 +64,6 @@ int main(int argc, char** argv)
         ret = sqlite3_open(argv[1], &db);
     else
         ret = sqlite3_open("./test.db", &db);
-
-    sqlite3_create_function(db, "firstchar", 1, SQLITE_UTF8, NULL, &firstchar, NULL, NULL);
-    sqlite3_create_function(db, "onTrigger", 2, SQLITE_UTF8, NULL, &onTrigger, NULL, NULL);
     if (ret != SQLITE_OK)
     {
         fprintf(stderr, "无法打开数据库：%s\n", sqlite3_errmsg(db));
@@ -74,6 +71,9 @@ int main(int argc, char** argv)
         return 1;
     }
     printf("数据库连接成功\n");
+
+    sqlite3_create_function(db, "firstchar", 1, SQLITE_UTF8, NULL, &firstchar, NULL, NULL);
+    sqlite3_create_function(db, "onTrigger", 2, SQLITE_UTF8, NULL, &onTrigger, NULL, NULL);
 
     //执行建表SQL
     ret = sqlite3_exec(db, sSQL1, _sql_callback, 0, &pErrMsg);

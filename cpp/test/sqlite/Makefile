@@ -5,5 +5,5 @@ all:
 	make -f Makefile.test_trigger
 
 clean:
-	rm -rf $(OUT_DIR)
+	rm -rf output
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+
+    <rule name = 'on_temp_humi_update'>
+
+        <event>
+            <fields>temp, humi</fields>
+            <from>8GBCH2FO2/testTH1/event</from>
+            <condition>temp &gt; 35</condition>
+        </event>
+
+        <control>
+            <to>S7JV8369SF/testAC1/control</to>
+            <data>{"command": "attr_set", "parameters": {"power":"on"}}</data>
+        </control>
+
+    </rule>
+
+</root>
