@@ -25,24 +25,28 @@ HDREXTS := h H hh hpp HPP h++ hxx hp
 # 指定源文件目录, 以及目标文件生成目录
 SRC_DIR = . src
 INC_DIR = . src
-OUT_DIR = target
+OUT_DIR = output
 OBJ_DIR = $(OUT_DIR)/obj
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC := 
 EXCLUDE_SRC := 
 
-# 设置目标类型(app, ar, so), 及目标名字
-TARGET_TYPE := app
+# 设置目标类型(exe, ar, so), 及目标名字
+TARGET_TYPE := exe
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME := $(OUT_DIR)/$(shell basename $(PWD))
+TARGET_NAME := 
 
-ifeq ($(TARGET_TYPE), so)
-	TARGET_NAME := $(OUT_DIR)/lib$(shell basename $(PWD).so)
+ifeq ($(TARGET_NAME), )
+	TARGET_NAME := $(shell basename $(PWD))
+endif
+
+ifneq ($(TARGET_TYPE), exe)
+	TARGET_NAME := $(join $(OUT_DIR)/lib, $(TARGET_NAME))
+	TARGET_NAME := $(join $(TARGET_NAME), .$(TARGET_TYPE))
 else
-	ifeq ($(TARGET_TYPE), ar)
-		TARGET_NAME := $(OUT_DIR)/lib$(shell basename $(PWD).a)
-	endif
+	TARGET_NAME := $(join $(OUT_DIR), /$(TARGET_NAME))
+	LDFLAGS += -L$(OUT_DIR)
 endif
 
 # 追加搜索目录
@@ -75,13 +79,17 @@ endef
 # 函数: 生成中间文件
 define gen_o_cmd
 $2/%.o: %.$1
-	$(CXX) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) $(CPPFLAGS) -c -o $$@ $$<
+ifeq ($3 , $(GCC))
+	$(3) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) -c -o $$@ $$<
+else
+	$(3) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) $(CPPFLAGS) -c -o $$@ $$<
+endif
 
 endef
 
 # 执行函数, make会将函数里的内容当Makefile解析, 注意$$符号
 $(eval $(foreach i, $(SRCEXTS), $(foreach d, $(SRC_DIR), $(call add_vpath,vpath %.$i $d))))
-$(eval $(foreach i, $(SRCEXTS), $(call gen_o_cmd,$i,$(OBJ_DIR))))
+$(eval $(foreach i, $(SRCEXTS), $(call gen_o_cmd,$i,$(OBJ_DIR),$(if $(filter-out c C, $(i)),$(CXX),$(GCC)))))
 
 # 静态, 动态, 可执行
 ifeq ($(TARGET_TYPE), ar)

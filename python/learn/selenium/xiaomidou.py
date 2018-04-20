@@ -17,15 +17,15 @@ url = "http://www.cnhtcerp.com/sales/"
 
 # linux配置:
 # 下载pdf的存储目录
-pdf_path = "/home/lidong/Downloads/pdf"
+#  pdf_path = "/home/lidong/Downloads/pdf"
 # chromedriver的安装目录
-driver_path = "/usr/local/bin/chromedriver"
+#  driver_path = "/usr/local/bin/chromedriver"
 
 # windown配置
 # 下载pdf的存储目录
-#  pdf_path = "D:\pdf"
+pdf_path = "D:\pdf"
 # chromedriver的安装目录
-#  driver_path = "D:\pdf\chromedriver.exe"
+driver_path = "D:\pdf\chromedriver.exe"
 
 paramstable = {
         'sdate' : '2017-9-1',
