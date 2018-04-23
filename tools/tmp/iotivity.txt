@@ -1,0 +1,150 @@
+                                                                                       
+                                                                    
+                                                                    
+                                                                    
+                                                                    
+                                                                    
+                                                                    
+                                                                    
+                                                                                                   12
+                                                                                                   CAQueueingThreadBaseRoutine
+                                                                                                              | thread3
+                                                                                                              |
+                                                                                                              v
+                                                                                           +---------> queue_add_element ---------+
+                                                                                           |                                      |
+                                                                                           |                                      |
+                                                                                           |                                      |
+                                                                                           |          +----------------+          |
+                                                                                           |          |      next      |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          |  | msg,size |  |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          +----------------+          |
+                                                                                           |                   ^                  |
+                                                                                           |                   |                  |
+                                                                                           |                   |                  |
+                                                                                           |          +----------------+          |
+                                                                                           |          |      next      |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          |  | msg,size |  |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          +----------------+          |
+                                                                                           |                   ^                  |
+                                                                                           |                   |                  |
+                                                                                           |                   |                  |
+                                                                                           |          +----------------+          |
+                                                                                           |          |      next      |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          |  | msg,size |  |          |
+                                                                                           |          |  +----------+  |          |
+                                                                                           |          +----------------+          |
+                                                                                           |                   ^                  |
+                                                                                           |                   |                  |
+                                                                                           |                   |                  |
+                                                                                           |                   +------+           |
+                                                                                           |                          |           |
+                                                                                           |    +---------------------|-------+   |
+                                                                                           |    |            |                |   |
+                                                                                           |    | threadtask |   dataQueue    |   |
+                                                                                           |    |            |                |   |
+                                                                                           |    +-----------------------------+   |
+                                                                                           |                                      |
+                                                                                           +---------- queue_add_element <--------+
+                                                                                                              ^                  
+                                                                                                              |                  
++---------------------------------------------------------+---------------------------------------------------+--------------+   
+| DIR: connectivity                                       |                                                   |              |
+|                                                         |                                                   |              |
+|                       interfacecontroller               |                   retransmission                  |              |                 
+|                               |                         |                          |                        |              |
+|                               |                         |                          |                        |              |  
+| connectivitymanager           |                  messagehandler                    |                 queueingthread        | 
+|        |                      |                         |                          |                        |              |
++--------+----------------------+-------------------------+--------------------------+------------------------+--------------+
+         |                      |                         |                          |                        |               
+    1    |                      |              2          |                          |             4          |               
+    CAInitialize                |              CAInitializeMessageHandler            |             CAQueueingThreadInitialize 
+                                |                                                    |             CAQueueingThreadStart              
+                                |                                                    |                                          
+                      3         |                                                    |                                          
+                      CASetPacketReceivedCallback                                    |                                                                   
+                      CASetErrorHandleCallback                                       |                                          
+                                                                         5           |                                             
+                                                                         CARetransmissionInitialize                             
+                                                                         CARetransmissionStart                                  
+                                                                                                                                
+             CAInitializeRA             CAInitializeNFC                                                                        
+                       \                  /                                                  
+                        \                /                                                   
+                      6  \              /                                                                                       
+                      CAInitializeAdapters                                                                                          
+                      /         |        \                                                                                    
+                     /          |         \                                                                                   
+                    /           |          \                                                                                  
+       CAInitializeIP   CAInitializeEDR   CAInitializeTCP                                                                        
+                                                                                                                              
+                                                                                             
+    7                                                                                        
+    CASelectNetwork                                                                          
+                                                                                             
+                                                                                             
+    8                                          9                                                                     
+    CARegisterHandler                          CASetInterfaceCallbacks                       
+      /     |     \                                                    
+     /      |      \
+    /       |       \
+Request  Response  Error                                                                    
+=========================   
+                                                                                                                                       
+
+
+
+                                                                                                                                       
+       
+       
+       
+                                                                                                                              
+                                                                                                                              
+       HandleCARequests                           HandleCAResponses                       HandleCAErrorResponse                                                               
+             ^                                           ^                                         ^                     
+             |                                           |                                         |
+             +-------------------------------------------.-----------------------------------------+
+                                                         |
+                                                        csdk                                                                                  
+                                           +-----------------------------+                                                    
+                                           |                             |                                                          
+                                           |    OCInitializeInternal     |                                     
+            server sample                  |             ^               |                   client sample                                                   
+      +-----------------------+            |             |               |             +----------------------+                    
+      |                       |            |             |               |             |                      | 
+      |Platform::start()   ----------------+--------> OCInit2 <----------+-----------------  Platform::start()|
+      |                       |            |             1               |             |                      | 
+      |                       |            |                             |             |                      | 
+      |     +--------------+  |            |                             |             |   +--------------+   | 
+      |     |     start    |  |            |                             |             |   |     start    |   |
+      |     |              |  |            |                             |             |   |              |   |
+      |     |              |  |thread2     |             2               |      thread2|   |              |   |
+      |     |  processFunc  ---------------+-------> OCProcess <---------+-----------------  listeningFunc|   |
+      |     |              |  |            |             |               |             |   |              |   |
+      |     +--------------+  |            |             |               |             |   +--------------+   |
+      |    wrapper            |            +-------------+---------------+             |   wrapper            |                     
+      |                       |                          |                             |                      |                             
+      +-----------------------+                          |                             +----------------------+                          
+      main thread                               /--------+                                          main thread                             
+                                               /                                                                                
+                           /------------------/                                                                             
+                          /                                                                                             
+    10                   v                     11                                                                       
+    CAHandleRequestResponse                    CAHandleRequestResponseCallbacks                                                                                                                                                  
+                                                                                                                              
+                                                                                                                              
+                                        
+                                                                                                                              
+                                                                                                                              
+                                                                                                                              
+
+
+
+                                                                                                                              
+                                                                   
