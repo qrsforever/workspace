@@ -8,19 +8,10 @@
                                                                     
                                                                                                    12
                                                                                                    CAQueueingThreadBaseRoutine
-                                                                                                              | thread3
+                                                                                                              | thread3 (send)
                                                                                                               |
                                                                                            +---------> queue_add_element ---------+
                                                                                            |                                      |
-                                                                                           |          +----------------+          |
-                                                                                           |          |      next      |          |
-                                                                                           |          |  +----------+  |          |
-                                                                                           |          |  | msg,size |  |          |
-                                                                                           |          |  +----------+  |          |
-                                                                                           |          +----------------+          |
-                                                                                           |                   ^                  |
-                                                                                           |                   |                  |
-                                                                                           |                   |                  |
                                                                                            |          +----------------+          |
                                                                                            |          |      next      |          |
                                                                                            |          |  +----------+  |          |
@@ -44,15 +35,15 @@
                                                                                            |    +---------------------|-------+   |
                                                                                            |    |            |                |   |
                                                                                            |    | threadTask |   dataQueue    |   |
-                                                                                           |    |            |                |   |
-                                                                                           |    +-----------------------------+   |
-                                                                                           |                                      |
-                                                                                           +---------- queue_add_element <--------+
-                                                                                                              |
-                                                                                                              |
-                                                                                                    CAQueueingThreadAddData
-                                                                                                              ^                  
-                                                                                                              |                  
+                                                     ♡-3                                   |    |            |                |   |
+                                     CAReceivedPacketCallback                              |    +-----------------------------+   |
+                                          parse | pdu                                      |                                      |
+                                                |                                          +---------- queue_add_element <--------+
+                                         g_receiveThread       g_sendThread                                   |
+                                                ^                   ^                                         |
+                                                |                   |                               CAQueueingThreadAddData
+                                                +---------+---------+                                         ^                  
+                                                          |                                                   |                  
 +---------------------------------------------------------+---------------------------------------------------+--------------+   
 | DIR: connectivity                                       |                                                   |              |
 |                                                         |                                                   |              |
@@ -67,76 +58,78 @@
     CAInitialize                |              CAInitializeMessageHandler            |             CAQueueingThreadInitialize 
                                 |                                                    |             CAQueueingThreadStart              
                                 |                                                    |                                          
-                      3         |                                                    |                                          
+                      3         |      ♡-1                                           |                                          
                       CASetPacketReceivedCallback                                    |                                                                   
                       CASetErrorHandleCallback                                       |                                          
                                                                          5           |                                             
                                                                          CARetransmissionInitialize                             
-                                                                         CARetransmissionStart                                  
-                                                                                                                                
-             CAInitializeRA             CAInitializeNFC                                                                        
-                       \                  /                                                  
-                        \                /                                                   
-                      6  \              /                                                                                       
-                      CAInitializeAdapters                                                                                          
-                      /         |        \                                                                                    
-                     /          |         \                                                                                   
-                    /           |          \                                                                                  
-       CAInitializeIP   CAInitializeEDR   CAInitializeTCP                                                                        
-                                                                                                                              
-                                                                                             
-    7                                                                                        
-    CASelectNetwork                                                                          
-                                                                                             
-                                                                                             
-    8                                          9                                                                     
-    CARegisterHandler                          CASetInterfaceCallbacks                       
-      /     |     \                                                    
-     /      |      \
-    /       |       \
-Request  Response  Error                                                                    
-=========================   
-                                                                                                                                       
-
-
-
-                                                                                                                                       
-       
-       
-       
-                                                                                                                              
-                                                                                                                              
-       HandleCARequests                           HandleCAResponses                       HandleCAErrorResponse                                                               
-             ^                                           ^                                         ^                     
-             |                                           |                                         |
-             +-------------------------------------------.-----------------------------------------+
-                                                         |
-                                                        csdk                                                                                  
-                                           +-----------------------------+                                                    
-                                           |                             |                                                          
-                                           |    OCInitializeInternal     |                                     
-            server sample                  |             ^               |                   client sample                                                   
-      +-----------------------+            |             |               |             +----------------------+                    
-      |                       |            |             |               |             |                      | 
-      |Platform::start()   ----------------+--------> OCInit2 <----------+-----------------  Platform::start()|
-      |                       |            |             1               |             |                      | 
-      |                       |            |                             |             |                      | 
-      |     +--------------+  |            |                             |             |   +--------------+   | 
-      |     |     start    |  |            |                             |             |   |     start    |   |
-      |     |              |  |            |                             |             |   |              |   |
-      |     |              |  |thread2     |             2               |      thread2|   |              |   |
-      |     |  processFunc  ---------------+-------> OCProcess <---------+-----------------  listeningFunc|   |
-      |     |              |  |            |             |               |             |   |              |   |
-      |     +--------------+  |            |             |               |             |   +--------------+   |
-      |    wrapper            |            +-------------+---------------+             |   wrapper            |                     
-      |                       |                          |                             |                      |                             
-      +-----------------------+                          |                             +----------------------+                          
-      main thread                               /--------+                                          main thread                             
-                                               /                                                                                
-                           /------------------/                                                                             
-                          /                                                                                             
-    10                   v                     11                                                                       
-    CAHandleRequestResponse                    CAHandleRequestResponseCallbacks                                                                                                                                                  
+                                                                         CARetransmissionS art                                  
+                                                                                                                                                   
+             CAInitializeRA             CAInitializeNFC                                                                               
+                       \                  /                                                        +--------------------------+       
+                        \                /                                                         |   CAConnectivityHandler  |       
+                      6  \  transtype   /                                 ♡-2                      |--------------------------|                                       
+                      CAInitializeAdapters                   +--> CAReceivedPacketCallback <-------- startAdapter(gen thread4)|                               
+                      /         |        \                   |                                     | stopAdapter              |                           
+                     /          |         \                  +--> CAAdapterChangedCallback         | startListenServer        |                                     
+                    /           |          \          params |                                     | stopListenServer         |      
+       CAInitializeTCP   CAInitializeEDR   CAInitializeIP ---+--> CAConnectionChangedCallback      | startDiscoveryServer     |                                           
+                                                             |                                     | sendData      (unicast)  |    
+                                                         non +--> CAAdapterErrorHandleCallback     | sendDataToAll (muticast) |   
+    7                                                        |                                     | getNetInfo               |   
+    CASelectNetwork                                          +--> CARegisterCallback  -----------> | readData                 |        
+                                                                                         handler   | terminate                |            
+                                                                                                   | transportType            |   
+    8                                          9                                                   +--------------------------+   
+    CARegisterHandler                          CASetInterfaceCallbacks                                                            
+      /     |     \                             /         |         \                                                             
+     /      |      \                           /          |          \                                                            
+    /       |       \     call                /           |           \                                                              
+Request  Response  Error  <--- g_requestHandler   g_responseHandler   g_errorHandler                                                 
+  a         b        c                 a                  b                c                                                         
+=========================      =====================================================                                                 
+                                                          ^                                                                           
+                                                          | call                                                                     
+                                               11         |              ♡-4                                                                     
++----->                                        CAHandleRequestResponseCallbacks                                                         
+|                                                                                                                                     
+|                                                                                                                                     
+|                                                                                                                                     
+|                                                                                                                                     
+|                                                                                                                                     
+|                                                                                                                                     
+|            a                                           b                                         c                                  
+|      HandleCARequests                            HandleCAResponses                       HandleCAErrorResponse                                                               
+|            ^                                           ^                                         ^                              
+|            |   ♡-5                                     |                                         |                              
+|            +----------------- -------------------------.-----------------------------------------+                              
+|                                                        |
+|                                                       csdk                                                                                  
+|                                          +-----------------------------+                                                    
+|                                          |                             |                                                          
+|                                          |    OCInitializeInternal     |                                     
+|           server sample                  |             ^               |                   client sample                                                   
+|     +-----------------------+            |             |               |             +----------------------+                    
+|     |                       |            |             |               |             |                      | 
+|     |Platform::start()   ----------------+--------> OCInit2 <----------+-----------------  Platform::start()|
+|     |                       |            |             1               |             |                      | 
+|     |                       |            |                             |             |                      | 
+|     |     +--------------+  |            |                             |             |   +--------------+   | 
+|     |     |     start    |  |            |                             |             |   |     start    |   |
+|     |     |              |  |            |                             |             |   |              |   |
+|     |     |              |  |thread2     |             2               |      thread2|   |              |   |
+|     |     |  processFunc  ---------------+-------> OCProcess <---------+-----------------  listeningFunc|   |
+|     |     |              |  |            |             |               |             |   |              |   |
+|     |     +--------------+  |            |             |               |             |   +--------------+   |
+|     |    wrapper            |            +-------------+---------------+             |   wrapper            |                     
+|     |                       |                          |                             |                      |                             
+|     +-----------------------+                          |                             +----------------------+                          
+|     main thread                               /--------+                                          main thread                             
+|                                              /                                                                                
+|                          /------------------/                                                                             
+|                         /                                                                                             
+|   10                   v                                                                                              
++-- CAHandleRequestResponse                                                                                                                                                                                                      
                                                                                                                               
                                                                                                                               
                                         
