@@ -1,7 +1,19 @@
-#!/usr/bin/python2.7
+#!C:\Users\teresa\AppData\Local\Programs\Python\Python36\python.exe
 # -*- coding: utf-8 -*-
 
 # 驱动: http://npm.taobao.org/mirrors/chromedriver
+
+# 使用方法 (参考https://blog.csdn.net/tyhj_sf/article/details/74891096）
+# 1. 安装chrome浏览器并启动, 在地址栏输入：chrome://settings/help 查看chrome浏览器的版本号
+# 2. 把Selenium整个文件放到C:\目录下
+# 3. 打开C:\Selenium\notes.txt, 查找对应chrome浏览器对应版本的chromedriver版本号
+# 4. 到http://npm.taobao.org/mirrors/chromedriver下载正确的chromedrive， 解压放到C:\Selenium中
+# 5. 下载并安装https://www.python.org/ftp/python/3.6.5/python-3.6.5-amd64.exe
+# 6. 配置环境变量Path将%USERPROFILE%\AppData\Local\Programs\Python\Python36\;添加到Path中（具体操作百度一下）
+# 7. 修改该文件的最上面一行（默认安装python的话， 只需要将teresa改为你的用户名 
+# 8. win + r, 输入cmd， 进入cmd命令行:  python -m pip install -U selenium
+# 9. 到C:\Selenium 双击xiaomidou.py
+# 10. 在弹出的终端上输入验证码
 
 import time
 import os
@@ -13,19 +25,9 @@ from selenium.webdriver.common.keys import Keys
 #  autocaptcha = 0
 debug = 1
 url = "http://www.cnhtcerp.com/sales/"
-#  pic_path = "/tmp/code.png"
-
-# linux配置:
-# 下载pdf的存储目录
-#  pdf_path = "/home/lidong/Downloads/pdf"
-# chromedriver的安装目录
-#  driver_path = "/usr/local/bin/chromedriver"
-
-# windown配置
-# 下载pdf的存储目录
-pdf_path = "D:\pdf"
-# chromedriver的安装目录
-driver_path = "D:\pdf\chromedriver.exe"
+pic_path = "/tmp/code.png"
+pdf_path = "C:\Selenium\pdf"
+driver_path = "C:\Selenium\chromedriver.exe"
 
 paramstable = {
         'sdate' : '2017-9-1',
@@ -147,8 +149,8 @@ def UserLogin(driver):
     password = driver.find_element_by_xpath('//*[@id="Window1_SimpleForm1_tbxPassword-inputEl"]')
     tcaptcha = driver.find_element_by_xpath('//*[@id="Window1_SimpleForm1_tbxCaptcha-inputEl"]')
 
-    username.send_keys('xxx')
-    password.send_keys('xxx')
+    username.send_keys('testcszhanghl')
+    password.send_keys('testcnhtc4088081123654')
     tcaptcha.send_keys(captcha)
     
     try:
@@ -268,7 +270,7 @@ def main():
     # 下载交接单文档 
     DownloadDropdownList(driver)
 
-    time.sleep(10000)
+    time.sleep(10)
     driver.quit()
 
 if __name__ == "__main__":
