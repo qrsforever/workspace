@@ -15,7 +15,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public static final String TAG = CashToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
-    public boolean mSignFlag = false;
 
     @Override
     protected void setUp() throws Exception {
@@ -25,8 +24,8 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
     @Test
     public void testDemo() throws UiObjectNotFoundException {
-        int i = 0, sign = 0;
-        for (i = 0; i < 9999; ++i) {
+        int i, flag = 0;
+        for (i = 0; i < 20; ++i) {
             try {
                 Log.d(TAG, "Start CashToutiao");
                 doStartApp();
@@ -46,24 +45,34 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             }
 
             try {
-                if (!mSignFlag) {
-                    Log.d(TAG, "Do Tasks");
+                Log.d(TAG, "Do Tasks");
+                if (flag == 0) {
                     doTask();
+                    flag = 1;
                 }
             } catch (UiObjectNotFoundException e) {
             }
 
+            /*
             try {
                 Log.d(TAG, "Do news");
                 doNews();
             } catch (UiObjectNotFoundException e) {
             }
-
+            */
             try {
                 Log.d(TAG, "Do Entertainment");
-                doEntertainment(60);
+                doEntertainment(20);
             } catch (UiObjectNotFoundException e) {
             }
+
+            // try {
+            //     Log.d(TAG, "Do Video");
+            //     doVideo(12);
+            // } catch (UiObjectNotFoundException e) {
+            // }
+
+
         }
     }
 
@@ -82,7 +91,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         UiObject app = allApps.getChild(new UiSelector().description("惠头条"));
         if (app.exists()) {
             app.swipeLeft(10); 
-            sleep(500);
+            sleep(1000);
             // app.longClick();
             UiObject rmapp = new UiObject(new UiSelector().text("Remove from list"));
             if (rmapp.exists())
@@ -157,7 +166,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             sleep(1000);
 
             UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
-            for (int i = 0; i < 20; ++i) {
+            for (int i = 0; i < 10; ++i) {
                 webpage.flingForward();
                 sleep(3000);
                 webpage.flingForward();
@@ -183,7 +192,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         /* Sign */
         UiObject sign = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/sign_btn_container"));
         sign.click();
-        mSignFlag = true;
         sleep(1000);
 
         // UiScrollable taskItems = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/task_scroll"));
@@ -192,24 +200,32 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         // videoTask.click();
         // sleep(1000);
 
-        // /* Video */
+        /* Video */
         // UiObject watchTask = new UiObject(new UiSelector().text("立即观看"));
         // watchTask.click();
         // sleep(1000);
         // try {
-        //     doVideo(4);
+        //     doVideo(12);
         // } catch (UiObjectNotFoundException e) {
         // }
     }
 
     public void doVideo(int loop) throws UiObjectNotFoundException {
+        /* 视频 */
         while (loop-- > 0) {
-            UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/listview"));
-            items.scrollForward();
-            UiObject first = items.getChild(new UiSelector().index(0));
-            first.click();
+            UiCollection newsTabs = new UiCollection(new UiSelector().resourceId("com.cashtoutiao:id/tab_news"));
+            UiObject video = newsTabs.getChildByText(new UiSelector().className("android.widget.TextView"), "视频");
+            video.click();
             sleep(30000);
             mDevice.pressBack();
         }
+        // while (loop-- > 0) {
+        //     UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/listview"));
+        //     items.scrollForward();
+        //     UiObject first = items.getChild(new UiSelector().index(0));
+        //     first.click();
+        //     sleep(30000);
+        //     mDevice.pressBack();
+        // }
     }
 }
