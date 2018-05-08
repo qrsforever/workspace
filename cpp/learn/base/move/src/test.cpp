@@ -86,9 +86,9 @@ private:
     int* _data; // 指向资源的指针，代表资源本身
 };
 
-MemoryBlock f() 
-{ 
-    return MemoryBlock(50); 
+MemoryBlock f()
+{
+    return MemoryBlock(50);
 }
 
 int main(int argc, char *argv[])
@@ -111,17 +111,17 @@ int main(int argc, char *argv[])
 
 // output:
 // 1
-// MemoryBlock construct 
+// MemoryBlock construct
 // 2
-// MemoryBlock const MemoryBlock) 
+// MemoryBlock const MemoryBlock)
 // 3
 // MemoryBlock &&
 // 4
-// MemoryBlock construct 
+// MemoryBlock construct
 // MemoryBlock =&&
 // MemoryBlock destruct 0
 // 5
-// MemoryBlock operator = 
+// MemoryBlock operator =
 // 6
 // MemoryBlock =&&
 // 7
@@ -140,10 +140,10 @@ int main(int argc, char *argv[])
 // 也使得另外一些标准库（如std::unique_ptr, std::function）成为可能。即使你并不直接使用右值引用，
 // 也可以通过标准库，间接从这一新特性中受益。
 // 为了更好的理解标准库结合右值引用带来的优化，我们有必要了解一下右值引用的重大意义。
-// 
+//
 
 // lvalue和rvalue的前缀怎么理解，left和right？好吧，l表示location，r表示read。
-// location表示可以在内存中寻址，可以被赋值，read表示可以直接知道值 
+// location表示可以在内存中寻址，可以被赋值，read表示可以直接知道值
 // std::move()来将左值转换成右值引用
 
 // && 和 &一样都是引用，&&是新标准弄出来的，称为 右值引用。
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 // 带名右值引用
 // T&& 这是一个左值，只不过她的类型是右值引用，只能绑定右值
 // 额外说一句：如果类型是T&& 且这个T类型无需推导即可确定，那么这个变量称为带名右值引用；如果这个T类型需要推导，那么这个变量称为转发型引用。
-// 
+//
 
 // A a;
 // A&& b = static_cast< A&&>(a);
