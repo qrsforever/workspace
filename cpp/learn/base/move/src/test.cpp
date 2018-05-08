@@ -1,7 +1,135 @@
 #include <iostream>
 #include <utility>
 
-// https://blog.csdn.net/viggirl/article/details/52858108
+class MemoryBlock
+{
+public:
+
+    // 构造器（初始化资源）
+    explicit MemoryBlock(size_t length)
+        : _length(length)
+          , _data(new int[length])
+    {
+        std::cout << "MemoryBlock construct \n";
+    }
+
+    // 析构器（释放资源）
+    ~MemoryBlock()
+    {
+        std::cout << "MemoryBlock destruct " << _data << "\n";
+        if (_data != nullptr)
+        {
+            delete[] _data;
+        }
+    }
+
+    // 拷贝构造器（实现拷贝语义：拷贝that）
+    MemoryBlock(const MemoryBlock& that)
+        // 拷贝that对象所拥有的资源
+        : _length(that._length)
+          , _data(new int[that._length])
+    {
+        std::copy(that._data, that._data + _length, _data);
+        std::cout << "MemoryBlock const MemoryBlock) \n";
+    }
+
+    // 拷贝赋值运算符（实现拷贝语义：释放this ＋ 拷贝that）
+    MemoryBlock& operator=(const MemoryBlock& that)
+    {
+        std::cout << "MemoryBlock operator = \n";
+        if (this != &that)
+        {
+            // 释放自身的资源
+            delete[] _data;
+
+            // 拷贝that对象所拥有的资源
+            _length = that._length;
+            _data = new int[_length];
+            std::copy(that._data, that._data + _length, _data);
+        }
+        return *this;
+    }
+
+    // 移动构造器（实现移动语义：移动that）
+    MemoryBlock(MemoryBlock&& that)
+        // 将自身的资源指针指向that对象所拥有的资源
+        : _length(that._length)
+          , _data(that._data)
+    {
+        std::cout << "MemoryBlock &&\n";
+        // 将that对象原本指向该资源的指针设为空值
+        that._data = nullptr;
+        that._length = 0;
+    }
+
+    // 移动赋值运算符（实现移动语义：释放this ＋ 移动that）
+    MemoryBlock& operator=(MemoryBlock&& that)
+    {
+        std::cout << "MemoryBlock =&&\n";
+        if (this != &that)
+        {
+            // 释放自身的资源
+            delete[] _data;
+
+            // 将自身的资源指针指向that对象所拥有的资源
+            _data = that._data;
+            _length = that._length;
+
+            // 将that对象原本指向该资源的指针设为空值
+            that._data = nullptr;
+            that._length = 0;
+        }
+        return *this;
+    }
+private:
+    size_t _length; // 资源的长度
+    int* _data; // 指向资源的指针，代表资源本身
+};
+
+MemoryBlock f() 
+{ 
+    return MemoryBlock(50); 
+}
+
+int main(int argc, char *argv[])
+{
+    std::cout << "1\n";
+    MemoryBlock a = f();            // ??error: 调用移动构造器，移动语义
+    std::cout << "2\n";
+    MemoryBlock b = a;              // 调用拷贝构造器，拷贝语义
+    std::cout << "3\n";
+    MemoryBlock c = std::move(a);   // 调用移动构造器，移动语义
+    std::cout << "4\n";
+    a = f();                        // 调用移动赋值运算符，移动语义
+    std::cout << "5\n";
+    b = a;                          // 调用拷贝赋值运算符，拷贝语义
+    std::cout << "6\n";
+    c = std::move(a);               // 调用移动赋值运算符，移动语义
+    std::cout << "7\n";
+    return 0;
+}
+
+// output:
+// 1
+// MemoryBlock construct 
+// 2
+// MemoryBlock const MemoryBlock) 
+// 3
+// MemoryBlock &&
+// 4
+// MemoryBlock construct 
+// MemoryBlock =&&
+// MemoryBlock destruct 0
+// 5
+// MemoryBlock operator = 
+// 6
+// MemoryBlock =&&
+// 7
+// MemoryBlock destruct 0x14d2dc0
+// MemoryBlock destruct 0x14d2cf0
+// MemoryBlock destruct 0
+
+// 参考: https://blog.csdn.net/viggirl/article/details/52858108
 
 // 并不移动什么
 // std::move的作用只是为了让调用构造函数的时候告诉编译器去选择移动构造函数.
@@ -38,28 +166,4 @@
 // A& e = b;
 // 左值引用可以绑定左值
 
-class Test {
-public:
-    Test() {
-        std::cout << "#### construct \n";
-    }
 
-    ~Test() {
-        std::cout << "#### destruct \n";
-    }
-};
-
-void test(Test t) 
-{
-    std::cout << "test function \n";
-}
-
-int main(int argc, char *argv[])
-{
-    {
-        Test t;
-        // std::move(t);
-        // test(std::move(t));
-    }
-    return 0;
-}
