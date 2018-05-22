@@ -20,6 +20,15 @@
   (value 40))
  )
 
+(deftemplate person
+ (slot name)
+ (multislot attrs)
+)
+
+(deffacts startup2 "冰箱柜2 状态"
+ ( aaa)
+ )
+
 (facts)
 (reset)
 (facts)
