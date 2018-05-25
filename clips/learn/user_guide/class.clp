@@ -6,6 +6,10 @@
  (slot age)
 )
 
+(browse-classes USER)
+(class-superclasses DUCK)
+(class-subclasses USER)
+
 (definstances DUCK_OBJECTS
  (Dorky_Duck of DUCK)
 )
@@ -23,5 +27,32 @@
 )
 
 (send [Dixie_Duck] print)
+
+(clear)
+
+(defclass A (is-a USER)
+    (slot x (default 7) (range 1 8))
+    (slot y (allowed-integers 2 3) (allowed-symbols foo bar))
+)
+
+(describe-class A)
+
+(slot-default-value A x)
+(slot-range A x)
+(slot-allowed-values A y)
+
+(defclass B (is-a USER) (slot x))
+(defclass C (is-a USER) 
+    (slot y (allowed-classes A B))
+)
+
+(slot-allowed-classes B x)
+(slot-allowed-classes C y)
+
+; but not check
+(make-instance Test_C of C 
+    (y "aaa")
+)
+(send [Test_C] print)
 
 (exit)

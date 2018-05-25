@@ -1,0 +1,16 @@
+(deffunction dir () ;later take module
+    "like the python dir"
+	(list-defmodules)
+	(list-defclasses)
+	(list-deffunctions)
+	(list-defgenerics)
+	(list-defmethods)
+	(list-defmessage-handlers)    
+	(list-definstances)
+	(list-deffacts)
+	(list-defglobals)
+	(list-defrules)
+	(list-focus-stack)
+    (print-all-ins USER)
+	(browse-classes)
+)

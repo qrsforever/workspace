@@ -12,47 +12,17 @@ extern "C" {
 using namespace std;
 using namespace QRS;
 
-void *g_clipsEnv = 0;
+extern "C" void* create_clips_environment();
 
+static void *g_clipsEnv = 0;
 
-static int queryFunction(void *environment, const char *logicalName)
-{
-    if (strcmp(logicalName, "stdout"))
-        return TRUE;
-    return FALSE;
-}
-
-static int printFunction(void *environment, const char *logicalName, const char *str)
-{
-    if (strcmp(logicalName, "stdout")) {
-        cout << str;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-extern "C" 
-void test_deftemplate_sample() 
+extern "C"
+void test_deftemplate_sample()
 {
     LOG_T();
 
-    g_clipsEnv = CreateEnvironment();
+    g_clipsEnv = create_clips_environment();
 
-    CHECK_NULL(g_clipsEnv);
-
-    EnvWatch(g_clipsEnv, "globals");
-    EnvWatch(g_clipsEnv, "rules");
-    EnvWatch(g_clipsEnv, "facts");
-    EnvWatch(g_clipsEnv, "activations");
-    EnvWatch(g_clipsEnv, "focus");
-    EnvWatch(g_clipsEnv, "deffunctions");
-    EnvWatch(g_clipsEnv, "compilations");
-
-    EnvAddRouter(g_clipsEnv, "stdout", 1, queryFunction, printFunction, 0, 0, 0);
-    EnvActivateRouter(g_clipsEnv, "stdout");
-
-    EnvReset(g_clipsEnv);
-    LOG_T();
     EnvLoad(g_clipsEnv, "clp/basic.clp");
     LOG_T();
     EnvReset(g_clipsEnv);
@@ -69,7 +39,7 @@ void test_deftemplate_sample()
 #if 0
     (deftemplate MAIN::EventOutput
      (slot speed (type INTEGER) (default 0))
-     (slot accel (type INTEGER)) 
+     (slot accel (type INTEGER))
      (slot accelOpen (type INTEGER))
      (slot distance (type INTEGER))
     )
@@ -100,7 +70,7 @@ void test_deftemplate_sample()
                     cout << "   slot param count: " << c << endl;
                     if (c == 1) {
                         void *tyval = slottype.value;
-                        int ty = GetMFType(tyval, 1); 
+                        int ty = GetMFType(tyval, 1);
                         cout << "   slot value type: " << ty << endl;
                         if (ty == SYMBOL) {
                             string value(ValueToString(GetMFValue(tyval, 1)));
@@ -124,9 +94,7 @@ void test_deftemplate_sample()
 
     dataObj.type = INTEGER;
     dataObj.value = EnvAddLong(g_clipsEnv, 10);
-    // EnvPutFactSlot(g_clipsEnv, 
+    // EnvPutFactSlot(g_clipsEnv,
 
     EnvRun(g_clipsEnv, -1);
 }
-
-

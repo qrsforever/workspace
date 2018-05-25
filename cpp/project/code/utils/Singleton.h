@@ -1,5 +1,5 @@
-#ifndef _LEECO_SINGLETON_H_
-#define _LEECO_SINGLETON_H_
+#ifndef _QRS_SINGLETON_H_
+#define _QRS_SINGLETON_H_
 
 #include "Mutex.h"
 
