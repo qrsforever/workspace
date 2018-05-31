@@ -1,6 +1,7 @@
 # 通用 Makefile
 
-# $(info "######## Makefile #######")
+TOPDIR := $(shell pwd)
+# $(info "######## Makefile ####### $(TOPDIR)")
 
 # 其他变量
 OPTIMIZE := -O2
@@ -15,7 +16,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS :=
+LDFLAGS := -lpthread
 INCLUDE :=
 
 # 源文件可能的后缀
@@ -33,9 +34,9 @@ SPECIAL_SRC :=
 EXCLUDE_SRC := ./UnitTest.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
-TARGET_TYPE := exe
+TARGET_TYPE := a
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME :=
+TARGET_NAME := Utils_misc
 
 ifeq ($(TARGET_NAME), )
 	TARGET_NAME := $(shell basename $(PWD))
@@ -111,5 +112,8 @@ clean:
 run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
+test:$(OBJECTS)
+	$(CXX) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS)
+	$(OUT_DIR)/$@
 
 .PHONY: $(PHONY)
