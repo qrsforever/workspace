@@ -3,7 +3,7 @@
  *
  *  Created: 2018-05-31 17:37:30
  *
- *  Copyright NotQRS
+ *  Copyright QRS
  ****************************************************************************/
 
 #include "RingBuffer.h"

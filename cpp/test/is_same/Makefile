@@ -1,13 +1,10 @@
-#=================================================================
-# date: 2018-05-31 13:39:41
-# title: Makefile
-#=================================================================
+# 通用 Makefile
 
-TOPDIR := $(shell pwd)
+# $(info "######## Makefile #######")
 
 # 其他变量
-OPTIMIZE := -O0
-WARNINGS := -Wall -Wno-unused -Wno-format -g
+OPTIMIZE := -O2
+WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 
 # 初始化编译工具以及编译选项
@@ -18,7 +15,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -lpthread
+LDFLAGS :=
 INCLUDE :=
 
 # 源文件可能的后缀
@@ -36,9 +33,9 @@ SPECIAL_SRC :=
 EXCLUDE_SRC := ./UnitTest.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
-TARGET_TYPE := a
+TARGET_TYPE := exe
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME := Utils_misc
+TARGET_NAME :=
 
 ifeq ($(TARGET_NAME), )
 	TARGET_NAME := $(shell basename $(PWD))
@@ -114,8 +111,5 @@ clean:
 run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
-test:$(TARGET_NAME)
-	$(CXX) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS)
-	$(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

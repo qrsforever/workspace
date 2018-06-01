@@ -3,7 +3,7 @@
  *
  *  Created: 2018-05-31 14:28:07
  *
- *  Copyright NotQRS
+ *  Copyright QRS
  ****************************************************************************/
 
 #ifndef __THREAD_H__
@@ -21,6 +21,7 @@ class Thread : public Runnable {
 public:
     Thread();
     Thread(Runnable *r);
+    Thread(pthread_t id);
     ~Thread();
 
     void start();
@@ -35,7 +36,7 @@ public:
     static Thread *currentThread();
 
 private:
-    void _init();
+    void _init(pthread_t id = 0);
 
 private:
 #ifdef DEBUG_THREAD

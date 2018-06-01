@@ -3,13 +3,12 @@
  *
  *  Created: 2018-05-31 14:34:17
  *
- *  Copyright NotQRS
+ *  Copyright QRS
  ****************************************************************************/
 
 #include "Thread.h"
 
 #include <string.h>
-
 #include <map>
 
 namespace UTILS {
@@ -29,6 +28,11 @@ Thread::Thread(Runnable *r): mRunnable(r)
     _init();
 }
 
+Thread::Thread(pthread_t id)
+{
+    _init(id);
+}
+
 Thread::~Thread()
 {
     pthread_mutex_lock(&gMutex);
@@ -40,13 +44,16 @@ Thread::~Thread()
     pthread_mutex_destroy(&mMutex);
 }
 
-void Thread::_init()
+void Thread::_init(pthread_t id)
 {
     pthread_mutex_init(&mMutex, 0);
 
     pthread_mutex_lock(&mMutex);
 
-    pthread_create(&mID, NULL, threadEntry, this);
+    if (id > 0)
+        mID = id;
+    else
+        pthread_create(&mID, NULL, threadEntry, this);
 
     pthread_mutex_lock(&gMutex);
     gThreads.insert(std::make_pair(mID, this));
@@ -79,7 +86,6 @@ Thread* Thread::currentThread()
 {
     Thread *curr = 0;
     pthread_t tID = pthread_self();
-
     pthread_mutex_lock(&gMutex);
     ThreadsIter_t it = gThreads.find(tID);
     if (it != gThreads.end())

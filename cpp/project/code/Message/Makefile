@@ -1,5 +1,5 @@
 #=================================================================
-# date: 2018-05-31 13:39:41
+# date: 2018-06-01 09:51:36
 # title: Makefile
 #=================================================================
 
@@ -8,7 +8,7 @@ TOPDIR := $(shell pwd)
 # 其他变量
 OPTIMIZE := -O0
 WARNINGS := -Wall -Wno-unused -Wno-format -g
-DEFS     := -DDEBUG
+DEFS     := -DDEBUG -DUSE_SHARED_PTR
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
@@ -18,8 +18,8 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -lpthread
-INCLUDE :=
+LDFLAGS := -L../Misc/output -Loutput -lUtils_misc -lpthread
+INCLUDE := -I../Misc
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
@@ -38,7 +38,7 @@ EXCLUDE_SRC := ./UnitTest.cpp
 # 设置目标类型(exe, a, so), 及目标名字
 TARGET_TYPE := a
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME := Utils_misc
+TARGET_NAME := Utils_message
 
 ifeq ($(TARGET_NAME), )
 	TARGET_NAME := $(shell basename $(PWD))
@@ -115,7 +115,8 @@ run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
 test:$(TARGET_NAME)
-	$(CXX) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS)
+	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
 	$(OUT_DIR)/$@
+
 
 .PHONY: $(PHONY)
