@@ -8,6 +8,7 @@
 
 #include "Thread.h"
 #include "Message.h"
+#include "MessageLooper.h"
 #include "MessageHandler.h"
 
 #include <typeinfo>

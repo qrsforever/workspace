@@ -8,43 +8,12 @@
 
 #include "MessageHandler.h"
 #include "Message.h"
+#include "MessageQueue.h"
+#include "MessageLooper.h"
+
 #include "SysTime.h"
-#include <typeinfo>
 
 namespace UTILS {
-
-static MessageHandler::LooperThread *gDefaultLooper = 0;
-
-namespace Looper {
-
-MessageHandler::LooperThread& getDefaultLooper()
-{
-    /* TODO */
-    if (!gDefaultLooper) {
-        gDefaultLooper = new MessageHandler::LooperThread(pthread_self());
-        gDefaultLooper->start();
-        /* gDefaultLooper->run(); */
-    }
-    return *gDefaultLooper;
-}
-
-} /* namespace Looper */
-
-void MessageHandler::LooperThread::run()
-{
-    MessageQueue *queue = getMessageQueue();
-
-    while (true) {
-        Message *msg = queue->next();
-        if (msg != NULL) {
-            if (0 == msg->target) {
-                return;
-            }
-            msg->target->dispatchMessage(msg);
-            msg->recycle();
-        }
-    }
-}
 
 void MessageHandler::dispatchMessage(Message *msg)
 {
@@ -60,9 +29,9 @@ MessageHandler::MessageHandler(): mQueue(0)
 {
     /* TODO */
     Thread *curr = Thread::currentThread();
-    LooperThread *looper = 0;
+    MessageLooper *looper = 0;
     try {
-        looper = dynamic_cast<LooperThread*>(curr);
+        looper = dynamic_cast<MessageLooper*>(curr);
         if (0 == looper)
             looper = &Looper::getDefaultLooper();
     } catch (const std::bad_cast& e) {

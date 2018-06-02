@@ -11,7 +11,9 @@
 
 #include "Object.h"
 
+#ifdef USE_SHARED_PTR
 #include <memory>
+#endif
 
 #ifdef __cplusplus
 

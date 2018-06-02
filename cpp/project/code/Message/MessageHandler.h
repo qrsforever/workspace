@@ -11,8 +11,9 @@
 
 #include <stdint.h>
 
-#include "Thread.h"
-#include "MessageQueue.h"
+#ifdef USE_SHARED_PTR
+#include <memory>
+#endif
 
 #ifdef __cplusplus
 
@@ -20,6 +21,7 @@ namespace UTILS {
 
 class Object;
 class Message;
+class MessageQueue;
 
 class MessageHandler {
 protected:
@@ -30,21 +32,6 @@ public:
         public: virtual ~Callback() {}
         public: virtual bool handleMessage(Message *msg) = 0;
     }; /* calss Callback */
-
-    class LooperThread : public Thread {
-    public:
-        LooperThread(): Thread(), mMsgQueue() { }
-        LooperThread(pthread_t id): Thread(id), mMsgQueue() { }
-        ~LooperThread(){ }
-
-        virtual void run();
-
-        MessageQueue *getMessageQueue() { return &mMsgQueue; }
-
-    private:
-        MessageQueue mMsgQueue;
-
-    }; /* class LooperThread */
 
     virtual void dispatchMessage(Message *msg);
 
@@ -87,10 +74,6 @@ public:
     Callback *mCallback;
 
 }; /* class MessageHandler */
-
-namespace Looper {
-MessageHandler::LooperThread& getDefaultLooper();
-}
 
 } /* namespace UTILS */
 
