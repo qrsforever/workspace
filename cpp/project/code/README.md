@@ -17,3 +17,10 @@ categories: [ C++ ]
 ```
 sed -i "s/namespace\ UTILS/namespace\ IOT/g" `grep "namespace\ UTILS" -rl .`
 ```
+
+编译
+====
+
+1. cd Misc; make; make test
+
+2. cd Message; make; make test
