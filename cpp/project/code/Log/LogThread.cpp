@@ -10,20 +10,32 @@
 
 #include <unistd.h>
 
+extern "C" void logInit();
+
 namespace UTILS {
 
 LogThread::LogThread()
 	: MessageLooper()
 {
+
 }
 
 LogThread::~LogThread()
 {
+
+}
+
+void LogThread::start()
+{
+    MessageLooper::start();
+
+    /* wait creating thread and init log */
+    usleep(200 * 1000);
 }
 
 void LogThread::run()
 {
-    // logInit();
+    logInit();
 
     MessageLooper::run();
 }

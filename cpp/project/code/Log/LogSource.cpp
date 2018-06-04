@@ -15,11 +15,13 @@
 
 namespace UTILS {
 
+SINGLETON_STATIC_INSTANCE(LogSource)
+
 #define MAX_BLOCK_SIZE	256
 
-static const char* textLevel[] = {"Assert : ", "Error! : ", "Warning: ", "Normal : ", "Verbose: "};
+static const char* textLevel[] = {"Assert : ", "Error! : ", "Warning: ", "Normal : ", "Info: "};
 
-LogSource::LogSource() : mPrefix(true)
+LogSource::LogSource() : mPrefix(true), mDataSink(0)
 {
 }
 
@@ -27,10 +29,31 @@ LogSource::~LogSource()
 {
 }
 
+bool LogSource::attachSink(DataSink *sink)
+{
+    Mutex::Autolock _l(&mMutex);
+    if (mDataSink)
+        return false;
+    mDataSink = sink;
+    return true;
+}
+
+bool LogSource::detachSink(DataSink *sink)
+{
+    Mutex::Autolock _l(&mMutex);
+    if (mDataSink != sink)
+        return false;
+    mDataSink = 0;
+    return true;
+}
+
 void LogSource::logVerbose(const char *file, int line, const char *function, int level, const char *fmt, va_list args)
 {
     uint8_t *bufPointer;
     uint32_t bufLength;
+
+    if (!mDataSink && mDataSink->getBuffer())
+        return;
 
     Mutex::Autolock _l(&mMutex);
 

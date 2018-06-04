@@ -20,6 +20,8 @@ public:
     LogThread();
     ~LogThread();
 
+    void start();
+    
     virtual void run();
 };
 

@@ -115,7 +115,7 @@ run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
 test:$(TARGET_NAME)
-	$(CXX) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS)
+	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
 	$(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

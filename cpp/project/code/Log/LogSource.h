@@ -9,6 +9,7 @@
 #ifndef __LogSource_H__
 #define __LogSource_H__
 
+#include "Singleton.h"
 #include "Mutex.h"
 
 #ifdef __cplusplus
@@ -17,10 +18,12 @@ namespace UTILS {
 
 class DataSink;
 
-class LogSource {
+class LogSource : public Singleton<LogSource> {
 public:
     LogSource();
     ~LogSource();
+    bool attachSink(DataSink *);
+    bool detachSink(DataSink *);
     void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, va_list args);
 private:
     int logPrefix(char *buffer, int length, const char *file, int line, const char *function, int level);

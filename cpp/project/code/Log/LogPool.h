@@ -25,7 +25,7 @@ public:
     LogPool();
     ~LogPool();
 
-    virtual bool attachFilter(LogFilter*, int);
+    virtual bool attachFilter(LogFilter*, int index = 0);
     virtual bool detachFilter(LogFilter*);
 
     virtual bool onDataArrive();
