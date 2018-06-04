@@ -1,12 +1,12 @@
 /***************************************************************************
- *  Log.cpp - Log Impl
+ *  LogSource.cpp - LogSource Impl
  *
  *  Created: 2018-06-04 11:17:02
  *
  *  Copyright QRS
  ****************************************************************************/
 
-#include "Log.h"
+#include "LogSource.h"
 #include "DataSink.h"
 #include "RingBuffer.h"
 #include "SysTime.h"
@@ -19,15 +19,15 @@ namespace UTILS {
 
 static const char* textLevel[] = {"Assert : ", "Error! : ", "Warning: ", "Normal : ", "Verbose: "};
 
-Log::Log() : mPrefix(true)
+LogSource::LogSource() : mPrefix(true)
 {
 }
 
-Log::~Log()
+LogSource::~LogSource()
 {
 }
 
-void Log::logVerbose(const char *file, int line, const char *function, int level, const char *fmt, va_list args)
+void LogSource::logVerbose(const char *file, int line, const char *function, int level, const char *fmt, va_list args)
 {
     uint8_t *bufPointer;
     uint32_t bufLength;
@@ -70,7 +70,7 @@ void Log::logVerbose(const char *file, int line, const char *function, int level
         mDataSink->onDataArrive();
 }
 
-int Log::logPrefix(char *buffer, int length, const char *file, int line, const char *function, int level)
+int LogSource::logPrefix(char *buffer, int length, const char *file, int line, const char *function, int level)
 {
     if (!buffer || !file)
         return -1;

@@ -1,13 +1,13 @@
 /***************************************************************************
- *  Log.h - Log Header
+ *  LogSource.h - LogSource Header
  *
  *  Created: 2018-06-04 11:12:52
  *
  *  Copyright QRS
  ****************************************************************************/
 
-#ifndef __Log_H__
-#define __Log_H__
+#ifndef __LogSource_H__
+#define __LogSource_H__
 
 #include "Mutex.h"
 
@@ -17,19 +17,19 @@ namespace UTILS {
 
 class DataSink;
 
-class Log {
+class LogSource {
 public:
-    Log();
-    ~Log();
+    LogSource();
+    ~LogSource();
     void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, va_list args);
 private:
     int logPrefix(char *buffer, int length, const char *file, int line, const char *function, int level);
     bool mPrefix;
     Mutex mMutex;
     DataSink *mDataSink;
-}; /* class Log */
+}; /* class LogSource */
 
 } /* namespace UTILS */
 
 #endif /* __cplusplus */
-#endif /* __Log_H__ */
+#endif /* __LogSource_H__ */
