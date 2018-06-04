@@ -21,13 +21,11 @@
 
 int g_logLevel = LOG_LEVEL_WARNING;
 
+/* TODO */
 static uint8_t *g_logBuffer = 0;
 static UTILS::RingBuffer *g_ringBuffer = 0;
-
 static UTILS::LogSource *g_logSource = 0;
-
-UTILS::LogPool *g_logPool = 0;
-UTILS::LogConsole *g_logConsole = 0;
+static UTILS::LogConsole *g_logConsole = 0;
 
 extern "C"
 void logInit() /* called in LogThread */
@@ -35,14 +33,14 @@ void logInit() /* called in LogThread */
     g_logBuffer = (uint8_t*)malloc(LOG_BUFFER_SIZE);
     g_ringBuffer = new UTILS::RingBuffer(g_logBuffer, LOG_BUFFER_SIZE);
 
-    g_logPool = &UTILS::LogPool::getInstance();
-    g_logPool->setBuffer(g_ringBuffer);
+    UTILS::LogPool *logPool = &UTILS::LogPool::getInstance();
+    logPool->setBuffer(g_ringBuffer);
 
     g_logConsole = new UTILS::LogConsole();
-    g_logPool->attachFilter(g_logConsole);
+    logPool->attachFilter(g_logConsole);
 
     g_logSource = &UTILS::LogSource::getInstance();
-    g_logSource->attachSink(g_logPool);
+    g_logSource->attachSink(logPool);
 }
 
 extern "C"

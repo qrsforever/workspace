@@ -8,6 +8,8 @@
 
 #include "Log.h"
 #include "LogThread.h"
+#include "LogPool.h"
+#include "LogFile.h"
 
 #include <unistd.h>
 
@@ -20,6 +22,8 @@ int main(int argc, char *argv[])
     g_logThread = new LogThread();
     g_logThread->start();
 
+    LogPool &logPool = LogPool::getInstance();
+
     LOGD("Not Show Debug Log.\n");
     LOGW("Show Warning Log.\n");
 
@@ -27,9 +31,22 @@ int main(int argc, char *argv[])
 
     LOGD("Show Debug Log.\n");
 
-    while (1) {
+    LogFile *logFile = new LogFile();
+    logPool.attachFilter(logFile);
+
+    for (int i = 0; i < 3; ++i) {
         LOGI("Main Looper!\n");
         sleep(1);
     };
+
+    logPool.detachFilter(logFile);
+    for (int i = 0; i < 3; ++i) {
+        LOGI("Main Looper!\n");
+        sleep(1);
+    };
+
+    delete(logFile);
+    logFile = 0;
+
     return 0;
 }
