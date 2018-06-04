@@ -93,12 +93,12 @@ $(eval $(foreach i, $(SRCEXTS), $(call gen_o_cmd,$i,$(OBJ_DIR),$(if $(filter-out
 
 # 静态, 动态, 可执行
 ifeq ($(TARGET_TYPE), a)
-$(TARGET_NAME): $(OBJECTS)
+$(TARGET_NAME): .mkdir $(OBJECTS)
 	rm -f $@
 	$(AR) rcvs $@ $(OBJECTS)
 else
 $(TARGET_NAME): LD=$(if $(filter-out %.c %.C, $(SOURCES)),$(CXX),$(GCC))
-$(TARGET_NAME): $(OBJECTS)
+$(TARGET_NAME): .mkdir $(OBJECTS)
 	$(LD) $(OBJECTS) -o $@ $(LDFLAGS)
 endif
 
@@ -109,7 +109,7 @@ clean:
 	rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
-	@$(TARGET_NAME)
+	export LD_LIBRARY_PATH=./output:$LD_LIBRARY_PATH && @$(TARGET_NAME)
 
 
 .PHONY: $(PHONY)
