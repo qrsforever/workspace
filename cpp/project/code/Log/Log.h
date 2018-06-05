@@ -20,7 +20,7 @@
 enum LogLevel {
     LOG_LEVEL_ERROR   = 0x01,
     LOG_LEVEL_WARNING = 0x02,
-    LOG_LEVEL_NORMAL  = 0x03,
+    LOG_LEVEL_DEBUG  = 0x03,
     LOG_LEVEL_INFO = 0x04
 };
 
@@ -48,8 +48,8 @@ do { \
 
 #define LOGD(args...) \
 do { \
-    if (g_logLevel >= LOG_LEVEL_NORMAL) \
-        logVerbose(__FILE__, __LINE__, __FUNCTION__, LOG_LEVEL_NORMAL, args); \
+    if (g_logLevel >= LOG_LEVEL_DEBUG) \
+        logVerbose(__FILE__, __LINE__, __FUNCTION__, LOG_LEVEL_DEBUG, args); \
 } while(0)
 
 #define LOGI(args...) \
@@ -64,6 +64,7 @@ do { \
 extern "C" {
 #endif
 
+void initLogThread();
 void logInit();
 void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, ...);
 void setLogLevel(int level);

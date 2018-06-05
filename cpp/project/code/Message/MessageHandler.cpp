@@ -13,6 +13,8 @@
 
 #include "SysTime.h"
 
+#include <typeinfo>
+
 namespace UTILS {
 
 void MessageHandler::dispatchMessage(Message *msg)

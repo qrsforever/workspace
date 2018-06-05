@@ -20,7 +20,7 @@ namespace UTILS {
 class LogFile : public LogFilter {
 public:
     LogFile();
-    ~LogFile();
+    virtual ~LogFile();
     virtual bool pushBlock(uint8_t* blockHead, uint32_t blockLength);
 private:
     FILE *mFp;

@@ -10,6 +10,7 @@
 #include "LogPool.h"
 #include "LogSource.h"
 #include "LogConsole.h"
+#include "LogThread.h"
 #include "RingBuffer.h"
 
 #include <stdlib.h>
@@ -26,6 +27,7 @@ static uint8_t *g_logBuffer = 0;
 static UTILS::RingBuffer *g_ringBuffer = 0;
 static UTILS::LogSource *g_logSource = 0;
 static UTILS::LogConsole *g_logConsole = 0;
+static UTILS::LogThread *g_logThread = 0;
 
 extern "C"
 void logInit() /* called in LogThread */
@@ -48,7 +50,13 @@ void logVerbose(const char *file, int line, const char *function, int level, con
 {
     va_list args;
     va_start(args, fmt);
+#ifdef NOT_USE_LOGPOOL
+    static char buffer[2048] = { 0 };
+    vsnprintf(buffer, 2047, fmt, args);
+    printf("%s", buffer);
+#else
     g_logSource->logVerbose(file, line, function, level, fmt, args);
+#endif
     va_end(args);
 }
 
@@ -58,3 +66,11 @@ void setLogLevel(int level)
     g_logLevel = level;
 }
 
+extern "C"
+void initLogThread()
+{
+    if (0 == g_logThread) {
+        g_logThread = new UTILS::LogThread();
+        g_logThread->start();
+    }
+}
