@@ -18,7 +18,7 @@ public:
     typedef std::shared_ptr<ClipsObject> pointer;
 
     ClipsObject(void *obj = 0) : mObj(obj) { }
-    ~ClipsObject();
+    ~ClipsObject() { }
 
     void* clipsObj() const { return mObj; }
 

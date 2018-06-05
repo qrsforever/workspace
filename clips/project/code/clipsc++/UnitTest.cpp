@@ -69,7 +69,7 @@ void startClips(Environment *env)
 {
     int ret = -1;
 
-    ret = env->batch_evaluate("res/init.clp")
+    ret = env->batch_evaluate("res/init.clp");
     LOGD("batch_evaluat: %d\n", ret);
 
     env->assert_fact("(init)");

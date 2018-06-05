@@ -19,7 +19,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -L$(UTILS_DIR)/output -lpthread -lclips -lutils
+LDFLAGS := -L$(UTILS_DIR)/output -L$(CLIPS630_DIR)/core -lpthread -lclips -lutils
 INCLUDE := -I$(UTILS_DIR)/Misc -I$(UTILS_DIR)/Message -I$(UTILS_DIR)/Log -I$(CLIPS630_DIR)/core
 
 # 源文件可能的后缀
@@ -117,6 +117,6 @@ run:$(TARGET_NAME)
 
 test:$(TARGET_NAME)
 	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
-	export LD_LIBRARY_PATH=$(UTILS_DIR)/output && $(OUT_DIR)/$@
+	export LD_LIBRARY_PATH=$(UTILS_DIR)/output:$(CLIPS630_DIR)/core && $(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

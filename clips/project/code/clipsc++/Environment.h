@@ -19,6 +19,11 @@
 #include <memory>
 #include <functional>
 
+extern "C"
+int EnvDefineFunction2WithContext(void *, const char *, int, int (*) (void *), const char *, const char *, void *);
+
+typedef int (*UserFunc_t)(void*);
+
 namespace CLIPS {
 
 template<typename R = void, typename... Args>
@@ -56,13 +61,23 @@ public:
     bool build(const std::string &construct);
     Fact::pointer assert_fact(const std::string &factString);
 
+    static void callback_multifield(void* theEnv, void *rv);
+
     template <typename T_return>
-    bool add_function(std::string name, Functor<T_return> &call);
+    bool add_function(std::string name, const Functor<T_return> &call);
+
+    int (*get_callback(const Functor<Values>& slot))(void*)
+    { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield; }
 
 protected:
     std::map<std::string, char *> mFuncRestr;
     std::map<std::string, Any> mFuncs;
     char *get_function_restriction(std::string &name);
+
+    static int get_arg_count(void *env);
+    static void* get_function_context(void *env);
+    static void  set_return_values(void *env, void *rv, const Values &v);
+    static void* add_symbol(void *env, const char *s);
 
 private:
     static std::map<void*, Environment*> mEnvironmentMap;
@@ -74,7 +89,7 @@ private:
 
 }; /* class Environment */
 
-inline char *Environment::get_function_restriction(std::string &name) 
+inline char *Environment::get_function_restriction(std::string &name)
 {
     if (mFuncRestr.find(name) != mFuncRestr.end())
         free(mFuncRestr[name]);
@@ -84,8 +99,22 @@ inline char *Environment::get_function_restriction(std::string &name)
     return restr;
 }
 
+inline void Environment::callback_multifield(void* theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 0 )
+            throw std::logic_error( "clipsmm/mf: wrong # args on functor callback; expected 0" );
+        Functor<Values> *call = static_cast<Functor<Values>*>(cbptr);
+        Values v = (*call)();
+        set_return_values(theEnv, rv, v);
+        return;
+    }
+    throw;
+}
+
 template <typename T_return>
-inline bool Environment::add_function(std::string name, Functor<T_return> &call)
+inline bool Environment::add_function(std::string name, const Functor<T_return> &call)
 {
     char retcode = get_return_code<T_return>();
     char *argstring = get_function_restriction(name);
@@ -94,10 +123,10 @@ inline bool Environment::add_function(std::string name, Functor<T_return> &call)
     return (EnvDefineFunction2WithContext(mObj,
             name.c_str(),
             retcode,
-            0,
+            get_callback(call),
             name.c_str(),
             argstring,
-            (void*)0));
+            (void*)&call));
 }
 
 } /* namespace CLIPS */
