@@ -20,14 +20,20 @@ namespace CLIPS {
 
 class ClipsLogger {
 public:
-    ClipsLogger();
+    ClipsLogger(std::string name);
     ~ClipsLogger();
+
+    std::string& getRouterName() { return mRouterName; }
 
     void log(const char *logicalName, const char *str);
 
 private:
     std::string mBuffer;
+    std::string mRouterName;
 }; /* class ClipsLogger */
+
+void initClipsLogger(void *env, ClipsLogger *logger);
+void finalizeClipsLogger(void *env);
 
 } /* namespace CLIPS */
 

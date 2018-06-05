@@ -9,6 +9,8 @@ DEFS     := -DDEBUG
 
 UTILS_DIR:= ../../../../cpp/project/code
 
+CLIPS630_DIR:=../../../learn/clips_core_source_630
+
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
 GCC 	:= $(CROSS_COMPILE)gcc
@@ -18,7 +20,7 @@ AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
 LDFLAGS := -L$(UTILS_DIR)/output -lpthread -lclips -lutils
-INCLUDE := -I$(UTILS_DIR)/Misc -I$(UTILS_DIR)/Message -I$(UTILS_DIR)/Log
+INCLUDE := -I$(UTILS_DIR)/Misc -I$(UTILS_DIR)/Message -I$(UTILS_DIR)/Log -I$(CLIPS630_DIR)/core
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
