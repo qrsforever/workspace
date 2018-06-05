@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "Utility.h"
+#include "Environment.h"
 
 #include <string>
 #include <stdexcept>
@@ -14,7 +15,6 @@
 extern "C" {
 #include "clips.h"
 };
-
 
 namespace CLIPS {
 

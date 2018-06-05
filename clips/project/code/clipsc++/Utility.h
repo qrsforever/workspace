@@ -9,11 +9,14 @@
 #ifndef __Utility_H__
 #define __Utility_H__
 
-#include "Environment.h"
 #include "Value.h"
+
+#include <stdexcept>
 #include <vector>
 
 namespace CLIPS {
+
+class Environment;
 
 std::vector<std::string> data_object_to_strings(void *cdo);
 Values data_object_to_values(void *cdo);

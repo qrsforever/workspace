@@ -10,7 +10,9 @@
 #define __Environment_H__
 
 #include "ClipsObject.h"
+#include "Utility.h"
 #include "Fact.h"
+#include "Any.h"
 
 #include <map>
 #include <string>
@@ -18,6 +20,19 @@
 #include <functional>
 
 namespace CLIPS {
+
+template<typename R = void, typename... Args>
+class Functor {
+public:
+    Functor(std::function<R(Args...)> fun) : _fun(fun) {
+
+    }
+    R operator()(Args... args) {
+        return _fun(args...);
+    }
+private:
+    std::function<R(Args...) > _fun;
+}; /* class Functor */
 
 class Environment : public ClipsObject {
 public:
@@ -41,7 +56,13 @@ public:
     bool build(const std::string &construct);
     Fact::pointer assert_fact(const std::string &factString);
 
+    template <typename T_return>
+    bool add_function(std::string name, Functor<T_return> &call);
 
+protected:
+    std::map<std::string, char *> mFuncRestr;
+    std::map<std::string, Any> mFuncs;
+    char *get_function_restriction(std::string &name);
 
 private:
     static std::map<void*, Environment*> mEnvironmentMap;
@@ -52,6 +73,32 @@ private:
     VoidCallback mRuleFiringCB;
 
 }; /* class Environment */
+
+inline char *Environment::get_function_restriction(std::string &name) 
+{
+    if (mFuncRestr.find(name) != mFuncRestr.end())
+        free(mFuncRestr[name]);
+    char *restr = (char *)malloc(4);
+    mFuncRestr[name] = restr;
+    snprintf(restr, 4, "00u");
+    return restr;
+}
+
+template <typename T_return>
+inline bool Environment::add_function(std::string name, Functor<T_return> &call)
+{
+    char retcode = get_return_code<T_return>();
+    char *argstring = get_function_restriction(name);
+    Any holder = std::shared_ptr<Functor<T_return>>(call);
+    mFuncs[name] = holder;
+    return (EnvDefineFunction2WithContext(mObj,
+            name.c_str(),
+            retcode,
+            0,
+            name.c_str(),
+            argstring,
+            (void*)0));
+}
 
 } /* namespace CLIPS */
 
