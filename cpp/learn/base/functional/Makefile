@@ -1,14 +1,11 @@
-#=================================================================
-# date: 2018-05-31 13:39:41
-# title: Makefile
-#=================================================================
+# 通用 Makefile
 
-TOPDIR := $(shell pwd)
+# $(info "######## Makefile #######")
 
 # 其他变量
-OPTIMIZE := -O0
-WARNINGS := -Wall -Wno-unused -Wno-format -g
-DEFS     := -DDEBUG -DNOT_USE_LOGPOOL
+OPTIMIZE := -O2
+WARNINGS := -Wall -Wno-unused -Wno-format
+DEFS     := -DDEBUG
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
@@ -18,7 +15,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -lpthread
+LDFLAGS :=
 INCLUDE :=
 
 # 源文件可能的后缀
@@ -26,19 +23,19 @@ SRCEXTS := c C cc cpp CPP c++ cxx cp
 HDREXTS := h H hh hpp HPP h++ hxx hp
 
 # 指定源文件目录, 以及目标文件生成目录
-SRC_DIR = . src ./Misc ./Message ./Log
-INC_DIR = . src ./Misc ./Message ./Log
+SRC_DIR = . src
+INC_DIR = . src
 OUT_DIR = output
 OBJ_DIR = $(OUT_DIR)/obj
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
-EXCLUDE_SRC := ./Misc/UnitTest.cpp ./Message/UnitTest.cpp ./Log/UnitTest.cpp
+EXCLUDE_SRC := src/UnitTest.cpp src/_learn.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
-TARGET_TYPE := so
+TARGET_TYPE := exe
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME := utils
+TARGET_NAME :=
 
 ifeq ($(TARGET_NAME), )
 	TARGET_NAME := $(shell basename $(PWD))
@@ -102,6 +99,7 @@ $(TARGET_NAME): .mkdir $(OBJECTS)
 else
 $(TARGET_NAME): LD=$(if $(filter-out %.c %.C, $(SOURCES)),$(CXX),$(GCC))
 $(TARGET_NAME): .mkdir $(OBJECTS)
+	echo $(SOURCES)
 	$(LD) $(OBJECTS) -o $@ $(LDFLAGS)
 endif
 
@@ -112,6 +110,7 @@ clean:
 	rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
-	@$(TARGET_NAME)
+	export LD_LIBRARY_PATH=./output && $(TARGET_NAME)
+
 
 .PHONY: $(PHONY)

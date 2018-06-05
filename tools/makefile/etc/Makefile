@@ -30,7 +30,7 @@ OBJ_DIR = $(OUT_DIR)/obj
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
-EXCLUDE_SRC := ./UnitTest.cpp
+EXCLUDE_SRC := src/UnitTest.cpp ./UnitTest.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
 TARGET_TYPE := exe
@@ -109,7 +109,7 @@ clean:
 	rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
-	export LD_LIBRARY_PATH=./output:$LD_LIBRARY_PATH && @$(TARGET_NAME)
+	export LD_LIBRARY_PATH=./output && $(TARGET_NAME)
 
 
 .PHONY: $(PHONY)
