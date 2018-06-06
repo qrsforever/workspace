@@ -68,6 +68,8 @@ extern "C" {
 
 void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, ...);
 void setLogLevel(int level);
+int init_clips_logger(void *env);
+int finalize_clips_logger(void *env);
 
 #ifdef __cplusplus
 }

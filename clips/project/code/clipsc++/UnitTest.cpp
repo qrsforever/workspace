@@ -7,7 +7,6 @@
  ****************************************************************************/
 
 #include "Environment.h"
-#include "ClipsLogger.h"
 #include "Log.h"
 
 extern "C"
@@ -59,6 +58,12 @@ public:
     {
         LOGD("tell version: %s\n", ver.c_str());
     }
+
+    std::string clipsCallGetConfDir()
+    {
+        return "res";
+    }
+
 };
 
 Test gTest;
@@ -66,7 +71,7 @@ Test gTest;
 void setupClips(Environment *env)
 {
     bool ret = false;
-    init_clips_logger(env->cobj(), "clipsc++");
+    init_clips_logger(env->cobj());
 
     /*
      * Test Build
@@ -85,6 +90,7 @@ void setupClips(Environment *env)
 
     ret = env->add_function("now", std::make_shared<Functor<Values>>(&gTest, &Test::clipsCallNow));
     ret = env->add_function("tell-ver", std::make_shared<Functor<void, std::string>>(&gTest, &Test::clipsCallTellVersion));
+    ret = env->add_function("get-conf-dir", std::make_shared<Functor<std::string>>(&gTest, &Test::clipsCallGetConfDir));
     LOGD("add_function ret = %d\n", ret);
 }
 
@@ -96,7 +102,6 @@ void startClips(Environment *env)
     LOGD("batch_evaluat: %d\n", ret);
 
     Fact::pointer f = env->assert_fact("(init)");
-
 }
 
 int main(int argc, char *argv[])
@@ -129,7 +134,7 @@ int main(int argc, char *argv[])
 
 
     /*
-     * 测试add_function: <返回值:Mult, 参数:Void>
+     * 测试add_function: <返回值:Mult, 参数: 无>
      */
     env->evaluate("(now)");
 
@@ -139,8 +144,9 @@ int main(int argc, char *argv[])
     env->evaluate("(tell-ver \"1.0.0\")");
 
     /*
-     *
+     * 测试add_function: <返回值: String, 参数: 无>
      */
+    env->evaluate("(printout debug (get-conf-dir) crlf)");
 
     LOGD("ENNNNNNNNNNNNNND\n");
     return sleep(100);

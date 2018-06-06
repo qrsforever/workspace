@@ -26,4 +26,3 @@
 
 (clear)
 (watch all)
-(tel-ver "1.0.0")

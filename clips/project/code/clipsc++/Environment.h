@@ -23,8 +23,6 @@
 extern "C"
 int EnvDefineFunction2WithContext(void *, const char *, int, int (*) (void *), const char *, const char *, void *);
 
-typedef int (*UserFunc_t)(void*);
-
 namespace CLIPS {
 
 template<typename R = void, typename... Args>
@@ -49,6 +47,7 @@ public:
     ~Environment();
 
     typedef std::function<void(void)> VoidCallback;
+    typedef int (*UserFunc_t)(void*);
 
     static void s_clear_callback(void *env);
     static void s_periodic_callback(void *env);
@@ -72,31 +71,143 @@ public:
     bool watch(const std::string& item);
     bool unwatch(const std::string& item);
 
-    static void callback_multifield(void* theEnv, void *rv);
-
-    template <typename T_return, typename T_arg1>
-    static T_return callback(void* theEnv);
-
+    /* ------ add_function ------ */
     template <typename T_return>
     bool add_function(std::string name, std::shared_ptr<Functor<T_return>> call);
 
     template <typename T_return, typename T_arg1>
     bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1>> call);
 
+    template <typename T_return, typename T_arg1, typename T_arg2>
+    bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2>> call);
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3>
+    bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3>> call);
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call);
+
+    /* ------ get_callback ------ */
+    int (*get_callback(std::shared_ptr<Functor<std::string>> call))(void*)
+    { return (UserFunc_t) (void* (*) (void*)) callback_string; }
+
+    template <typename T_arg1>
+    int (*get_callback(std::shared_ptr<Functor<std::string, T_arg1>> call))(void*)
+    { return (UserFunc_t) (void* (*) (void*)) callback_string<T_arg1>; }
+
+    template <typename T_arg1, typename T_arg2>
+    int (*get_callback(std::shared_ptr<Functor<std::string, T_arg1, T_arg2>> call))(void*)
+    { return (UserFunc_t) (void* (*) (void*)) callback_string<T_arg1, T_arg2>; }
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3>
+    int (*get_callback(std::shared_ptr<Functor<std::string, T_arg1, T_arg2, T_arg3>> call))(void*)
+    { return (UserFunc_t) (void* (*) (void*)) callback_string<T_arg1, T_arg2, T_arg3>; }
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    int (*get_callback(std::shared_ptr<Functor<std::string, T_arg1, T_arg2, T_arg3, T_arg4>> call))(void*)
+    { return (UserFunc_t) (void* (*) (void*)) callback_string<T_arg1, T_arg2, T_arg3, T_arg4>; }
+
     int (*get_callback(std::shared_ptr<Functor<Values>> call))(void*)
     { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield; }
+
+    template <typename T_arg1>
+    int (*get_callback(std::shared_ptr<Functor<Values, T_arg1>> call))(void*)
+    { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield<T_arg1>; }
+
+    template <typename T_arg1, typename T_arg2>
+    int (*get_callback(std::shared_ptr<Functor<Values>> call))(void*)
+    { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield<T_arg1, T_arg2>; }
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3>
+    int (*get_callback(std::shared_ptr<Functor<Values>> call))(void*)
+    { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield<T_arg1, T_arg2, T_arg3>; }
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    int (*get_callback(std::shared_ptr<Functor<Values>> call))(void*)
+    { return  (UserFunc_t) (void (*) (void*, void*)) callback_multifield<T_arg1, T_arg2, T_arg3, T_arg4>; }
+
+    template <typename T_return>
+    int (*get_callback(std::shared_ptr<Functor<T_return>> call))(void*)
+    { return  (UserFunc_t) (T_return (*) (void*)) callback; }
 
     template <typename T_return, typename T_arg1>
     int (*get_callback(std::shared_ptr<Functor<T_return, T_arg1>> call))(void*)
     { return  (UserFunc_t) (T_return (*) (void*)) callback<T_return, T_arg1>; }
 
-protected:
-    std::map<std::string, char *> m_func_restr;
-    std::map<std::string, Any> m_funcs;
+    template <typename T_return, typename T_arg1, typename T_arg2>
+    int (*get_callback(std::shared_ptr<Functor<T_return, T_arg1, T_arg2>> call))(void*)
+    { return  (UserFunc_t) (T_return (*) (void*)) callback<T_return, T_arg1, T_arg2>; }
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3>
+    int (*get_callback(std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3>> call))(void*)
+    { return  (UserFunc_t) (T_return (*) (void*)) callback<T_return, T_arg1, T_arg2, T_arg3>; }
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    int (*get_callback(std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call))(void*)
+    { return  (UserFunc_t) (T_return (*) (void*)) callback<T_return, T_arg1, T_arg2, T_arg3, T_arg4>; }
+
+    /* ------ callback ------ */
+    static void *callback_string(void *theEnv);
+
+    template <typename T_arg1>
+    static void *callback_string(void *theEnv);
+
+    template <typename T_arg1, typename T_arg2>
+    static void *callback_string(void *theEnv);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3>
+    static void *callback_string(void *theEnv);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    static void *callback_string(void *theEnv);
+
+    static void callback_multifield(void *theEnv, void *rv);
+
+    template <typename T_arg1>
+    static void callback_multifield(void *theEnv, void *rv);
+
+    template <typename T_arg1, typename T_arg2>
+    static void callback_multifield(void *theEnv, void *rv);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3>
+    static void callback_multifield(void *theEnv, void *rv);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    static void callback_multifield(void *theEnv, void *rv);
+
+    template <typename T_return>
+    static T_return callback(void *theEnv);
+
+    template <typename T_return, typename T_arg1>
+    static T_return callback(void *theEnv);
+
+    template <typename T_return, typename T_arg1, typename T_arg2>
+    static T_return callback(void *theEnv);
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3>
+    static T_return callback(void *theEnv);
+
+    template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    static T_return callback(void *theEnv);
+
+    /* ------ get_function_restriction ------ */
     char *get_function_restriction(std::string &name);
 
     template <typename T_arg1>
     char *get_function_restriction(std::string &name);
+
+    template <typename T_arg1, typename T_arg2>
+    char *get_function_restriction(std::string &name);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3>
+    char *get_function_restriction(std::string &name);
+
+    template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+    char *get_function_restriction(std::string &name);
+
+protected:
+    std::map<std::string, char *> m_func_restr;
+    std::map<std::string, Any> m_funcs;
 
     static int get_arg_count(void *env);
     static void* get_function_context(void *env);
@@ -113,6 +224,7 @@ private:
 
 }; /* class Environment */
 
+/* ------ get_function_restriction ------ */
 inline char *Environment::get_function_restriction(std::string &name)
 {
     if (m_func_restr.find(name) != m_func_restr.end())
@@ -134,11 +246,131 @@ inline char *Environment::get_function_restriction(std::string &name)
     return restr;
 }
 
-inline void Environment::callback_multifield(void* theEnv, void *rv)
+template <typename T_arg1, typename T_arg2>
+inline char *Environment::get_function_restriction(std::string &name)
+{
+    if (m_func_restr.find(name) != m_func_restr.end())
+        free(m_func_restr[name]);
+    char *restr = (char *)malloc(6); 
+    m_func_restr[name] = restr;
+    snprintf(restr, 6, "22u%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>());
+    return restr;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3>
+inline char *Environment::get_function_restriction(std::string &name)
+{
+    if (m_func_restr.find(name) != m_func_restr.end())  
+        free(m_func_restr[name]);
+    char *restr = (char *)malloc(7); 
+    m_func_restr[name] = restr;
+    snprintf(restr, 7, "33u%c%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>(),
+        get_argument_code<T_arg3>());
+    return restr;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+inline char *Environment::get_function_restriction(std::string &name)
+{
+    if (m_func_restr.find(name) != m_func_restr.end())
+        free(m_func_restr[name]);
+    char *restr = (char *)malloc(8); 
+    m_func_restr[name] = restr;
+    snprintf(restr, 8, "44u%c%c%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>(),
+        get_argument_code<T_arg3>(), get_argument_code<T_arg4>());
+    return restr;
+}
+
+/* ------ callback ------ */
+inline void* Environment::callback_string(void *theEnv)
 {
     void *cbptr = get_function_context(theEnv);
     if (cbptr) {
-        if (get_arg_count(theEnv) != 0 )
+        if (get_arg_count(theEnv) != 0)
+            throw std::logic_error("clipsmm/string: wrong # args on slot callback; expected 0");
+        Functor<std::string> *call = (Functor<std::string>*)(cbptr);
+        return add_symbol(theEnv, ((*call)()).c_str());
+    }
+    throw;
+}
+
+template <typename T_arg1>
+inline void* Environment::callback_string(void *theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 1)
+            throw std::logic_error("clipsmm/string: wrong # args on slot callback; expected 1");
+        T_arg1 arg1;
+        get_argument(theEnv, 1, arg1);
+        Functor<std::string, T_arg1> *call = (Functor<std::string, T_arg1>*)(cbptr);
+        return add_symbol(theEnv, ((*call)(arg1)).c_str());
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2>
+inline void* Environment::callback_string(void *theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 2)
+            throw std::logic_error("clipsmm/string: wrong # args on slot callback; expected 2");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        Functor<std::string, T_arg1, T_arg2> *call = (Functor<std::string, T_arg1, T_arg2>*)(cbptr);
+        return add_symbol(theEnv, ((*call)(arg1, arg2)).c_str());
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3>
+inline void* Environment::callback_string(void *theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 3)
+            throw std::logic_error("clipsmm/string: wrong # args on slot callback; expected 3");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        Functor<std::string, T_arg1, T_arg2, T_arg3> *call = (Functor<std::string, T_arg1, T_arg2, T_arg3>*)(cbptr);
+        return add_symbol(theEnv, ((*call)(arg1, arg2, arg3)).c_str());
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+inline void* Environment::callback_string(void *theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 4)
+            throw std::logic_error("clipsmm/string: wrong # args on slot callback; expected 4");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        T_arg4 arg4;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        get_argument(theEnv, 4, arg4);
+        Functor<std::string, T_arg1, T_arg2, T_arg3, T_arg4> *call = (Functor<std::string, T_arg1, T_arg2, T_arg3, T_arg4>*)(cbptr);
+        return add_symbol(theEnv, ((*call)(arg1, arg2, arg3, arg4)).c_str());
+    }
+    throw;
+}
+
+inline void Environment::callback_multifield(void *theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 0)
             throw std::logic_error( "clipsmm/mf: wrong # args on functor callback; expected 0" );
         Functor<Values> *call = (Functor<Values>*)(cbptr);
         Values v = (*call)();
@@ -148,13 +380,106 @@ inline void Environment::callback_multifield(void* theEnv, void *rv)
     throw;
 }
 
-template < typename T_return, typename T_arg1 >
+template <typename T_arg1>
+inline void Environment::callback_multifield(void *theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 1)
+            throw std::logic_error("clipsmm/mf: wrong # args on functor callback; expected 1");
+        T_arg1 arg1;
+        get_argument(theEnv, 1, arg1);
+        Functor<Values, T_arg1> *call = (Functor<Values, T_arg1>*)(cbptr);
+        Values v = (*call)(arg1);
+        set_return_values(theEnv, rv, v);
+        return;
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2>
+inline void Environment::callback_multifield(void *theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 2)
+            throw std::logic_error("clipsmm/mf: wrong # args on functor callback; expected 2");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        Functor<Values, T_arg1, T_arg2> *call = (Functor<Values, T_arg1, T_arg2>*)(cbptr);
+        Values v = (*call)(arg1, arg2);
+        set_return_values(theEnv, rv, v);
+        return;
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3>
+inline void Environment::callback_multifield(void *theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 3)
+            throw std::logic_error("clipsmm/mf: wrong # args on functor callback; expected 3");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        Functor<Values, T_arg1, T_arg2, T_arg3> *call = (Functor<Values, T_arg1, T_arg2, T_arg3>*)(cbptr);
+        Values v = (*call)(arg1, arg2, arg3);
+        set_return_values(theEnv, rv, v);
+        return;
+    }
+    throw;
+}
+
+template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+inline void Environment::callback_multifield(void *theEnv, void *rv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 4)
+            throw std::logic_error("clipsmm/mf: wrong # args on functor callback; expected 4");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        T_arg4 arg4;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        get_argument(theEnv, 4, arg4);
+        Functor<Values, T_arg1, T_arg2, T_arg3, T_arg4> *call = (Functor<Values, T_arg1, T_arg2, T_arg3, T_arg4>*)(cbptr);
+        Values v = (*call)(arg1, arg2, arg3, arg4);
+        set_return_values(theEnv, rv, v);
+        return;
+    }
+    throw;
+}
+
+template <typename T_return>
+inline T_return Environment::callback(void* theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 0)
+            throw std::logic_error("clipsmm: wrong # args on slot callback; expected 1");
+        Functor<T_return> *call = (Functor<T_return>*)(cbptr);
+        return (*call)();
+    }
+    throw;
+}
+
+template <typename T_return, typename T_arg1>
 inline T_return Environment::callback(void* theEnv)
 {
     void *cbptr = get_function_context(theEnv);
     if (cbptr) {
         if (get_arg_count(theEnv) != 1)
-            throw std::logic_error( "clipsmm: wrong # args on slot callback; expected 1" );
+            throw std::logic_error("clipsmm: wrong # args on slot callback; expected 1");
         T_arg1 arg1;
         get_argument(theEnv, 1, arg1);
         Functor<T_return, T_arg1> *call = (Functor<T_return, T_arg1>*)(cbptr);
@@ -163,33 +488,126 @@ inline T_return Environment::callback(void* theEnv)
     throw;
 }
 
+template <typename T_return, typename T_arg1, typename T_arg2>
+inline T_return Environment::callback(void* theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 2)
+            throw std::logic_error("clipsmm: wrong # args on slot callback; expected 2");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        Functor<T_return, T_arg1, T_arg2> *call = (Functor<T_return, T_arg1, T_arg2>*)(cbptr);
+        return (*call)(arg1, arg2);
+    }
+    throw;
+}
+
+template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3>
+inline T_return Environment::callback(void* theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 3)
+            throw std::logic_error("clipsmm: wrong # args on slot callback; expected 3");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        Functor<T_return, T_arg1, T_arg2, T_arg3> *call = (Functor<T_return, T_arg1, T_arg2, T_arg3>*)(cbptr);
+        return (*call)(arg1, arg2, arg3);
+    }
+    throw;
+}
+
+template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
+inline T_return Environment::callback(void* theEnv)
+{
+    void *cbptr = get_function_context(theEnv);
+    if (cbptr) {
+        if (get_arg_count(theEnv) != 4)
+            throw std::logic_error("clipsmm: wrong # args on slot callback; expected 4");
+        T_arg1 arg1;
+        T_arg2 arg2;
+        T_arg3 arg3;
+        T_arg4 arg4;
+        get_argument(theEnv, 1, arg1);
+        get_argument(theEnv, 2, arg2);
+        get_argument(theEnv, 3, arg3);
+        get_argument(theEnv, 4, arg4);
+        Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4> *call = (Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>*)(cbptr);
+        return (*call)(arg1, arg2, arg3, arg4);
+    }
+    throw;
+}
+
+/* ------ add_function ------ */
 template <typename T_return>
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return>> call)
 {
-    char retcode = get_return_code<T_return>();
-    char *argstring = get_function_restriction(name);
     m_funcs[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
-            retcode,
+            get_return_code<T_return>(),
             get_callback(call),
             name.c_str(),
-            argstring,
+            get_function_restriction(name),
             (void*)call.get()));
 }
 
 template <typename T_return, typename T_arg1>
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1>> call)
 {
-    char retcode = get_return_code<T_return>();
-    char *argstring = get_function_restriction<T_arg1>(name);
     m_funcs[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
-            retcode,
+            get_return_code<T_return>(),
             get_callback(call),
             name.c_str(),
-            argstring,
+            get_function_restriction<T_arg1>(name),
+            (void*)call.get()));
+}
+
+template <typename T_return, typename T_arg1, typename T_arg2>
+inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2>> call)
+{
+    m_funcs[name] = call;
+    return (EnvDefineFunction2WithContext(m_cobj,
+            name.c_str(),
+            get_return_code<T_return>(),
+            get_callback(call),
+            name.c_str(),
+            get_function_restriction<T_arg1,T_arg2>(name),
+            (void*)call.get()));
+}
+
+template < typename T_return, typename T_arg1, typename T_arg2, typename T_arg3 >
+inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3>> call)
+{
+    m_funcs[name] = call;
+    return (EnvDefineFunction2WithContext(m_cobj,
+            name.c_str(),
+            get_return_code<T_return>(),
+            get_callback(call),
+            name.c_str(),
+            get_function_restriction<T_arg1,T_arg2, T_arg3>(name),
+            (void*)call.get()));
+}
+
+template < typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4 >
+inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call)
+{
+    m_funcs[name] = call;
+    return (EnvDefineFunction2WithContext(m_cobj,
+            name.c_str(),
+            get_return_code<T_return>(),
+            get_callback(call),
+            name.c_str(),
+            get_function_restriction<T_arg1,T_arg2, T_arg3, T_arg4>(name),
             (void*)call.get()));
 }
 
