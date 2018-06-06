@@ -144,21 +144,21 @@ void *value_to_data_object(const Environment &env, const Value &value)
     case TYPE_SYMBOL:
     case TYPE_STRING:
     case TYPE_INSTANCE_NAME:
-        p = EnvAddSymbol(env.clipsObj(),
+        p = EnvAddSymbol(env.cobj(),
             const_cast<char*>(value.as_string().c_str())
            );
         SetpValue(clipsdo, p);
         return clipsdo;
     case TYPE_INTEGER:
-        p = EnvAddLong(env.clipsObj(), value.as_integer());
+        p = EnvAddLong(env.cobj(), value.as_integer());
         SetpValue(clipsdo, p);
         return clipsdo;
     case TYPE_FLOAT:
-        p = EnvAddDouble(env.clipsObj(), value.as_float());
+        p = EnvAddDouble(env.cobj(), value.as_float());
         SetpValue(clipsdo, p);
         return clipsdo;
     case TYPE_EXTERNAL_ADDRESS:
-        p = EnvAddExternalAddress(env.clipsObj(), value.as_address(), EXTERNAL_ADDRESS);
+        p = EnvAddExternalAddress(env.cobj(), value.as_address(), EXTERNAL_ADDRESS);
         SetpValue(clipsdo, p);
         return clipsdo;
     default:
@@ -179,7 +179,7 @@ void* value_to_data_object(const Environment &env, const Values &values)
 
     DATA_OBJECT *clipsdo = new DATA_OBJECT;
 
-    p = EnvCreateMultifield(env.clipsObj(), values.size());
+    p = EnvCreateMultifield(env.cobj(), values.size());
     for (unsigned int iter = 0; iter < values.size(); iter++) {
         unsigned int mfi = iter + 1; // mfptr indices start at 1
         SetMFType(p, mfi, values[iter].type());
@@ -187,21 +187,21 @@ void* value_to_data_object(const Environment &env, const Values &values)
         case TYPE_SYMBOL:
         case TYPE_STRING:
         case TYPE_INSTANCE_NAME:
-            p2 = EnvAddSymbol(env.clipsObj(),
+            p2 = EnvAddSymbol(env.cobj(),
                 const_cast<char*>(values[iter].as_string().c_str())
                );
             SetMFValue(p, mfi, p2);
             break;
         case TYPE_INTEGER:
-            p2 = EnvAddLong(env.clipsObj(), values[iter].as_integer());
+            p2 = EnvAddLong(env.cobj(), values[iter].as_integer());
             SetMFValue(p, mfi, p2);
             break;
         case TYPE_FLOAT:
-            p2 = EnvAddDouble(env.clipsObj(), values[iter].as_float());
+            p2 = EnvAddDouble(env.cobj(), values[iter].as_float());
             SetMFValue(p, mfi, p2);
             break;
         case TYPE_EXTERNAL_ADDRESS:
-            p2 = EnvAddExternalAddress(env.clipsObj(), values[iter].as_address(), EXTERNAL_ADDRESS);
+            p2 = EnvAddExternalAddress(env.cobj(), values[iter].as_address(), EXTERNAL_ADDRESS);
             SetMFValue(p, mfi, p2);
             break;
         default:

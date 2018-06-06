@@ -3,11 +3,9 @@
 # $(info "######## Makefile #######")
 
 # 其他变量
-OPTIMIZE := -O2
+OPTIMIZE := 
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
-
-UTILS_DIR:= ../../../../cpp/project/code
 
 CLIPS630_DIR:=../../../learn/clips_core_source_630
 
@@ -19,8 +17,8 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -L$(UTILS_DIR)/output -L$(CLIPS630_DIR)/core -lpthread -lclips -lutils
-INCLUDE := -I$(UTILS_DIR)/Misc -I$(UTILS_DIR)/Message -I$(UTILS_DIR)/Log -I$(CLIPS630_DIR)/core
+LDFLAGS := -L$(CLIPS630_DIR)/core -lpthread -lclips
+INCLUDE := -I$(CLIPS630_DIR)/core
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
@@ -72,7 +70,7 @@ endif
 # 定义伪目标
 PHONY = all .mkdir clean
 
-all: .mkdir $(TARGET_NAME)
+all: .mkdir $(TARGET_NAME) test
 
 # 函数: 添加%.x依赖文件的路径
 define add_vpath
@@ -117,6 +115,6 @@ run:$(TARGET_NAME)
 
 test:$(TARGET_NAME)
 	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
-	export LD_LIBRARY_PATH=$(UTILS_DIR)/output:$(CLIPS630_DIR)/core && $(OUT_DIR)/$@
+	export LD_LIBRARY_PATH=$(CLIPS630_DIR)/core && $(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

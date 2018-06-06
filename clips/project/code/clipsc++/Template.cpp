@@ -19,7 +19,7 @@ namespace CLIPS {
 
 Template::Template(Environment &environment, void *obj)
     : ClipsObject(obj)
-    , mEnvironment(environment)
+    , m_environment(environment)
 {
 }
 
@@ -34,23 +34,23 @@ Template::~Template()
 
 std::string Template::name()
 {
-    if (mObj)
-        return EnvGetDeftemplateName(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvGetDeftemplateName(m_environment.cobj(), m_cobj);
     else
         return std::string();
 }
 
 std::string Template::module_name()
 {
-    if (mObj)
-        return EnvDeftemplateModule(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvDeftemplateModule(m_environment.cobj(), m_cobj);
     else
         return std::string();
 }
 
 std::string Template::formatted() {
-    if (mObj)
-        return EnvGetDeftemplatePPForm(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvGetDeftemplatePPForm(m_environment.cobj(), m_cobj);
     else
         return std::string();
 }
@@ -58,9 +58,9 @@ std::string Template::formatted() {
 Values Template::slot_allowed_values(const std::string &slot_name)
 {
     DATA_OBJECT clipsdo;
-    if (mObj) {
-        EnvDeftemplateSlotAllowedValues(mEnvironment.clipsObj(),
-            mObj,
+    if (m_cobj) {
+        EnvDeftemplateSlotAllowedValues(m_environment.cobj(),
+            m_cobj,
             const_cast<char*>(slot_name.c_str()),
             &clipsdo);
         return data_object_to_values(&clipsdo);
@@ -71,9 +71,9 @@ Values Template::slot_allowed_values(const std::string &slot_name)
 Values Template::slot_cardinality(const std::string &slot_name)
 {
     DATA_OBJECT clipsdo;
-    if (mObj) {
-        EnvDeftemplateSlotCardinality(mEnvironment.clipsObj(),
-            mObj,
+    if (m_cobj) {
+        EnvDeftemplateSlotCardinality(m_environment.cobj(),
+            m_cobj,
             const_cast<char*>(slot_name.c_str()),
             &clipsdo);
         return data_object_to_values(&clipsdo);
@@ -83,21 +83,21 @@ Values Template::slot_cardinality(const std::string &slot_name)
 
 int Template::slot_default_type(const std::string &slot_name)
 {
-    if (!mObj)
+    if (!m_cobj)
         return NO_DEFAULT;
     return EnvDeftemplateSlotDefaultP(
-        mEnvironment.clipsObj(),
-        mObj,
+        m_environment.cobj(),
+        m_cobj,
         const_cast<char*>(slot_name.c_str()));
 }
 
 Values Template::slot_default_value(const std::string &slot_name)
 {
     DATA_OBJECT clipsdo;
-    if (!mObj)
+    if (!m_cobj)
         return Values();
-    EnvDeftemplateSlotDefaultValue(mEnvironment.clipsObj(),
-        mObj,
+    EnvDeftemplateSlotDefaultValue(m_environment.cobj(),
+        m_cobj,
         const_cast<char*>(slot_name.c_str()),
         &clipsdo);
     return data_object_to_values(&clipsdo);
@@ -106,10 +106,10 @@ Values Template::slot_default_value(const std::string &slot_name)
 Values Template::slot_range(const std::string &slot_name)
 {
     DATA_OBJECT clipsdo;
-    if (!mObj)
+    if (!m_cobj)
         return Values();
-    EnvDeftemplateSlotRange(mEnvironment.clipsObj(),
-        mObj,
+    EnvDeftemplateSlotRange(m_environment.cobj(),
+        m_cobj,
         const_cast<char*>(slot_name.c_str()),
         &clipsdo);
     return data_object_to_values(&clipsdo);
@@ -117,9 +117,9 @@ Values Template::slot_range(const std::string &slot_name)
 
 bool Template::slot_exists(const std::string &slot_name)
 {
-    if (mObj)
-        return EnvDeftemplateSlotExistP(mEnvironment.clipsObj(),
-            mObj,
+    if (m_cobj)
+        return EnvDeftemplateSlotExistP(m_environment.cobj(),
+            m_cobj,
             const_cast<char*>(slot_name.c_str()));
     else
         return false;
@@ -127,9 +127,9 @@ bool Template::slot_exists(const std::string &slot_name)
 
 bool Template::is_multifield_slot(const std::string &slot_name)
 {
-    if (mObj)
-        return EnvDeftemplateSlotMultiP(mEnvironment.clipsObj(),
-            mObj,
+    if (m_cobj)
+        return EnvDeftemplateSlotMultiP(m_environment.cobj(),
+            m_cobj,
             const_cast<char*>(slot_name.c_str()));
     else
         return false;
@@ -137,9 +137,9 @@ bool Template::is_multifield_slot(const std::string &slot_name)
 
 bool Template::is_single_field_slot(const std::string & slot_name)
 {
-    if (mObj)
-        return EnvDeftemplateSlotSingleP(mEnvironment.clipsObj(),
-            mObj,
+    if (m_cobj)
+        return EnvDeftemplateSlotSingleP(m_environment.cobj(),
+            m_cobj,
             const_cast<char*>(slot_name.c_str()));
     else
         return false;
@@ -148,50 +148,50 @@ bool Template::is_single_field_slot(const std::string & slot_name)
 std::vector<std::string> Template::slot_names()
 {
     DATA_OBJECT clipsdo;
-    if (!mObj)
+    if (!m_cobj)
         return std::vector<std::string>();
 
-    EnvDeftemplateSlotNames(mEnvironment.clipsObj(), mObj, &clipsdo);
+    EnvDeftemplateSlotNames(m_environment.cobj(), m_cobj, &clipsdo);
     return data_object_to_strings(&clipsdo);
 }
 
 bool Template::is_watched()
 {
-    if (!mObj)
+    if (!m_cobj)
         return false;
-    return EnvGetDeftemplateWatch(mEnvironment.clipsObj(), mObj);
+    return EnvGetDeftemplateWatch(m_environment.cobj(), m_cobj);
 }
 
 Template::pointer Template::next()
 {
     void * nxt;
-    if (!mObj)
+    if (!m_cobj)
         return Template::pointer();
-    nxt = EnvGetNextDeftemplate(mEnvironment.clipsObj(), mObj);
+    nxt = EnvGetNextDeftemplate(m_environment.cobj(), m_cobj);
     if (nxt)
-        return Template::create(mEnvironment, nxt);
+        return Template::create(m_environment, nxt);
     else
         return Template::pointer();
 }
 
 bool Template::is_deletable()
 {
-    if (!mObj)
+    if (!m_cobj)
         return false;
-    return EnvIsDeftemplateDeletable(mEnvironment.clipsObj(), mObj);
+    return EnvIsDeftemplateDeletable(m_environment.cobj(), m_cobj);
 }
 
 void Template::set_watch(unsigned state)
 {
-    if (mObj)
-        EnvSetDeftemplateWatch(mEnvironment.clipsObj(), state, mObj);
+    if (m_cobj)
+        EnvSetDeftemplateWatch(m_environment.cobj(), state, m_cobj);
 }
 
 bool Template::retract()
 {
-    if (!mObj)
+    if (!m_cobj)
         return false;
-    return EnvUndeftemplate(mEnvironment.clipsObj(), mObj);
+    return EnvUndeftemplate(m_environment.cobj(), m_cobj);
 }
 
 } /* namespace CLIPS */

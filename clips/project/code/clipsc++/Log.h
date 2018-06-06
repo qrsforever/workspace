@@ -1,7 +1,7 @@
 /***************************************************************************
- *  Log.h - Log Header
+ *  Log.h - Log header for clipsc++
  *
- *  Created: 2018-06-04 13:39:03
+ *  Created: 2018-06-06 19:04:43
  *
  *  Copyright QRS
  ****************************************************************************/
@@ -11,11 +11,6 @@
 
 #include <stdio.h>
 #include <stdint.h>
-
-#define CRASH() do { \
-    *(int *)(uintptr_t)0xbbadbeef = 0; \
-    ((void(*)())0)(); \
-} while(false)
 
 enum LogLevel {
     LOG_LEVEL_ERROR   = 0x01,
@@ -31,7 +26,6 @@ enum LogLevel {
 #define LOGW(args...) ((void)0)
 #define LOGD(args...) ((void)0)
 #define LOGI(args...) ((void)0)
-#define LOGT(args...) ((void)0)
 
 #else /* NDEBUG */
 
@@ -72,8 +66,6 @@ do { \
 extern "C" {
 #endif
 
-void initLogThread();
-void logInit();
 void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, ...);
 void setLogLevel(int level);
 

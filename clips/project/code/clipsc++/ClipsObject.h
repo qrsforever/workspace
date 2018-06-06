@@ -17,13 +17,13 @@ class ClipsObject {
 public:
     typedef std::shared_ptr<ClipsObject> pointer;
 
-    ClipsObject(void *obj = 0) : mObj(obj) { }
+    ClipsObject(void *obj = 0) : m_cobj(obj) { }
     ~ClipsObject() { }
 
-    void* clipsObj() const { return mObj; }
+    void* cobj() const { return m_cobj; }
 
 protected:
-    void *mObj;
+    void *m_cobj;
 
 }; /* class ClipsObject */
 

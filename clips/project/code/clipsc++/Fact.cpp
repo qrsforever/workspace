@@ -20,10 +20,10 @@ namespace CLIPS {
 
 Fact::Fact(Environment &environment, void *obj)
     : ClipsObject(obj)
-    , mEnvironment(environment)
+    , m_environment(environment)
 {
-    if (mObj)
-        EnvIncrementFactCount(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        EnvIncrementFactCount(m_environment.cobj(), m_cobj);
 }
 
 Fact::pointer Fact::create(Environment &environment, void *obj)
@@ -33,47 +33,47 @@ Fact::pointer Fact::create(Environment &environment, void *obj)
 
 Fact::pointer Fact::create(Environment &environment, Template::pointer temp)
 {
-    struct fact *f = EnvCreateFact(environment.clipsObj(), temp->clipsObj());
+    struct fact *f = EnvCreateFact(environment.cobj(), temp->cobj());
     return Fact::pointer(new Fact(environment, f));
 }
 
 Fact::~Fact()
 {
-    if (mObj)
-        EnvDecrementFactCount(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        EnvDecrementFactCount(m_environment.cobj(), m_cobj);
 }
 
 bool Fact::assign_slot_defaults()
 {
-    if (mObj)
-        return EnvAssignFactSlotDefaults(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvAssignFactSlotDefaults(m_environment.cobj(), m_cobj);
     return false;
 }
 
 Template::pointer Fact::get_template()
 {
-   if (!mObj)
+   if (!m_cobj)
      return Template::pointer();
 
-   void* tem = EnvFactDeftemplate(mEnvironment.clipsObj(), mObj);
+   void* tem = EnvFactDeftemplate(m_environment.cobj(), m_cobj);
 
    if (tem)
-     return Template::create(mEnvironment, tem);
+     return Template::create(m_environment, tem);
    else
      return Template::pointer();
  }
 
 bool Fact::exists() const
 {
-    if (mObj)
-        return EnvFactExistp(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvFactExistp(m_environment.cobj(), m_cobj);
     return false;
 }
 
 long int Fact::index() const
 {
-    if (mObj)
-        return EnvFactIndex(mEnvironment.clipsObj(), mObj);
+    if (m_cobj)
+        return EnvFactIndex(m_environment.cobj(), m_cobj);
     return -1;
 }
 
@@ -81,10 +81,10 @@ std::vector<std::string> Fact::slot_names()
 {
     DATA_OBJECT clipsdo;
 
-    if (!mObj)
+    if (!m_cobj)
         return std::vector<std::string>();
 
-    EnvFactSlotNames(mEnvironment.clipsObj(), mObj, &clipsdo);
+    EnvFactSlotNames(m_environment.cobj(), m_cobj, &clipsdo);
 
     return data_object_to_strings(&clipsdo);
 }
@@ -94,13 +94,13 @@ Values Fact::slot_value(const std::string &name)
     DATA_OBJECT clipsdo;
     int result;
 
-    if (!mObj)
+    if (!m_cobj)
         return Values();
 
     if (name == "")
-        result = EnvGetFactSlot(mEnvironment.clipsObj(), mObj, NULL, &clipsdo);
+        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, NULL, &clipsdo);
     else
-        result = EnvGetFactSlot(mEnvironment.clipsObj(), mObj, const_cast<char*>(name.c_str()), &clipsdo);
+        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, const_cast<char*>(name.c_str()), &clipsdo);
     if (result)
         return data_object_to_values(&clipsdo);
     else
@@ -111,35 +111,35 @@ Fact::pointer Fact::next()
 {
     void *next_fact;
 
-    if (!mObj)
+    if (!m_cobj)
         return Fact::pointer();
 
     if (!this->exists())
         return Fact::pointer();
 
-    next_fact = EnvGetNextFact(mEnvironment.clipsObj(), mObj);
+    next_fact = EnvGetNextFact(m_environment.cobj(), m_cobj);
     if (next_fact)
-        return Fact::create(mEnvironment, next_fact);
+        return Fact::create(m_environment, next_fact);
     else
         return Fact::pointer();
 }
 
 bool Fact::retract()
 {
-    if (!mObj)
+    if (!m_cobj)
         return false;
-    return EnvRetract(mEnvironment.clipsObj(), mObj);
+    return EnvRetract(m_environment.cobj(), m_cobj);
 }
 
 bool Fact::set_slot(const std::string &slot_name, const Value &value)
 {
-    DATA_OBJECT *clipsdo = (DATA_OBJECT*)value_to_data_object(mEnvironment, value);
-    if (!clipsdo || !mObj) {
+    DATA_OBJECT *clipsdo = (DATA_OBJECT*)value_to_data_object(m_environment, value);
+    if (!clipsdo || !m_cobj) {
         delete clipsdo;
         return false;
     }
-    bool rv = EnvPutFactSlot(mEnvironment.clipsObj(),
-        mObj,
+    bool rv = EnvPutFactSlot(m_environment.cobj(),
+        m_cobj,
         const_cast<char*>(slot_name.c_str()),
         clipsdo);
     delete clipsdo;
@@ -148,13 +148,13 @@ bool Fact::set_slot(const std::string &slot_name, const Value &value)
 
 bool Fact::set_slot(const std::string &slot_name, const Values &values)
 {
-    DATA_OBJECT *clipsdo = (DATA_OBJECT*)value_to_data_object(mEnvironment, values);
-    if (!clipsdo || !mObj) {
+    DATA_OBJECT *clipsdo = (DATA_OBJECT*)value_to_data_object(m_environment, values);
+    if (!clipsdo || !m_cobj) {
         delete clipsdo;
         return false;
     }
-    bool rv = EnvPutFactSlot(mEnvironment.clipsObj(),
-        mObj,
+    bool rv = EnvPutFactSlot(m_environment.cobj(),
+        m_cobj,
         const_cast<char*>(slot_name.c_str()),
         clipsdo);
     delete clipsdo;
@@ -173,9 +173,9 @@ bool Fact::operator==(const Fact::pointer &other) const
 
 unsigned int Fact::refcount() const
 {
-    if (!mObj)  return 0;
+    if (!m_cobj)  return 0;
 
-    struct fact *f = (struct fact *)mObj;
+    struct fact *f = (struct fact *)m_cobj;
     return f->factHeader.busyCount;
 }
 

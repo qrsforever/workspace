@@ -15,90 +15,81 @@ extern "C" {
 
 namespace CLIPS {
 
-ClipsLogger::ClipsLogger(std::string name) : mRouterName(name)
-{
+static std::string g_buffer;
+static std::string g_route_name;
 
-}
-
-ClipsLogger::~ClipsLogger()
-{
-
-}
-
-void ClipsLogger::log(const char *logicalName, const char *str)
-{
-    if (strcmp(str, "\n") != 0) {
-        mBuffer += str;
-        return;
-    }
-
-    if (strcmp(logicalName, LOG_INFO_NAME) == 0) {
-        LOGI("Clips: %s", mBuffer.c_str());
-    } else if (strcmp(logicalName, LOG_DEBUG_NAME) == 0) {
-        LOGD("Clips: %s", mBuffer.c_str());
-    } else if (strcmp(logicalName, LOG_WARN_NAME) == 0) {
-        LOGW("Clips: %s", mBuffer.c_str());
-    } else if (strcmp(logicalName, LOG_ERROR_NAME) == 0) {
-        LOGE("Clips: %s", mBuffer.c_str());
-    }
-    mBuffer.clear();
-}
-
-static int s_LogRouterQuery(void *env, const char *logicalName)
+static int s_log_router_query(void *env, const char *logicalName)
 {
     if (strcmp(logicalName, LOG_INFO_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_DEBUG_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_WARN_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_ERROR_NAME) == 0) return TRUE;
+    if (strcmp(logicalName, WTRACE) == 0) return TRUE;
+    if (strcmp(logicalName, STDOUT) == 0) return TRUE;
+    if (strcmp(logicalName, WWARNING) == 0) return TRUE;
+    if (strcmp(logicalName, WERROR) == 0) return TRUE;
+    if (strcmp(logicalName, WDISPLAY) == 0) return TRUE;
     return FALSE;
 }
 
-static int s_LogRouterPrint(void *env, const char *logicalName, const char *str)
+static int s_log_router_print(void *env, const char *logicalName, const char *str)
 {
-    void *context = GetEnvironmentRouterContext(env);
-    if (context) {
-        ClipsLogger *logger = static_cast<ClipsLogger *>(context);
-        logger->log(logicalName, str);
+    if (strcmp(str, "\n") != 0) {
+        g_buffer += str;
         return TRUE;
     }
-    return FALSE;
+    g_buffer += "\n";
+    if (strcmp(logicalName, LOG_INFO_NAME) == 0
+        || strcmp(logicalName, WDISPLAY) == 0) {
+        LOGI("Clips: %s", g_buffer.c_str());
+    } else if (strcmp(logicalName, LOG_DEBUG_NAME) == 0
+        || strcmp(logicalName, STDOUT) == 0) {
+        LOGD("Clips: %s", g_buffer.c_str());
+    } else if (strcmp(logicalName, LOG_WARN_NAME) == 0
+        || strcmp(logicalName, WWARNING) == 0) {
+        LOGW("Clips: %s", g_buffer.c_str());
+    } else if (strcmp(logicalName, LOG_ERROR_NAME) == 0
+        || strcmp(logicalName, WERROR) == 0) {
+        LOGE("Clips: %s", g_buffer.c_str());
+    } else if (strcmp(logicalName, WTRACE) == 0) {
+        LOGT("Clips: %s", g_buffer.c_str());
+    }
+    g_buffer.clear();
+    return TRUE;
 }
 
-static int s_LogRouterExit(void *env, int exitCode)
+static int s_log_router_exit(void *env, int exitCode)
 {
     return TRUE;
 }
 
-void initClipsLogger(void *env, ClipsLogger *logger)
+int init_clips_logger(void *env, const std::string& routeName)
 {
     /* int EnvAddRouterWithContext(
      *     environment,routerName,priority,queryFunction,
      *     printFunction, getcFunction,ungetcFunction,
      *     exitFunction,context); */
-    EnvAddRouterWithContext(
+    int ret = EnvAddRouterWithContext(
         env,
-        logger->getRouterName().c_str(),
-        50,
-        s_LogRouterQuery,
-        s_LogRouterPrint,
+        g_route_name.c_str(),
+        30,
+        s_log_router_query,
+        s_log_router_print,
         0, 0,
-        s_LogRouterExit,
-        logger);
+        s_log_router_exit,
+        0);
 
-    EnvActivateRouter(env, (char*)logger->getRouterName().c_str());
+    /* if (ret == TRUE) {
+     *     ret = EnvActivateRouter(env, (char*)logger->get_router_name().c_str());
+     *     LOGD("EnvActivateRouter: %d\n", ret);
+     * }  */
+
+    return ret;
 }
 
-void finalizeClipsLogger(void *env)
+int finalize_clips_logger(void *env)
 {
-    void *context = GetEnvironmentRouterContext(env);
-    if (!context)
-        return;
-
-    ClipsLogger *logger = static_cast<ClipsLogger *>(context);
-    if (logger) {
-        EnvDeleteRouter(env, (char *)logger->getRouterName().c_str());
-        delete logger;
-    }
+    return EnvDeleteRouter(env, g_route_name.c_str());
 }
 
 } /* namespace CLIPS */

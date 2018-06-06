@@ -8,19 +8,21 @@
 
 #include "Environment.h"
 #include "ClipsLogger.h"
-#include "MessageLooper.h"
 #include "Log.h"
 
+extern "C"
+#include "clips.h"
+
+#include <unistd.h>
+#include <sys/time.h>
 #include <iostream>
 #include <sstream>
 
-using namespace UTILS;
 using namespace CLIPS;
 
 #define TEST_VERSION_MAJOR 0
 #define TEST_VERSION_MINOR 0
 #define TEST_VERSION_MICRO 1
-
 
 class Test {
 public:
@@ -40,13 +42,31 @@ public:
     {
         LOGD("onRuleFiring this[%p]\n", this);
     }
+
+    Values clipsCallNow()
+    {
+        LOGD("call now\n");
+        Values rv;
+        struct timeval tv;
+        gettimeofday(&tv, 0);
+        rv.push_back(tv.tv_sec);
+        rv.push_back(tv.tv_usec);
+        return rv;
+        return Values();
+    }
+
+    void clipsCallTellVersion(std::string ver)
+    {
+        LOGD("tell version: %s\n", ver.c_str());
+    }
 };
 
 Test gTest;
 
 void setupClips(Environment *env)
 {
-    initClipsLogger(env->clipsObj(), new ClipsLogger(LOG_DEBUG_NAME));
+    bool ret = false;
+    init_clips_logger(env->cobj(), "clipsc++");
 
     /*
      * Test Build
@@ -61,8 +81,11 @@ void setupClips(Environment *env)
         TEST_VERSION_MAJOR,
         TEST_VERSION_MINOR,
         TEST_VERSION_MICRO);
-    LOGD("buff = %s\n", buff);
     env->build(buff);
+
+    ret = env->add_function("now", std::make_shared<Functor<Values>>(&gTest, &Test::clipsCallNow));
+    ret = env->add_function("tell-ver", std::make_shared<Functor<void, std::string>>(&gTest, &Test::clipsCallTellVersion));
+    LOGD("add_function ret = %d\n", ret);
 }
 
 void startClips(Environment *env)
@@ -72,15 +95,13 @@ void startClips(Environment *env)
     ret = env->batch_evaluate("res/init.clp");
     LOGD("batch_evaluat: %d\n", ret);
 
-    env->assert_fact("(init)");
+    Fact::pointer f = env->assert_fact("(init)");
+
 }
 
 int main(int argc, char *argv[])
 {
     int ret = -1;
-
-    initLogThread();
-    setLogLevel(LOG_LEVEL_DEBUG);
 
     LOGD("Main start\n");
 
@@ -89,13 +110,38 @@ int main(int argc, char *argv[])
     /*
      * Regist clear,reset,periodic,run callback
      */
-    env->registClearCallback(std::bind(&Test::onClear, &gTest));
-    env->registPeriodicCallback(std::bind(&Test::onPeriodic, &gTest));
-    env->registResetCallback(std::bind(&Test::onReset, &gTest));
-    env->registRuleFiringCallback(std::bind(&Test::onRuleFiring, &gTest));
+    env->regist_clear_callback(std::bind(&Test::onClear, &gTest));
+    // env->regist_periodic_callback(std::bind(&Test::onPeriodic, &gTest));
+    env->regist_reset_callback(std::bind(&Test::onReset, &gTest));
+    env->regist_rulefiring_callback(std::bind(&Test::onRuleFiring, &gTest));
 
     setupClips(env);
+    startClips(env);
 
-    Looper::getDefaultLooper().run();
-    return 0;
+    /*
+     * 测试Logger
+     */
+    env->evaluate("(printout stdout \"stdout-printf\" crlf)");
+    env->evaluate("(printout debug \"debug-printf\" crlf)");
+    env->evaluate("(printout error \"error-printf\" crlf)");
+    env->evaluate("(printout warn \"warning-printf\" crlf)");
+    env->evaluate("(printout info \"info-printf\" crlf)");
+
+
+    /*
+     * 测试add_function: <返回值:Mult, 参数:Void>
+     */
+    env->evaluate("(now)");
+
+    /*
+     * 测试add_function: <返回值:任意(排除Mult,String), 参数:任意一个>
+     */
+    env->evaluate("(tell-ver \"1.0.0\")");
+
+    /*
+     *
+     */
+
+    LOGD("ENNNNNNNNNNNNNND\n");
+    return sleep(100);
 }

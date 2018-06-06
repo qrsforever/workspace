@@ -12,72 +12,72 @@
 
 namespace CLIPS {
 
-Value::Value(Type type): mValue(NULL)
+Value::Value(Type type): m_value(NULL)
 {
     this->set_type(type);
 }
 
-Value::Value(float x): mValue(NULL)
+Value::Value(float x): m_value(NULL)
 {
     this->set_type(TYPE_FLOAT);
     this->set(x);
 }
 
-Value::Value(double x): mValue(NULL)
+Value::Value(double x): m_value(NULL)
 {
     this->set_type(TYPE_FLOAT);
     this->set(x);
 }
 
-Value::Value(short int x): mValue(NULL)
+Value::Value(short int x): m_value(NULL)
 {
     this->set_type(TYPE_INTEGER);
     this->set(x);
 }
 
-Value::Value(unsigned short int x): mValue(NULL)
+Value::Value(unsigned short int x): m_value(NULL)
 {
     this->set_type(TYPE_INTEGER);
     this->set(x);
 }
 
-Value::Value(int x): mValue(NULL)
+Value::Value(int x): m_value(NULL)
 {
     this->set_type(TYPE_INTEGER);
     this->set(x);
 }
 
-Value::Value(unsigned int x): mValue(NULL)
+Value::Value(unsigned int x): m_value(NULL)
 {
     this->set_type(TYPE_INTEGER);
     this->set(x);
 }
 
-Value::Value(long int x): mValue(NULL)
+Value::Value(long int x): m_value(NULL)
 {
     this->set_type(TYPE_INTEGER);
     this->set(x);
 }
 
-Value::Value(char* x, Type type): mValue(NULL)
+Value::Value(char* x, Type type): m_value(NULL)
 {
     this->set_type(type);
     this->set(x);
 }
 
-Value::Value(const std::string& x, Type type): mValue(NULL)
+Value::Value(const std::string& x, Type type): m_value(NULL)
 {
     this->set_type(type);
     this->set(x);
 }
 
-Value::Value(void* x, Type type): mValue(NULL)
+Value::Value(void* x, Type type): m_value(NULL)
 {
     this->set_type(type);
     this->set(x);
 }
 
-Value::Value(const Value& value): mValue(NULL)
+Value::Value(const Value& value): m_value(NULL)
 {
     this->operator=(value);
 }
@@ -89,11 +89,11 @@ Value::~Value()
 
 double Value::as_float() const
 {
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_FLOAT:
-        return *static_cast<double*>(mValue);
+        return *static_cast<double*>(m_value);
     case TYPE_INTEGER:
-        return *static_cast<long int*>(mValue);
+        return *static_cast<long int*>(m_value);
     default:
         throw std::logic_error("Invalid get_float() of non-float value");
     }
@@ -101,11 +101,11 @@ double Value::as_float() const
 
 long int Value::as_integer() const
 {
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_FLOAT:
-        return static_cast<long int>(*static_cast<double*>(mValue));
+        return static_cast<long int>(*static_cast<double*>(m_value));
     case TYPE_INTEGER:
-        return *static_cast<long int*>(mValue);
+        return *static_cast<long int*>(m_value);
     default:
         throw std::logic_error("Invalid get_float() of non-float value");
     }
@@ -113,11 +113,11 @@ long int Value::as_integer() const
 
 std::string& Value::as_string() const
 {
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_STRING:
     case TYPE_SYMBOL:
     case TYPE_INSTANCE_NAME:
-        return *static_cast<std::string*>(mValue);
+        return *static_cast<std::string*>(m_value);
     default:
         throw std::logic_error("Invalid get_string() of non-string value");
     }
@@ -125,11 +125,11 @@ std::string& Value::as_string() const
 
 void* Value::as_address() const
 {
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_EXTERNAL_ADDRESS:
-        return mValue;
+        return m_value;
     case TYPE_INSTANCE_ADDRESS:
-        return *static_cast<int**>(mValue);
+        return *static_cast<int**>(m_value);
     default:
         throw std::logic_error("Invalid get_address() of non-address value");
     }
@@ -144,11 +144,11 @@ Value& Value::set(double x, bool change_type)
 {
     if (change_type)
         this->set_type(TYPE_FLOAT);
-    if (mClipsType == TYPE_INTEGER)
+    if (m_clips_type == TYPE_INTEGER)
         return this->set(static_cast<long int>(x));
-    if (mClipsType != TYPE_FLOAT)
+    if (m_clips_type != TYPE_FLOAT)
         throw std::logic_error("Invalid set(double x) on non-float value");
-    *static_cast<double*>(mValue) = x;
+    *static_cast<double*>(m_value) = x;
     return *this;
 }
 
@@ -176,11 +176,11 @@ Value& Value::set(long int x, bool change_type)
 {
     if (change_type)
         this->set_type(TYPE_INTEGER);
-    if (mClipsType == TYPE_FLOAT)
+    if (m_clips_type == TYPE_FLOAT)
         return this->set(static_cast<double>(x));
-    if (mClipsType != TYPE_INTEGER)
+    if (m_clips_type != TYPE_INTEGER)
         throw std::logic_error("Invalid set(long int x) on non-integer value");
-    *static_cast<long int*>(mValue) = x;
+    *static_cast<long int*>(m_value) = x;
     return *this;
 }
 
@@ -188,11 +188,11 @@ Value& Value::set(const std::string& x, bool change_type, Type type)
 {
     if (change_type)
         this->set_type(type);
-    if (! (mClipsType == TYPE_STRING ||
-            mClipsType == TYPE_SYMBOL ||
-            mClipsType == TYPE_INSTANCE_NAME))
+    if (! (m_clips_type == TYPE_STRING ||
+            m_clips_type == TYPE_SYMBOL ||
+            m_clips_type == TYPE_INSTANCE_NAME))
         throw std::logic_error("Invalid set(std::string x) on non-string value");
-    *static_cast<std::string*>(mValue) = x;
+    *static_cast<std::string*>(m_value) = x;
     return *this;
 }
 
@@ -206,13 +206,13 @@ Value& Value::set(void* x, bool change_type, Type type)
 {
     if (change_type)
         this->set_type(type);
-    if (! (mClipsType == TYPE_EXTERNAL_ADDRESS ||
-            mClipsType == TYPE_INSTANCE_ADDRESS))
+    if (! (m_clips_type == TYPE_EXTERNAL_ADDRESS ||
+            m_clips_type == TYPE_INSTANCE_ADDRESS))
         throw std::logic_error("Invalid set(void* x) on non-address value");
-    if (mClipsType == TYPE_EXTERNAL_ADDRESS) {
-        mValue = x;
+    if (m_clips_type == TYPE_EXTERNAL_ADDRESS) {
+        m_value = x;
     } else {
-        *static_cast<int**>(mValue) = static_cast<int*>(x);
+        *static_cast<int**>(m_value) = static_cast<int*>(x);
     }
     return *this;
 }
@@ -269,7 +269,7 @@ Value::operator void*() const
 
 size_t Value::size() const
 {
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_FLOAT:
         return sizeof(double);
     case TYPE_INTEGER:
@@ -277,7 +277,7 @@ size_t Value::size() const
     case TYPE_SYMBOL:
     case TYPE_STRING:
     case TYPE_INSTANCE_NAME:
-        return sizeof(*static_cast<std::string*>(mValue));
+        return sizeof(*static_cast<std::string*>(m_value));
     case TYPE_EXTERNAL_ADDRESS:
         return sizeof(void*);
 
@@ -339,24 +339,24 @@ Value& Value::operator=(void* x)
 
 Value& Value::operator=(const Value& x)
 {
-    this->set_type(x.mClipsType);
-    switch (mClipsType) {
+    this->set_type(x.m_clips_type);
+    switch (m_clips_type) {
     case TYPE_FLOAT:
-        *static_cast<double*>(mValue) = *static_cast<double*>(x.mValue);
+        *static_cast<double*>(m_value) = *static_cast<double*>(x.m_value);
         break;
     case TYPE_INTEGER:
-        *static_cast<long int*>(mValue) = *static_cast<long int*>(x.mValue);
+        *static_cast<long int*>(m_value) = *static_cast<long int*>(x.m_value);
         break;
     case TYPE_SYMBOL:
     case TYPE_STRING:
     case TYPE_INSTANCE_NAME:
-        *static_cast<std::string*>(mValue) = *static_cast<std::string*>(x.mValue);
+        *static_cast<std::string*>(m_value) = *static_cast<std::string*>(x.m_value);
         break;
     case TYPE_EXTERNAL_ADDRESS:
-        mValue = x.mValue;
+        m_value = x.m_value;
 
     case TYPE_INSTANCE_ADDRESS:
-        *static_cast<int**>(mValue) = *static_cast<int**>(x.mValue);
+        *static_cast<int**>(m_value) = *static_cast<int**>(x.m_value);
         break;
     }
     return *this;
@@ -464,62 +464,62 @@ bool Value::operator!=(void* x) const
 
 Type Value::type() const
 {
-    return mClipsType;
+    return m_clips_type;
 }
 
 Type Value::set_type(Type type)
 {
-    if (mValue)
+    if (m_value)
         deallocate_storage();
 
-    mClipsType = type;
+    m_clips_type = type;
     switch (type) {
     case TYPE_FLOAT:
-        mValue = new double;
+        m_value = new double;
         break;
     case TYPE_INTEGER:
-        mValue = new long int;
+        m_value = new long int;
         break;
     case TYPE_SYMBOL:
     case TYPE_STRING:
     case TYPE_INSTANCE_NAME:
-        mValue = new std::string;
+        m_value = new std::string;
         break;
     case TYPE_EXTERNAL_ADDRESS:
-        mValue = NULL;
+        m_value = NULL;
         break;
     case TYPE_INSTANCE_ADDRESS:
-        mValue = new int*;
+        m_value = new int*;
         break;
     }
-    return mClipsType;
+    return m_clips_type;
 }
 
 void Value::deallocate_storage()
 {
-    if (!mValue)
+    if (!m_value)
         return;
-    switch (mClipsType) {
+    switch (m_clips_type) {
     case TYPE_FLOAT:
-        delete static_cast<double*>(mValue);
+        delete static_cast<double*>(m_value);
         break;
     case TYPE_INTEGER:
-        delete static_cast<long int*>(mValue);
+        delete static_cast<long int*>(m_value);
         break;
     case TYPE_SYMBOL:
     case TYPE_STRING:
     case TYPE_INSTANCE_NAME:
-        delete static_cast<std::string*>(mValue);
+        delete static_cast<std::string*>(m_value);
         break;
     case TYPE_EXTERNAL_ADDRESS:
-        mValue = NULL;
+        m_value = NULL;
         break;
 
     case TYPE_INSTANCE_ADDRESS:
-        delete static_cast<int**>(mValue);
+        delete static_cast<int**>(m_value);
         break;
     }
-    mValue = NULL;
+    m_value = NULL;
 }
 
 } /* namespace CLIPS */

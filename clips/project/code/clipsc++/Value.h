@@ -120,9 +120,9 @@ public:
     Type set_type(Type type);
 
 protected:
-    void* mValue;
+    void* m_value;
 
-    Type mClipsType;
+    Type m_clips_type;
 
     void deallocate_storage();
 }; /* class Value */

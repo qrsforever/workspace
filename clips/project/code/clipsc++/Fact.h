@@ -57,7 +57,7 @@ public:
     unsigned int refcount() const;
 
 protected:
-    Environment& mEnvironment;
+    Environment& m_environment;
 
 }; /* class Fact */
 

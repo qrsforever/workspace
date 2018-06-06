@@ -3,23 +3,27 @@
 ; title: Unit Test
 ;=================================================================
 
-(defglobal
-    ?*CLIPS_DIRS* = (get-clips-dirs)
-    ?*DEBUG* = 2
-    ?*CONFIG_PREFIXES* = (create$ "res/")
-    ?*START-TIME* = (now)
-)
+; (defglobal
+;     ?*CLIPS_DIRS* = (get-clips-dirs)
+;     ?*DEBUG* = 2
+;     ?*CONFIG_PREFIXES* = (create$ "res/")
+;     ?*START-TIME* = (now)
+; )
 
-(deffunction resolve-file (?file)
-    (foreach ?d ?*CLIPS_DIRS*
-        (bind ?fn (str-cat ?d ?file))
-        (if (open ?fn file-clips-tmp)
-            then
-                (close file-clips-tmp)
-                (return ?fn)
-        )
-    )
-    (return FALSE)
-)
+; (deffunction resolve-file (?file)
+;     (foreach ?d ?*CLIPS_DIRS*
+;         (bind ?fn (str-cat ?d ?file))
+;         (if (open ?fn file-clips-tmp)
+;             then
+;                 (close file-clips-tmp)
+;                 (return ?fn)
+;         )
+;     )
+;     (return FALSE)
+; )
 
-(load* (resolve-file utils.clp))
+; (load* (resolve-file utils.clp))
+
+(clear)
+(watch all)
+(tel-ver "1.0.0")

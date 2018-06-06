@@ -63,7 +63,7 @@ public:
     bool retract();
 
 protected:
-    Environment& mEnvironment;
+    Environment& m_environment;
 
 }; /* class Template */
 

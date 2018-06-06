@@ -19,7 +19,7 @@ SINGLETON_STATIC_INSTANCE(LogSource)
 
 #define MAX_BLOCK_SIZE	256
 
-static const char* textLevel[] = {"Assert : ", "Error! : ", "Warning: ", "Debug : ", "Info: "};
+static const char* textLevel[] = {"Assert : ", "Error! : ", "Warning: ", "Debug : ", "Info: ", "Trace:"};
 
 LogSource::LogSource() : mPrefix(true), mDataSink(0)
 {
