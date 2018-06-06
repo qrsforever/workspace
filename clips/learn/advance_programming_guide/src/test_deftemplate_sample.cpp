@@ -3,14 +3,11 @@
 #include <vector>
 #include <string>
 
-#include "utils/tools.h"
-
 extern "C" {
 #include "clips.h"
 }
 
 using namespace std;
-using namespace QRS;
 
 extern "C" void* create_clips_environment();
 
@@ -19,12 +16,9 @@ static void *g_clipsEnv = 0;
 extern "C"
 void test_deftemplate_sample()
 {
-    LOG_T();
-
     g_clipsEnv = create_clips_environment();
 
     EnvLoad(g_clipsEnv, "clp/basic.clp");
-    LOG_T();
     EnvReset(g_clipsEnv);
 
     DATA_OBJECT dataObj;
@@ -36,6 +30,7 @@ void test_deftemplate_sample()
     }
     cout << "Count: " << templeNames.size() << endl;
 
+    EnvEval(g_clipsEnv, "(printout stdout \"hello\" crlf)", &dataObj);
 #if 0
     (deftemplate MAIN::EventOutput
      (slot speed (type INTEGER) (default 0))
@@ -45,7 +40,6 @@ void test_deftemplate_sample()
     )
 #endif
     void *tempPtr = EnvFindDeftemplate(g_clipsEnv, templeNames[1].c_str()/* EventOutput */);
-    CHECK_NULL(tempPtr);
 
     EnvDeftemplateSlotNames(g_clipsEnv, tempPtr, &dataObj);
     // cout << "GetpType(&dataObj) " << GetpType(&dataObj) << endl;
@@ -53,7 +47,6 @@ void test_deftemplate_sample()
     if (MULTIFIELD == GetpType(&dataObj)) {
         int cnt = GetpDOLength(&dataObj);
         void *tempval = GetValue(dataObj);
-        CHECK_NULL(tempval);
         cout << "Template[" << templeNames[1] << "] GetpDOLength[speed,accel,accelOpen,distance]: " << cnt << endl;
         for (int i=1; i <= cnt; ++i) {
             int type = GetMFType(tempval, i);
@@ -61,7 +54,6 @@ void test_deftemplate_sample()
             if (type == SYMBOL) {
                 DATA_OBJECT slottype;
                 void *slotname = (void*)ValueToString(GetMFValue(tempval, i));
-                CHECK_NULL(slotname);
                 cout << "   slot name: " << string((char*)slotname) << endl;
                 EnvDeftemplateSlotTypes(g_clipsEnv, tempPtr, (char *)slotname, &slottype);
                 cout << "   slot type: " << GetpType(&slottype) << endl;
@@ -88,7 +80,6 @@ void test_deftemplate_sample()
     }
 
     void *newFact = EnvCreateFact(g_clipsEnv, tempPtr);
-    CHECK_NULL(newFact);
     EnvAssignFactSlotDefaults(g_clipsEnv, newFact);
     EnvAssert(g_clipsEnv, newFact);
 
