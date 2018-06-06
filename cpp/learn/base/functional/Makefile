@@ -112,5 +112,7 @@ clean:
 run:$(TARGET_NAME)
 	export LD_LIBRARY_PATH=./output && $(TARGET_NAME)
 
+test:run
+
 
 .PHONY: $(PHONY)
