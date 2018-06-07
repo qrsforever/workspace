@@ -26,7 +26,7 @@ public:
     Any(const Any & other)
         : content(other.content ? other.content->clone() : 0) {}
 
-    ~Any() 
+    ~Any()
     {
         delete content;
     }
@@ -89,7 +89,7 @@ private: // types
         ValueType held;
     }; /* class holder */
 
-private:                  
+private:
     template<typename ValueType>
     friend ValueType *any_cast(Any *);
     placeholder *content;

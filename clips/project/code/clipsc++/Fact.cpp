@@ -18,8 +18,12 @@ extern "C" {
 
 namespace CLIPS {
 
-Fact::Fact(Environment &environment, void *obj)
-    : ClipsObject(obj)
+Fact::Fact(Environment &environment, void *cobj)
+#ifndef DEBUG_MEMORY
+    : ClipsObject(cobj)
+#else
+    : ClipsObject("Fact", cobj)
+#endif
     , m_environment(environment)
 {
     if (m_cobj)

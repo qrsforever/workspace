@@ -28,7 +28,7 @@ int g_logLevel = LOG_LEVEL_TRACE;
 
 static std::string g_buffer;
 
-static const char* textLevel[] = {"Assert: ", "Error!: ", "Warning: ", "Debug: ", "Info: ", "Trace:"};
+static const char* textLevel[] = {"Assert", "Error!", "Warning", "Debug", "Info", "Trace"};
 
 extern "C"
 void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, ...)
@@ -42,7 +42,7 @@ void logVerbose(const char *file, int line, const char *function, int level, con
     va_list args;
     va_start(args, fmt);
     vsnprintf(buffer, 2047, fmt, args);
-    printf("%s:%d | %s | %s %s",  pFile, line, function, textLevel[level], buffer);
+    printf("%s:%d | %s | %s | %s",  pFile, line, function, textLevel[level], buffer);
     va_end(args);
 }
 

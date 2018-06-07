@@ -120,7 +120,7 @@ public:
     Type set_type(Type type);
 
 protected:
-    void* m_value;
+    void *m_value;
 
     Type m_clips_type;
 

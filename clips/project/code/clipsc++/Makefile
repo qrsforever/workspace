@@ -3,7 +3,7 @@
 # $(info "######## Makefile #######")
 
 # 其他变量
-OPTIMIZE := 
+OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 

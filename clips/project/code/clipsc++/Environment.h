@@ -12,9 +12,15 @@
 #include "ClipsObject.h"
 #include "Utility.h"
 #include "Fact.h"
+#include "DefaultFacts.h"
+#include "Global.h"
+#include "Module.h"
+#include "Rule.h"
+#include "Function.h"
 #include "Any.h"
 
 #include <map>
+#include <vector>
 #include <string>
 #include <memory>
 #include <functional>
@@ -62,16 +68,85 @@ public:
     bool batch_evaluate(const std::string &filename);
     int load(const std::string &filename);
     bool build(const std::string &construct);
+    void reset();
+    bool save(const std::string &filename);
 
-    Values evaluate(const std::string& expression);
-    Values function(const std::string& function_name, const std::string& arguments=std::string());
-
-    Fact::pointer assert_fact(const std::string &factString);
-
+/*{{{ debug --> */
+    int is_watched(const std::string &item);
     bool watch(const std::string& item);
     bool unwatch(const std::string& item);
+    bool is_dribble_active();
+    bool dribble_on(const std::string &filename);
+    bool dribble_off();
+/* <-- debug }}}*/
 
-    /* ------ add_function ------ */
+/*{{{ run */
+    long int run(long int runlimit = -1L);
+    Values evaluate(const std::string &expression);
+    Values function(const std::string &function_name, const std::string &arguments=std::string());
+    void refresh_agenda();
+    void refresh_agenda(const Module &module);
+    void refresh_agenda(Module::pointer module);
+    void reorder_agenda();
+    void reorder_agenda(const Module &module);
+    void reorder_agenda(Module::pointer module);
+/*}}}*/
+
+/*{{{ facts --> */
+    Fact::pointer get_facts();
+    Fact::pointer assert_fact(const std::string &factString);
+
+    DefaultFacts::pointer get_default_facts(const std::string &default_facts_name);
+    std::vector< std::string > get_default_facts_names();
+    std::vector<std::string> get_default_facts_names(const Module &module);
+    std::vector<std::string> get_default_facts_names(Module::pointer module);
+    DefaultFacts::pointer get_default_facts_list_head();
+/* <-- facts }}}*/
+
+/*{{{ module --> */
+    Module::pointer get_module(const std::string &module_name);
+    Module::pointer get_module_list_head();
+    std::vector<std::string> get_module_names();
+
+    Module::pointer get_current_module();
+    Module::pointer get_focused_module();
+    std::vector<std::string> get_focus_stack();
+/* <-- module }}}*/
+
+/*{{{ global --> */
+    Global::pointer get_global(const std::string &global_name);
+    Global::pointer get_global_list_head();
+    std::vector<std::string> get_globals_names();
+    std::vector<std::string> get_globals_names(const Module &module);
+    std::vector<std::string> get_globals_names(Module::pointer module);
+/* <-- global }}}*/
+
+/*{{{ function --> */
+    Function::pointer get_function(const std::string &function_name);
+    Function::pointer get_function_list_head();
+    std::vector<std::string> get_function_names();
+    std::vector<std::string> get_function_names(const Module &module);
+    std::vector<std::string> get_function_names(Module::pointer module);
+/* <-- function }}}*/
+
+/*{{{ template --> */
+    Template::pointer get_template(const std::string &template_name);
+    Template::pointer get_template_list_head();
+    std::vector< std::string > get_template_names();
+    std::vector<std::string> get_template_names(const Module &module);
+    std::vector<std::string> get_template_names(Module::pointer module);
+/* <-- template }}}*/
+
+/*{{{ rule --> */
+    Rule::pointer get_rule(const std::string &rule_name);
+    Rule::pointer get_rule_list_head();
+    std::vector< std::string > get_rule_names();
+    std::vector<std::string> get_rule_names(const Module &module);
+    std::vector<std::string> get_rule_names(Module::pointer module);
+    void remove_rules();
+/* <-- rule }}}*/
+
+/*{{{ add_function --> */
     template <typename T_return>
     bool add_function(std::string name, std::shared_ptr<Functor<T_return>> call);
 
@@ -86,8 +161,9 @@ public:
 
     template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call);
+/* <-- add_function }}}*/
 
-    /* ------ get_callback ------ */
+/*{{{ get_callback --> */
     int (*get_callback(std::shared_ptr<Functor<std::string>> call))(void*)
     { return (UserFunc_t) (void* (*) (void*)) callback_string; }
 
@@ -145,8 +221,9 @@ public:
     template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     int (*get_callback(std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call))(void*)
     { return  (UserFunc_t) (T_return (*) (void*)) callback<T_return, T_arg1, T_arg2, T_arg3, T_arg4>; }
+/* <-- get_callback }}}*/
 
-    /* ------ callback ------ */
+/*{{{ callback --> */
     static void *callback_string(void *theEnv);
 
     template <typename T_arg1>
@@ -189,8 +266,9 @@ public:
 
     template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     static T_return callback(void *theEnv);
+/* <-- callback }}}*/
 
-    /* ------ get_function_restriction ------ */
+/*{{{ get_function_restriction */
     char *get_function_restriction(std::string &name);
 
     template <typename T_arg1>
@@ -204,10 +282,13 @@ public:
 
     template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     char *get_function_restriction(std::string &name);
+/* <-- get_function_restriction }}}*/
+
+    bool remove_function(std::string name);
 
 protected:
     std::map<std::string, char *> m_func_restr;
-    std::map<std::string, Any> m_funcs;
+    std::map<std::string, Any> m_functors;
 
     static int get_arg_count(void *env);
     static void* get_function_context(void *env);
@@ -224,7 +305,7 @@ private:
 
 }; /* class Environment */
 
-/* ------ get_function_restriction ------ */
+/*{{{ get_function_restriction --> */
 inline char *Environment::get_function_restriction(std::string &name)
 {
     if (m_func_restr.find(name) != m_func_restr.end())
@@ -251,7 +332,7 @@ inline char *Environment::get_function_restriction(std::string &name)
 {
     if (m_func_restr.find(name) != m_func_restr.end())
         free(m_func_restr[name]);
-    char *restr = (char *)malloc(6); 
+    char *restr = (char *)malloc(6);
     m_func_restr[name] = restr;
     snprintf(restr, 6, "22u%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>());
     return restr;
@@ -260,9 +341,9 @@ inline char *Environment::get_function_restriction(std::string &name)
 template <typename T_arg1, typename T_arg2, typename T_arg3>
 inline char *Environment::get_function_restriction(std::string &name)
 {
-    if (m_func_restr.find(name) != m_func_restr.end())  
+    if (m_func_restr.find(name) != m_func_restr.end())
         free(m_func_restr[name]);
-    char *restr = (char *)malloc(7); 
+    char *restr = (char *)malloc(7);
     m_func_restr[name] = restr;
     snprintf(restr, 7, "33u%c%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>(),
         get_argument_code<T_arg3>());
@@ -274,14 +355,15 @@ inline char *Environment::get_function_restriction(std::string &name)
 {
     if (m_func_restr.find(name) != m_func_restr.end())
         free(m_func_restr[name]);
-    char *restr = (char *)malloc(8); 
+    char *restr = (char *)malloc(8);
     m_func_restr[name] = restr;
     snprintf(restr, 8, "44u%c%c%c%c", get_argument_code<T_arg1>(), get_argument_code<T_arg2>(),
         get_argument_code<T_arg3>(), get_argument_code<T_arg4>());
     return restr;
 }
+/* <-- get_function_restriction }}}*/
 
-/* ------ callback ------ */
+/*{{{ callback --> */
 inline void* Environment::callback_string(void *theEnv)
 {
     void *cbptr = get_function_context(theEnv);
@@ -544,12 +626,13 @@ inline T_return Environment::callback(void* theEnv)
     }
     throw;
 }
+/* <-- callback }}}*/
 
-/* ------ add_function ------ */
+/*{{{ add_function --> */
 template <typename T_return>
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return>> call)
 {
-    m_funcs[name] = call;
+    m_functors[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
             get_return_code<T_return>(),
@@ -562,7 +645,7 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 template <typename T_return, typename T_arg1>
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1>> call)
 {
-    m_funcs[name] = call;
+    m_functors[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
             get_return_code<T_return>(),
@@ -575,7 +658,7 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 template <typename T_return, typename T_arg1, typename T_arg2>
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2>> call)
 {
-    m_funcs[name] = call;
+    m_functors[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
             get_return_code<T_return>(),
@@ -588,7 +671,7 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 template < typename T_return, typename T_arg1, typename T_arg2, typename T_arg3 >
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3>> call)
 {
-    m_funcs[name] = call;
+    m_functors[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
             get_return_code<T_return>(),
@@ -601,7 +684,7 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 template < typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4 >
 inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call)
 {
-    m_funcs[name] = call;
+    m_functors[name] = call;
     return (EnvDefineFunction2WithContext(m_cobj,
             name.c_str(),
             get_return_code<T_return>(),
@@ -610,6 +693,7 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
             get_function_restriction<T_arg1,T_arg2, T_arg3, T_arg4>(name),
             (void*)call.get()));
 }
+/* <-- add_function }}}*/
 
 } /* namespace CLIPS */
 
