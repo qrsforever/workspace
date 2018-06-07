@@ -7,7 +7,7 @@ OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 
-CLIPS_DIR:=../../../learn/clips_core_source_640
+CLIPS_DIR:=../../../learn/clips_core_source_630
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =

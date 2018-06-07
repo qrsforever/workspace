@@ -47,3 +47,8 @@ build clips:
 1. 修改`Makefile`指定`CLIPS630_DIR`路径
 
 2. make; make test; make clean
+
+TODO
+====
+
+640和630版本变化太大, 本代码使用630编译
