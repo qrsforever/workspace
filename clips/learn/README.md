@@ -1,14 +1,5 @@
----
-
-title: Clips C++ interface
-date: 2018-06-04 16:24:24
-tags: [ Clips, C++ ]
-categories: [ Local ]
-
----
-
-下载依赖
-========
+下载
+====
 
 官网下载: 
     [630](https://sourceforge.net/projects/clipsrules/files/CLIPS/6.30/)
@@ -40,10 +31,3 @@ build clips:
 1. `cd clips_core_source_640/core`
 2. `make`
 
-
-调试编译
-========
-
-1. 修改`Makefile`指定`CLIPS630_DIR`路径
-
-2. make; make test; make clean

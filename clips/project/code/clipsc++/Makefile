@@ -7,7 +7,7 @@ OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 
-CLIPS630_DIR:=../../../learn/clips_core_source_630
+CLIPS_DIR:=../../../learn/clips_core_source_640
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
@@ -17,8 +17,8 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS := -L$(CLIPS630_DIR)/core -lpthread -lclips
-INCLUDE := -I$(CLIPS630_DIR)/core
+LDFLAGS := -L$(CLIPS_DIR)/core -lpthread -lclips
+INCLUDE := -I$(CLIPS_DIR)/core
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
@@ -115,6 +115,6 @@ run:$(TARGET_NAME)
 
 test:$(TARGET_NAME)
 	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
-	export LD_LIBRARY_PATH=$(CLIPS630_DIR)/core && $(OUT_DIR)/$@
+	export LD_LIBRARY_PATH=$(CLIPS_DIR)/core && $(OUT_DIR)/$@
 
 .PHONY: $(PHONY)
