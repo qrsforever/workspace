@@ -19,7 +19,7 @@ std::map<void*, Environment*> Environment::m_environment_map;
 
 void Environment::s_clear_callback(void *env)
 {
-    LOGI("Call s_ClearCallBack(%p) this[%p]\n", env, m_environment_map[env]);
+    /* LOGI("Call s_ClearCallBack(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
     if (context->m_clear_cb) {
         context->m_clear_cb();
@@ -28,7 +28,7 @@ void Environment::s_clear_callback(void *env)
 
 void Environment::s_periodic_callback(void *env)
 {
-    LOGI("Call s_periodic_callback(%p) this[%p]\n", env, m_environment_map[env]);
+    /* LOGI("Call s_periodic_callback(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
     if (context->m_periodic_cb) {
         context->m_periodic_cb();
@@ -37,7 +37,7 @@ void Environment::s_periodic_callback(void *env)
 
 void Environment::s_reset_callback(void *env)
 {
-    LOGI("Call s_reset_callback(%p) this[%p]\n", env, m_environment_map[env]);
+    /* LOGI("Call s_reset_callback(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
     if (context->m_reset_callback) {
         context->m_reset_callback();
@@ -46,7 +46,7 @@ void Environment::s_reset_callback(void *env)
 
 void Environment::s_rulefiring_callback(void *env)
 {
-    LOGI("Call s_rulefiring_callback(%p) this[%p]\n", env, m_environment_map[env]);
+    /* LOGI("Call s_rulefiring_callback(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
     if (context->m_rulefiring_cb) {
         context->m_rulefiring_cb();
@@ -91,11 +91,7 @@ Environment::~Environment()
     m_func_restr.clear();
 }
 
-bool Environment::batch_evaluate(const std::string& filename)
-{
-    return EnvBatchStar(m_cobj, filename.c_str());
-}
-
+/*{{{ general --> */
 int Environment::load(const std::string& filename)
 {
     return EnvLoad(m_cobj, filename.c_str());
@@ -116,6 +112,16 @@ bool Environment::save(const std::string &filename)
     return EnvSave(m_cobj, filename.c_str());
 }
 
+bool Environment::binary_load(const std::string &filename)
+{
+    return EnvBload(m_cobj, filename.c_str());
+}
+
+bool Environment::binary_save(const std::string &filename)
+{
+    return EnvBsave(m_cobj, filename.c_str());
+}
+
 Values Environment::evaluate(const std::string& expression)
 {
     DATA_OBJECT clipsdo;
@@ -123,6 +129,11 @@ Values Environment::evaluate(const std::string& expression)
     if (result)
         return data_object_to_values(&clipsdo);
     return Values();
+}
+
+bool Environment::batch_evaluate(const std::string& filename)
+{
+    return EnvBatchStar(m_cobj, filename.c_str());
 }
 
 Values Environment::function(const std::string &function_name, const std::string &arguments)
@@ -133,6 +144,7 @@ Values Environment::function(const std::string &function_name, const std::string
         return data_object_to_values(&clipsdo);
     return Values();
 }
+/* <-- general }}}*/
 
 /*{{{ debug --> */
 int Environment::is_watched(const std::string &item)

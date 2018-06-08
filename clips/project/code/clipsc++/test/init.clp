@@ -8,22 +8,25 @@
 (defglobal
     ?*CLIPS_DIRS* = (get-clips-dirs)
     ?*DEBUG* = 2
-    ?*CONFIG_PREFIXES* = (create$ "res/")
+    ?*CONFIG_PREFIXES* = (create$ "test/")
     ?*START-TIME* = (now)
 )
 
 (deffunction resolve-file (?file)
     (foreach ?d ?*CLIPS_DIRS*
-        (bind ?fn (str-cat ?d ?file))
+        (bind ?fn (str-cat ?d ?*CONFIG_PREFIXES* ?file))
+        (printout debug "resolve file " ?fn crlf)
         (if (open ?fn fd) then
             (close fd)
             (return ?fn)
         )
     )
+    (printout error "not found " ?file "!" crlf)
     (return FALSE)
 )
 
-; (load* (resolve-file utils.clp))
+(load* (resolve-file cls001.clp))
+(load* (resolve-file rule001.clp))
 
 (deftemplate confval
     (slot path (type STRING))

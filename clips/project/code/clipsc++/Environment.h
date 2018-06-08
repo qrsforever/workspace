@@ -65,11 +65,16 @@ public:
     void regist_reset_callback(VoidCallback cb) { m_reset_callback = cb; }
     void regist_rulefiring_callback(VoidCallback cb) { m_rulefiring_cb = cb; }
 
-    bool batch_evaluate(const std::string &filename);
+/*{{{ general --> */
     int load(const std::string &filename);
-    bool build(const std::string &construct);
-    void reset();
     bool save(const std::string &filename);
+    bool binary_load(const std::string &filename);
+    bool binary_save(const std::string &filename);
+    
+    bool build(const std::string &construct);
+    bool batch_evaluate(const std::string &filename);
+    void reset();
+/* <-- general }}}*/
 
 /*{{{ debug --> */
     int is_watched(const std::string &item);
@@ -161,6 +166,8 @@ public:
 
     template <typename T_return, typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     bool add_function(std::string name, std::shared_ptr<Functor<T_return, T_arg1, T_arg2, T_arg3, T_arg4>> call);
+
+    bool remove_function(std::string name);
 /* <-- add_function }}}*/
 
 /*{{{ get_callback --> */
@@ -283,8 +290,6 @@ public:
     template <typename T_arg1, typename T_arg2, typename T_arg3, typename T_arg4>
     char *get_function_restriction(std::string &name);
 /* <-- get_function_restriction }}}*/
-
-    bool remove_function(std::string name);
 
 protected:
     std::map<std::string, char *> m_func_restr;

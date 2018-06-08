@@ -50,19 +50,19 @@ class Test {/*{{{*/
 public:
     void onClear(void)
     {
-        LOGD("onClear this[%p]\n", this);
+        /* LOGD("onClear this[%p]\n", this); */
     }
     void onPeriodic(void)
     {
-        LOGD("onPeriodic this[%p]\n", this);
+        /* LOGD("onPeriodic this[%p]\n", this); */
     }
     void onReset(void)
     {
-        LOGD("onReset this[%p]\n", this);
+        /* LOGD("onReset this[%p]\n", this); */
     }
     void onRuleFiring(void)
     {
-        LOGD("onRuleFiring this[%p]\n", this);
+        /* LOGD("onRuleFiring this[%p]\n", this); */
     }
 
     Values clipsCallNow()
@@ -258,7 +258,7 @@ void test_function(Environment *env)
         if (function) {
             LOGD("function name: %s, is_watched: %d\n", names[i].c_str(), function->is_watched());
             if (function->formatted().length()) {
-                LOGD("\tformat:\n%s\n", function->formatted().c_str());
+                LOGD("format:\n%s\n", function->formatted().c_str());
             }
         }
     }
@@ -273,25 +273,25 @@ void test_template(Environment *env)
         if (temp) {
             LOGD("template name: %s, is_watched: %d\n", names[i].c_str(), temp->is_watched());
             if (temp->formatted().length()) {
-                LOGD("\tformat: \n%s\n", temp->formatted().c_str());
+                LOGD("format: \n%s\n", temp->formatted().c_str());
             }
         }
         std::vector<std::string> slots = temp->slot_names();
         for (unsigned int j = 0; j < slots.size(); ++j) {
-           LOGD("\tslot_name[%s] default_type[%d] is_single[%d] is_multi[%d]\n", \
+           LOGD("slot_name[%s] default_type[%d] is_single[%d] is_multi[%d]\n", \
                slots[j].c_str(), \
                temp->slot_default_type(slots[j]), \
                temp->is_single_field_slot(slots[j]),  \
                temp->is_multifield_slot(slots[j]));
            Values allowedValues = temp->slot_allowed_values(slots[j]);
-           LOGD("\t\tallowedValues: size = %d\n", allowedValues.size());
-           SHOW_VALUES(allowedValues, "\t\t\t");
+           LOGD("\tallowedValues: size = %d\n", allowedValues.size());
+           SHOW_VALUES(allowedValues, "\t\t");
            Values rangeValues = temp->slot_range(slots[j]);
-           LOGD("\t\trangeValues: size = %d\n", rangeValues.size());
-           SHOW_VALUES(rangeValues, "\t\t\t");
+           LOGD("\trangeValues: size = %d\n", rangeValues.size());
+           SHOW_VALUES(rangeValues, "\t\t");
            Values defaultValues = temp->slot_default_value(slots[j]);
-           LOGD("\t\tdefaultValues: size = %d\n", defaultValues.size());
-           SHOW_VALUES(defaultValues, "\t\t\t");
+           LOGD("\tdefaultValues: size = %d\n", defaultValues.size());
+           SHOW_VALUES(defaultValues, "\t\t");
         }
     }
 }/*}}}*/
@@ -303,13 +303,13 @@ void test_rule(Environment *env)
     for (unsigned int i = 0; i < names.size(); ++i) {
         rule = env->get_rule(names[i]);
         if (rule) {
+            if (rule->formatted().length()) {
+                LOGD("\tformat:\n%s\n", rule->formatted().c_str());
+            }
             LOGD("rule_name: %s, activation_watch: %d, firing_watch: %d\n", \
                 names[i].c_str(), \
                 rule->activations_watched(), \
                 rule->firings_watched());
-            if (rule->formatted().length()) {
-                LOGD("\tformat:\n%s\n", rule->formatted().c_str());
-            }
         }
     }
 }/*}}}*/
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 {/*{{{*/
     int ret = -1;
 
-    LOGD("Main start\n");
+    LOGD("\n\n********************Main start****************\n\n");
 
     Environment *env = new Environment();
 
@@ -373,5 +373,5 @@ int main(int argc, char *argv[])
      */
     test_rule(env);
 
-    return sleep(5);
+    return 0;
 }/*}}}*/
