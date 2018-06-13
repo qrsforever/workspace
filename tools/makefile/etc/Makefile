@@ -1,6 +1,8 @@
 # 通用 Makefile
 
 # $(info "######## Makefile #######")
+ 
+# PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
 
 # 其他变量
 OPTIMIZE := -O2
@@ -27,6 +29,9 @@ SRC_DIR = . src
 INC_DIR = . src
 OUT_DIR = output
 OBJ_DIR = $(OUT_DIR)/obj
+
+# 指定运行环境(-Wl,-rpath, 多个使用:)
+RPATH 	= ".:$(OUT_DIR)"
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
@@ -99,7 +104,7 @@ $(TARGET_NAME): .mkdir $(OBJECTS)
 else
 $(TARGET_NAME): LD=$(if $(filter-out %.c %.C, $(SOURCES)),$(CXX),$(GCC))
 $(TARGET_NAME): .mkdir $(OBJECTS)
-	$(LD) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(LD) $(OBJECTS) -o $@ $(LDFLAGS) -Wl,-rpath=$(RPATH)
 endif
 
 .mkdir:
@@ -109,7 +114,7 @@ clean:
 	rm -rf $(OUT_DIR)
 
 run:$(TARGET_NAME)
-	export LD_LIBRARY_PATH=./output && $(TARGET_NAME)
+	$(TARGET_NAME)
 
 
 .PHONY: $(PHONY)
