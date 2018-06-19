@@ -1,5 +1,6 @@
 #include <iostream>
 #include <functional>
+#include <string>
 
 // constexpr：告诉编译器我可以是编译期间可知的，尽情的优化我吧。
 // const：告诉程序员没人动得了我，放心的把我传出去；或者放心的把变量交给我，我啥也不动就瞅瞅。
@@ -20,6 +21,22 @@ void f2(int flag)
     std::cout << "f2(" << flag << ")\n";
 }
 
+class A {
+public:
+    int i_ = 0; // C++11允许非静态（non-static）数据成员在其声明处（在其所属类内部）进行初始化
+
+    void output(int x, int y)
+    {
+        std::cout << x << "" << y << std::endl;
+    }
+
+    void output2(const std::string &x, const std::string &y, int state)
+    {
+
+    }
+
+};
+
 int main(int argc, char *argv[])
 {
     g_currentRun = f1;
@@ -33,5 +50,12 @@ int main(int argc, char *argv[])
     {
         g_currentRun(); //f2(1)
     }
+
+    A a;
+    std::function<void(int, int)> fr = std::bind(&A::output, &a, std::placeholders::_1, std::placeholders::_2);
+
+    std::function<void(const std::string&, const std::string&, int)> fr2 = 
+        std::bind(&A::output2, &a, 
+            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     return 0;
 }
