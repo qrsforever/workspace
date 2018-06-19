@@ -47,6 +47,14 @@
     (printout t "Duck-2 " (instance-name ?duck) " age " ?age crlf)
 )
 
+(defrule find-age-over-10-and-below-20
+    ?duck <- (object
+        (is-a DUCK)
+        (age ?age &:(> ?age 10)&:(< ?age 20)))
+  =>
+    (printout t "Duck-3 " (instance-name ?duck) " age " ?age crlf)
+)
+
 (defrule find-name-is-unkown-or-name-is-dinky
     (or
         (object
@@ -65,19 +73,26 @@
     (printout t "Duck-3 " crlf)
 )
 
-(send [Dinky_Duck] put-age 30)
-(assert (make-again 1))
-(send [Dinky_Duck] print)
-
+; (send [Dinky_Duck] put-age 30)
+; (assert (make-again 1))
+; (send [Dinky_Duck] print)
+; 
 (instances)
 
+(send [Dinky_Duck] print)
+(send [Dorky_Duck] print)
+(send [Dinky_Duck] put-age 25)
+(send [Dinky_Duck] put-age 15)
 (agenda)
 (run)
-(agenda)
 
-(assert (make-again 1))
-(facts)
-(instances)
-(agenda)
+; (agenda)
+; (run)
+; (agenda)
+; 
+; (assert (make-again 1))
+; (facts)
+; (instances)
+; (agenda)
 
 (exit)
