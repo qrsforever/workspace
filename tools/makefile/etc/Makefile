@@ -3,6 +3,7 @@
 # $(info "######## Makefile #######")
  
 # PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
+# git rev-parse --git-dir
 
 # 其他变量
 OPTIMIZE := -O2
@@ -35,7 +36,7 @@ RPATH 	= ".:$(OUT_DIR)"
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
-EXCLUDE_SRC := src/UnitTest.cpp ./UnitTest.cpp
+EXCLUDE_SRC := %UnitTest.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
 TARGET_TYPE := exe
