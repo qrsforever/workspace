@@ -22,7 +22,7 @@
 
 ; why age not show out.
 (make-instance Dixie_Duck of DUCK
- (sound quack) 
+ (sound quack)
  (age 2)
 )
 
@@ -42,7 +42,7 @@
 (slot-allowed-values A y)
 
 (defclass B (is-a USER) (slot x))
-(defclass C (is-a USER) 
+(defclass C (is-a USER)
     (slot y (allowed-classes A B))
 )
 
@@ -50,9 +50,43 @@
 (slot-allowed-classes C y)
 
 ; but not check
-(make-instance Test_C of C 
+(make-instance Test_C of C
     (y "aaa")
 )
 (send [Test_C] print)
+
+(defclass D (is-a USER)
+    (slot x (type INTEGER) (default 7) (range 1 8))
+)
+
+; check send wrong type ????? why ???
+(make-instance Test_D of D
+    (x 10)
+)
+(send [Test_D] put-x "20")
+(send [Test_D] print)
+(class [Test_D])
+
+(instance-existp Test_D)
+(instance-existp [Test_D])
+
+(instance-existp Test_G)
+(instance-existp [Test_G])
+
+
+(lexemep "aaaa  bbb")
+(lexemep aaaa)
+
+(if (not (lexemep aaaa))
+ then
+    (printout t "YYYYY" crlf)
+  else
+    (printout t "NNNNN" crlf)
+)
+
+(instances)
+(unmake-instance [Test_D])
+(undefclass D)
+(list-defclasses)
 
 (exit)

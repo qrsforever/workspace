@@ -25,18 +25,27 @@
 )
 
 (defrule test2
-    ?f <- (datetime 
+    ?f <- (datetime
             (year ?year &:(= ?year 2018))
             (month ?month &:(> ?month 7))
             (minute ?minute &:(= ?minute 22))
         )
  =>
+    (retract ?f)
     (printout t "okkkkkkkko" crlf)
 )
 
 (assert (datetime (year 2018) (month 8) (minute 22)))
+; not retract
+(assert (datetime (year 2019) (month 8) (minute 22)))
+(assert (datetime (year 2021) (month 8) (minute 22)))
+(assert (datetime (year 2022) (month 8) (minute 22)))
+(assert (datetime (year 2023) (month 8) (minute 22)))
+
+(facts)
 
 (agenda)
 (run)
 
+(facts)
 (exit)

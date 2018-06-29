@@ -76,7 +76,7 @@
 ; (send [Dinky_Duck] put-age 30)
 ; (assert (make-again 1))
 ; (send [Dinky_Duck] print)
-; 
+;
 (instances)
 
 (send [Dinky_Duck] print)
@@ -89,7 +89,7 @@
 ; (agenda)
 ; (run)
 ; (agenda)
-; 
+;
 ; (assert (make-again 1))
 ; (facts)
 ; (instances)
