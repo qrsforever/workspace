@@ -59,6 +59,12 @@
     (slot x (type INTEGER) (default 7) (range 1 8))
 )
 
+; return not used, must have delete
+; (defmessage-handler D delete ()
+(defmessage-handler D delete before ()
+    (return TRUE)
+)
+
 ; check send wrong type ????? why ???
 (make-instance Test_D of D
     (x 10)
@@ -87,7 +93,15 @@
 
 (instances)
 (unmake-instance [Test_D])
+(bind ?res (unmake-instance [Test_D]))
+(if (eq ?res TRUE)
+ then
+     (printout t "unmake-instance:" ?res crlf)
+)
 (undefclass D)
 (list-defclasses)
+
+(symbol-to-instance-name Test_D)
+
 
 (exit)

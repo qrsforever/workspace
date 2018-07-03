@@ -17,4 +17,8 @@
     (printout t "TEST_CASE not start..." crlf)
 )
 
+(bind ?b (create$ aa bb ccc))
+(printout t (expand$ ?b) crlf)
+
+
 (exit)

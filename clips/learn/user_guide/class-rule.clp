@@ -32,12 +32,16 @@
 (run)
 
 (defrule find-age-over-10
+    (hello ?a)
     ?duck <- (object
         (is-a DUCK)
-        (age ?age &:(> ?age 10)))
+        (age ?age &:(> ?age ?a)))
   =>
     (printout t "Duck-1 " (instance-name ?duck) " age " ?age crlf)
 )
+
+; ok
+(assert (hello 10))
 
 (defrule find-age-over-20-or-below-10
     ?duck <- (object
