@@ -53,6 +53,7 @@
         (age ?age &:(> ?age 10)&:(< ?age 20)))
   =>
     (printout t "Duck-3 " (instance-name ?duck) " age " ?age crlf)
+    (return ffff)
 )
 
 (defrule find-name-is-unkown-or-name-is-dinky

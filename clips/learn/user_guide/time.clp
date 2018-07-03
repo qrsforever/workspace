@@ -15,6 +15,10 @@
 (agenda)
 (run)
 
+(deffunction create-clock()
+    (return (time))
+)
+
 (deftemplate datetime
     (slot year (type INTEGER))
     (slot month (type INTEGER))
@@ -22,9 +26,11 @@
     (slot hour (type INTEGER))
     (slot minute (type INTEGER))
     (slot second (type INTEGER))
+    (slot clock (type INTEGER) (default-dynamic (create-clock)))
 )
 
 (defrule test2
+    (declare (salience 200))
     ?f <- (datetime
             (year ?year &:(= ?year 2018))
             (month ?month &:(> ?month 7))
@@ -33,6 +39,14 @@
  =>
     (retract ?f)
     (printout t "okkkkkkkko" crlf)
+)
+
+(defrule test3
+    (declare (salience -200))
+    ?f <- (datetime (month ?month &:(= ?month 8)))
+  =>
+    (retract ?f)
+    (printout t "--->found " ?f crlf)
 )
 
 (assert (datetime (year 2018) (month 8) (minute 22)))

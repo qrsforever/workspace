@@ -66,6 +66,7 @@
 (send [Test_D] put-x "20")
 (send [Test_D] print)
 (class [Test_D])
+(instance-name [Test_D])
 
 (instance-existp Test_D)
 (instance-existp [Test_D])
