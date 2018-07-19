@@ -5,9 +5,11 @@ import tkinter as tk
 from tkinter import ttk
 from res import Strings
 from res import Styles
+from res import Colors
 
 gStrings = Strings.strings
 gStyles = Styles.styles
+gColors = Colors.colors
 
 class WindowGUI(object):
 
@@ -27,8 +29,8 @@ class WindowGUI(object):
 
     def onConfigure(self):
         style = ttk.Style()
-        style.theme_create('app', parent="alt", settings=gStyles['app'])
-        style.theme_use('app')
+        style.theme_create('monitor', parent="alt", settings=gStyles['monitor'])
+        style.theme_use('monitor')
 
 
     def onInitWindow(self):
@@ -91,22 +93,18 @@ class WindowGUI(object):
     def createLogSetView(self, tab):
         # level frame
         level_frm = ttk.Frame(tab)
-        ttk.Label(level_frm,
-                text = gStrings['loglevel'][self.lan],
-                font = ('Arial', 20)
+        ttk.Label(level_frm, text=gStrings['loglevel'][self.lan],
                 ).grid(row=0, column=0, columnspan=6, sticky=tk.W)
         level_frm.pack(anchor="w")
 
-
-        # j = 1
-        # for t in ('模块名', 'Error', 'Warning', 'Normal', 'Info', 'Trace'):
-        #     tk.Label(frm,
-        #             text = t,
-        #             pady = 10,
-        #             width = 10,
-        #             font = ('Arial', 16)
-        #             ).grid(row=1, column=j)
-        #     j = j + 1
+        j = 1
+        for t in (gStrings['logModule'][self.lan], gStrings['logError'][self.lan],
+                gStrings['logWarn'][self.lan], gStrings['logNormal'][self.lan],
+                gStrings['logInfo'][self.lan], gStrings['logTrace'][self.lan]) :
+            ttk.Label(level_frm, text=t, width=12, anchor=tk.CENTER,
+                    foreground=gColors['White'],
+                    font=('Arial', 12)).grid(row=1, column=j)
+            j += 1
 
         # i = 2
         # for name in names:

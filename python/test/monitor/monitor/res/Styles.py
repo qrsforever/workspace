@@ -6,79 +6,78 @@ from res import Colors
 gColors = Colors.colors
 
 styles = {
-        'app': {
-            ".": { # Root
-                "configure": {
-                    "background"        : gColors['DarkGray'],
-                    "foreground"        : gColors['LightGray'],
-                    "relief"            : "flat",
-                    "highlightcolor"    : gColors['GreenYellow']
+        'monitor': {
+            '.': { # Root
+                'configure': {
+                    'background'        : gColors['DarkGray'],
+                    'foreground'        : gColors['LightGray'],
+                    'relief'            : 'flat',
+                    'highlightcolor'    : gColors['GreenYellow']
                     }
                 },
 
-            "TFrame": {
-                "configure": {
-                    "foreground"        : gColors['GreenYellow'],
-                    "padding"           : 10,
-                    "font"              : ("Calibri", 12)
+            'TFrame': {
+                'configure': {
+                    'font'              : ('Calibri', 12)
                     }
                 },
 
-            "TLabel": {
-                "configure": {
-                    "foreground"        : gColors['GreenYellow'],
-                    "padding"           : 10,
-                    "font"              : ("Calibri", 12)
+            'TLabel': {
+                'configure': {
+                    'foreground'        : gColors['LightGray'],
+                    'borderwidth'       : 2,
+                    'padding'           : 10,               # add spaces for four sides
+                    'font'              : ('Calibri', 12)
                     }
                 },
 
-            "TNotebook": {
-                "configure": {
-                    "padding"           : 5
+            'TNotebook': {
+                'configure': {
+                    'padding'           : 5
                     }
                 },
 
-            "TNotebook.Tab": {
-                "configure": {
-                    "padding"           : [25, 5], 
-                    "foreground"        : "white"
+            'TNotebook.Tab': {
+                'configure': {
+                    'padding'           : [25, 5], 
+                    'foreground'        : 'white'
                     },
-                "map": {
-                    "background"        : [("selected", gColors['DimGray'])],
-                    "expand"            : [("selected", [1, 1, 1, 0])]
+                'map': {
+                    'background'        : [('selected', gColors['DimGray'])],
+                    'expand'            : [('selected', [1, 1, 1, 0])]
                     }
                 },
 
-            "TCombobox": {
-                "configure": {
-                    "selectbackground"  : gColors['DarkGray'],
-                    "fieldbackground"   : "white",
-                    "background"        : gColors['LightGray'],
-                    "foreground"        : "black"
+            'TCombobox': {
+                'configure': {
+                    'selectbackground'  : gColors['DarkGray'],
+                    'fieldbackground'   : 'white',
+                    'background'        : gColors['LightGray'],
+                    'foreground'        : 'black'
                     }
                 },
 
-            "TButton": {
-                "configure": {
-                    "font"              : ("Calibri", 13, 'bold'),
-                    "background"        : "black",
-                    "foreground"        : gColors['YellowGreen']
+            'TButton': {
+                'configure': {
+                    'font'              : ('Calibri', 13, 'bold'),
+                    'background'        : 'black',
+                    'foreground'        : gColors['YellowGreen']
                     },
-                "map": {
-                    "background"        : [("active", gColors['YellowGreen'])],
-                    "foreground"        : [("active", 'black')]
+                'map': {
+                    'background'        : [('active', gColors['YellowGreen'])],
+                    'foreground'        : [('active', 'black')]
                     }
                 },
 
-            "TEntry": {
-                    "configure": {
-                        "foreground"    : "black"
+            'TEntry': {
+                    'configure': {
+                        'foreground'    : 'black'
                         }
                     },
 
-            "Horizontal.TProgressbar": {
-                    "configure": {
-                        "background"    : gColors['DimGray']
+            'Horizontal.TProgressbar': {
+                    'configure': {
+                        'background'    : gColors['DimGray']
                         }
                     }
             } # app

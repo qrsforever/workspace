@@ -39,7 +39,7 @@ strings = {
             'cn' : '日志过滤'
             },
         'logModule' : {
-            'en' : 'Module Name',
+            'en' : 'ModuleName',
             'cn' : '模块名'
             },
         'logError' : {
