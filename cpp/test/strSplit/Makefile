@@ -1,9 +1,6 @@
-# 通用 Makefile
-
-# $(info "######## Makefile #######")
+# 通用 Makefile 
  
-# PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
-# PROJECT_ROOT_DIR := $(shell dirname `git rev-parse --git-dir`)
+# $(info "######## Makefile #######")
 
 # 其他变量
 OPTIMIZE := -O2
@@ -11,7 +8,7 @@ WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 
 # 初始化编译工具以及编译选项
-CROSS_COMPILE =
+CROSS_COMPILE = 
 GCC 	:= $(CROSS_COMPILE)gcc
 CXX 	:= $(CROSS_COMPILE)g++
 CC		:=
@@ -28,31 +25,23 @@ HDREXTS := h H hh hpp HPP h++ hxx hp
 # 指定源文件目录, 以及目标文件生成目录
 SRC_DIR = . src
 INC_DIR = . src
-OUT_DIR = output
-OBJ_DIR = $(OUT_DIR)/obj
-
-# 指定运行环境(-Wl,-rpath, 多个使用:)
-RPATH 	= ".:$(OUT_DIR)"
+OBJ_DIR = out/target
 
 # 额外增加的源文件或者排除不编译的源文件
-SPECIAL_SRC :=
-EXCLUDE_SRC := %UnitTest.cpp
+SPECIAL_SRC := 
+EXCLUDE_SRC := 
 
-# 设置目标类型(exe, a, so), 及目标名字
-TARGET_TYPE := exe
+# 设置目标类型(app, ar, so), 及目标名字
+TARGET_TYPE := app
 TARGET_TYPE := $(strip $(TARGET_TYPE))
-TARGET_NAME :=
+TARGET_NAME := out/$(shell basename $(PWD))
 
-ifeq ($(TARGET_NAME), )
-	TARGET_NAME := $(shell basename $(PWD))
-endif
-
-ifneq ($(TARGET_TYPE), exe)
-	TARGET_NAME := $(join $(OUT_DIR)/lib, $(TARGET_NAME))
-	TARGET_NAME := $(join $(TARGET_NAME), .$(TARGET_TYPE))
+ifeq ($(TARGET_TYPE), so)
+	TARGET_NAME := out/lib$(shell basename $(PWD).so)
 else
-	TARGET_NAME := $(join $(OUT_DIR), /$(TARGET_NAME))
-	LDFLAGS += -L$(OUT_DIR)
+	ifeq ($(TARGET_TYPE), ar)
+		TARGET_NAME := out/lib$(shell basename $(PWD).a)
+	endif
 endif
 
 # 追加搜索目录
@@ -85,37 +74,33 @@ endef
 # 函数: 生成中间文件
 define gen_o_cmd
 $2/%.o: %.$1
-ifeq ($3 , $(GCC))
-	$(3) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) -c -o $$@ $$<
-else
-	$(3) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) $(CPPFLAGS) -c -o $$@ $$<
-endif
+	$(CXX) $(INCLUDE) -Wp,-MT,$$@ -Wp,-MMD,$$@.d $(CFLAGS) $(CPPFLAGS) -c -o $$@ $$<
 
 endef
 
 # 执行函数, make会将函数里的内容当Makefile解析, 注意$$符号
 $(eval $(foreach i, $(SRCEXTS), $(foreach d, $(SRC_DIR), $(call add_vpath,vpath %.$i $d))))
-$(eval $(foreach i, $(SRCEXTS), $(call gen_o_cmd,$i,$(OBJ_DIR),$(if $(filter-out c C, $(i)),$(CXX),$(GCC)))))
+$(eval $(foreach i, $(SRCEXTS), $(call gen_o_cmd,$i,$(OBJ_DIR))))
 
 # 静态, 动态, 可执行
-ifeq ($(TARGET_TYPE), a)
-$(TARGET_NAME): .mkdir $(OBJECTS)
+ifeq ($(TARGET_TYPE), ar)
+$(TARGET_NAME): $(OBJECTS)
 	rm -f $@
 	$(AR) rcvs $@ $(OBJECTS)
-else
+else 
 $(TARGET_NAME): LD=$(if $(filter-out %.c %.C, $(SOURCES)),$(CXX),$(GCC))
-$(TARGET_NAME): .mkdir $(OBJECTS)
-	$(LD) $(OBJECTS) -o $@ $(LDFLAGS) -Wl,-rpath=$(RPATH)
+$(TARGET_NAME): $(OBJECTS)
+	$(LD) $(OBJECTS) -o $@ $(LDFLAGS) 
 endif
 
 .mkdir:
 	@if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
 
 clean:
-	rm -rf $(OUT_DIR)
+	rm -rf $(OBJ_DIR) $(TARGET_NAME)
 
 run:$(TARGET_NAME)
-	$(TARGET_NAME)
+	@$(TARGET_NAME)
+	
 
-
-.PHONY: $(PHONY)
+.PHONY: $(PHONY) 

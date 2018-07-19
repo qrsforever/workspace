@@ -35,7 +35,15 @@ public:
 
     }
 
+
+    int test1(int a) { return 10; }
+    int test2(std::string b) { return 20; }
+
 };
+
+int test1(int a) { return 10; }
+int test1(std::string b) { return 20; }
+
 
 int main(int argc, char *argv[])
 {
@@ -43,6 +51,9 @@ int main(int argc, char *argv[])
     {
         g_currentRun(); //f1()
     }
+
+    std::function<int(int)> t1 = std::bind(test1, 10);
+    // std::function<int(std::string)> t2 = std::bind(test1, "20");
 
     constexpr int flag = 1;
 
@@ -57,5 +68,9 @@ int main(int argc, char *argv[])
     std::function<void(const std::string&, const std::string&, int)> fr2 = 
         std::bind(&A::output2, &a, 
             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+    // std::function<int(int)> t3 = std::bind(&A::test1, &a, 10);
+    // std::function<int(std::string)> t4 = std::bind(&A::test2, &a, std::string("20"));
+
     return 0;
 }

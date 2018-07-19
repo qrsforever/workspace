@@ -1,7 +1,6 @@
 
 (deftemplate scene-mode
     (slot zone)
-    (slot state (type SYMBOL) (default none))
     (slot from (type SYMBOL) (default none))
     (slot to (type SYMBOL) (default none))
 )
@@ -17,23 +16,6 @@
     (modify ?scene (state entering) (from ?to) (to ?mode))
 )
 
-; trigger scene quit
-(defrule trigger-scene-quit
-    (declare (salience -1000))
-    ?quit <- (scene-quit ?zone ?is-back)
-    ?scene <- (scene-mode (zone ?zone) (from ?from) (to ?to))
-  =>
-    (retract ?quit)
-    (if ?is-back
-     then
-        (printout t "is-back here" crlf)
-        (modify ?scene (from none) (to ?from))
-     else
-        (printout t "not is-back here" crlf)
-        (modify ?scene (from none) (to none))
-    )
-)
-
 (defrule room1-none
     ?f <- (scene-mode (zone room1) (to none))
    =>
@@ -41,7 +23,7 @@
 )
 
 (defrule room1-sleeping
-    ?f <- (scene-mode (state ?state) (zone room1) (to sleeping))
+    ?f <- (scene-mode (zone room1) (to sleeping))
   =>
     (printout t "room1 enter sleepping mode" crlf)
 )
@@ -97,11 +79,6 @@
 (facts)
 (agenda)
 (run)
-
-; (assert (scene-quit room1 TRUE))
-; (facts)
-; (agenda)
-; (run)
 
 (exit)
 

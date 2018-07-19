@@ -77,5 +77,9 @@
 (facts)
 
 
+(defclass oic.d.light  (is-a USER)
+ (slot a)
+ (slot b)
+)
 
 (exit)
