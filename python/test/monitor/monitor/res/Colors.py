@@ -65,6 +65,7 @@ colors = {
         'MediumSpringGreen':    '#00FA9A',     #中春绿色
         'MintCream':            '#F5FFFA',     #薄荷奶油
         'SpringGreen':          '#00FF7F',     #春绿色
+        'MungBeanPaste':        '#CCE8CF',     #绿豆沙
         'MediumSeaGreen':       '#3CB371',     #中海洋绿
         'SeaGreen':             '#2E8B57',     #海洋绿
         'Honeydew':             '#F0FFF0',     #蜜色/蜜瓜色

@@ -2,9 +2,25 @@
 # -*- coding: utf-8 -*-
 
 strings = {
+        'quit' : {
+            'en' : 'Quit',
+            'cn' : '退出'
+            },
         'title' : {
             'en' : 'MonitorTool',
             'cn' : '监控工具'
+            },
+        'serverAddr' : {
+            'en' : 'Server Address',
+            'cn' : '服务器地址'
+            },
+        'serverPort' : {
+            'en' : 'Server Port',
+            'cn' : '服务器端口'
+            },
+        'connect' : {
+            'en' : 'Connect',
+            'cn' : '连接'
             },
         'basicInfo' : {
             'en' : 'Basic Infomation',

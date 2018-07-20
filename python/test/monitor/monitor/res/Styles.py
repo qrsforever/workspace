@@ -9,8 +9,8 @@ styles = {
         'monitor': {
             '.': { # Root
                 'configure': {
-                    'background'        : gColors['DarkGray'],
-                    'foreground'        : gColors['LightGray'],
+                    'background'        : gColors['MungBeanPaste'],
+                    'foreground'        : gColors['Black'],
                     'relief'            : 'flat',
                     'highlightcolor'    : gColors['GreenYellow']
                     }
@@ -24,7 +24,6 @@ styles = {
 
             'TLabel': {
                 'configure': {
-                    'foreground'        : gColors['LightGray'],
                     'borderwidth'       : 2,
                     'padding'           : 10,               # add spaces for four sides
                     'font'              : ('Calibri', 12)
@@ -40,7 +39,7 @@ styles = {
             'TNotebook.Tab': {
                 'configure': {
                     'padding'           : [25, 5], 
-                    'foreground'        : 'white'
+                    'foreground'        : gColors['Black']
                     },
                 'map': {
                     'background'        : [('selected', gColors['DimGray'])],
@@ -51,22 +50,16 @@ styles = {
             'TCombobox': {
                 'configure': {
                     'selectbackground'  : gColors['DarkGray'],
-                    'fieldbackground'   : 'white',
+                    'fieldbackground'   : gColors['White'],
                     'background'        : gColors['LightGray'],
-                    'foreground'        : 'black'
+                    'foreground'        : gColors['Black']
                     }
                 },
 
             'TButton': {
                 'configure': {
-                    'font'              : ('Calibri', 13, 'bold'),
-                    'background'        : 'black',
-                    'foreground'        : gColors['YellowGreen']
+                    'font'              : ('Calibri', 12)
                     },
-                'map': {
-                    'background'        : [('active', gColors['YellowGreen'])],
-                    'foreground'        : [('active', 'black')]
-                    }
                 },
 
             'TEntry': {

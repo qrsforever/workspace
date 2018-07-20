@@ -20,9 +20,10 @@ class TCPClient(object):
         return True
 
     def close(self):
-        self.srv_socket.send(b'quit')
-        time.sleep(0.3)
-        self.srv_socket.close()
+        if self.connectted:
+            self.srv_socket.send(b'quit')
+            time.sleep(0.3)
+            self.srv_socket.close()
 
     def command(self, cmd, *args):
         if not self.connectted:
