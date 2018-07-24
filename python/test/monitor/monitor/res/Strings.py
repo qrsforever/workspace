@@ -15,20 +15,20 @@ strings = {
             'cn' : '监控工具'
             },
         'serverAddr' : {
-            'en' : 'Server Address: ',
-            'cn' : '服务器地址: '
+            'en' : 'Server Address:',
+            'cn' : '服务器地址:'
             },
         'serverPort' : {
-            'en' : 'Server Port: ',
-            'cn' : '服务器端口: '
+            'en' : 'Server Port:',
+            'cn' : '服务器端口:'
             },
         'host' : {
-            'en' : 'Host Address: ',
-            'cn' : '主机地址: '
+            'en' : 'Host Address:',
+            'cn' : '主机地址:'
             },
         'port' : {
-            'en' : 'Host Port: ',
-            'cn' : '主机端口: '
+            'en' : 'Host Port:',
+            'cn' : '主机端口:'
             },
         'output' : {
             'en' : 'Output',
@@ -59,7 +59,7 @@ strings = {
             'cn' : 'HomeBrain: '
             },
         'reVer' : {
-            'en' : 'RuleEngine: ',
+                'en' : 'RuleEngine: ',
             'cn' : 'RuleEngine: '
             },
         'logSet' : {
@@ -117,5 +117,13 @@ strings = {
         'logTrace' : {
             'en' : 'Trace',
             'cn' : '跟踪'
+            },
+        'deviceSel' : {
+            'en' : 'Device:',
+            'cn' : '设备:'
+            },
+        'deviceID' : {
+            'en' : 'UUID:',
+            'cn' : 'UUID:'
             },
         }

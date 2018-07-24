@@ -18,7 +18,7 @@ styles = {
 
             'TFrame': {
                 'configure': {
-                    'font'              : ('Calibri', 12)
+                    'font'              : ('Arial', 12)
                     }
                 },
 
@@ -26,7 +26,7 @@ styles = {
                 'configure': {
                     'borderwidth'       : 2,
                     'padding'           : 10,               # add spaces for four sides
-                    'font'              : ('Calibri', 12)
+                    'font'              : ('Arial', 12)
                     }
                 },
 
@@ -49,16 +49,17 @@ styles = {
 
             'TCombobox': {
                 'configure': {
-                    'selectbackground'  : gColors['DarkGray'],
+                    #  'font'              : ('Arial', 14),  # no usefull why ?
+                    'selectbackground'  : gColors['FireBrick'],
                     'fieldbackground'   : gColors['White'],
-                    'background'        : gColors['LightGray'],
-                    'foreground'        : gColors['Black']
-                    }
+                    'background'        : gColors['DimGray'],
+                    'foreground'        : gColors['Black'],
+                    },
                 },
 
             'TButton': {
                 'configure': {
-                    'font'              : ('Calibri', 12),
+                    'font'              : ('Arial', 12),
                     'background'        : gColors['LightSteelBlue'],
                     'foreground'        : gColors['Black'],
                     'relief'            : 'raised'

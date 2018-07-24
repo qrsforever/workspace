@@ -68,17 +68,17 @@ class WindowGUI(object):
 
         # set tabpage
         self.tabControl = ttk.Notebook(self.win) 
-        bi_tab = ttk.Frame(self.tabControl)
-        self.tabControl.add(bi_tab, text = gStrings['basicInfo'][self.lan]) 
-        log_tab = ttk.Frame(self.tabControl)
-        self.tabControl.add(log_tab, text = gStrings['logSet'][self.lan])
-        dev_tab = ttk.Frame(self.tabControl)
-        self.tabControl.add(dev_tab, text = gStrings['devCtrl'][self.lan])
+        self.bi_tab = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.bi_tab, text = gStrings['basicInfo'][self.lan]) 
+        self.log_tab = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.log_tab, text = gStrings['logSet'][self.lan])
+        self.dev_tab = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.dev_tab, text = gStrings['devCtrl'][self.lan])
         self.tabControl.pack(expand=1, fill="both") 
 
-        self.createBasicInfoView(bi_tab)
-        self.createLogSetView(log_tab)
-        self.createDevControlView(dev_tab)
+        self.createBasicInfoView(self.bi_tab)
+        self.createLogSetView(self.log_tab)
+        self.createDevControlView(self.dev_tab)
 # }}}
 
     def onSwitchLang(self):# {{{
@@ -178,7 +178,7 @@ class WindowGUI(object):
         ver_frm = ttk.Frame(tab)
         ttk.Label(ver_frm, text=gStrings['versionInfo'][self.lan],
                 foreground=gColors['Tomato'],
-                font=('Calibri', 14)
+                font=('Arial', 14)
                 ).grid(row=0, column=0, columnspan=2, sticky=tk.W)
         ver_frm.pack(anchor="w")
 
@@ -206,7 +206,7 @@ class WindowGUI(object):
         level_frm = ttk.Frame(tab)
         ttk.Label(level_frm, text=gStrings['loglevel'][self.lan],
                 foreground=gColors['Tomato'],
-                font=('Calibri', 14)
+                font=('Arial', 14)
                 ).grid(row=i, column=j, columnspan=6, sticky=tk.W)
         level_frm.pack(anchor="w")
 
@@ -245,7 +245,7 @@ class WindowGUI(object):
         log_frm = ttk.Frame(tab)
         ttk.Label(log_frm, text=gStrings['logOutput'][self.lan],
                 foreground=gColors['Tomato'],
-                font=('Calibri', 14)
+                font=('Arial', 14)
                 ).grid(row=0, column=0, sticky=tk.W)
         ttk.Label(log_frm, text=gStrings['host'][self.lan]).grid(row=1, column=0)
         ttk.Entry(log_frm, textvariable=self.host_addr).grid(row=1, column=1)
@@ -291,7 +291,76 @@ class WindowGUI(object):
 # }}}
 
     def createDevControlView(self, tab):
-        pass
+        sel_frm = ttk.Frame(tab)
+        sel_frm.pack()
+
+        #  Devices
+        ttk.Label(sel_frm, text=gStrings['deviceSel'][self.lan],
+                foreground=gColors['Tomato'],
+                font=('Arial', 14)
+                ).pack(side=tk.LEFT)
+        self.device_var = tk.StringVar()
+        self.device_list = ttk.Combobox(sel_frm, 
+                takefocus=False,
+                width=15, textvariable=self.device_var,
+                exportselection=0, font=('Arial', 14))
+        result = self.tcp.command('getDevices')
+        devices = ('<NONE>')
+        if len(result) > 0:
+            devices = result.split(';')
+        self.device_list['values'] = devices
+        self.device_list.current(0)
+        self.device_list.bind("<<ComboboxSelected>>", self.onDeviceSelected)
+        self.device_list.pack(side=tk.LEFT)
+        ttk.Label(sel_frm, text=gStrings['deviceID'][self.lan],
+                foreground=gColors['Tomato'],
+                font=('Arial', 14)
+                ).pack(side=tk.LEFT, anchor=tk.E, padx=(15, 0))
+
+        self.onInstanceSelected()
+
+        #  Instances
+        self.ins_var = tk.StringVar()
+        self.ins_list = ttk.Combobox(sel_frm, 
+                width=40, textvariable=self.ins_var,
+                exportselection=0, font=('Arial', 14))
+        inses = self.tcp.command('getInstaces', devices[0])
+        values = ('<NONE>')
+        if len(inses) > 0:
+            values = inses.split(';')
+        self.ins_list['values'] = values
+        self.ins_list.current(0)
+        self.ins_list.bind("<<ComboboxSelected>>", self.onInstanceSelected)
+        self.ins_list.pack(side=tk.LEFT)
+
+    def onDeviceSelected(self, *args):
+        inses = self.tcp.command('getInstaces', self.device_list.get())
+        print("inses:", inses)
+        values = ('<NONE>')
+        if len(inses) > 0:
+            values = inses.split(';')
+        self.ins_list['values'] = values
+        self.ins_list.current(0)
+        self.onInstanceSelected()
+
+    def onInstanceSelected(self, *args):
+        try:
+            self.pro_frm.destroy()
+        except Exception as e:
+            print("don't worry, that's ok!")
+        self.pro_frm = ttk.Frame(self.dev_tab)
+        slots = ()
+        result = self.tcp.command('getSlots', self.device_list.get())
+        if len(result) > 0:
+            slots = result.split(';')
+        j = 0
+        for pro in slots:
+            ttk.Label(self.pro_frm, text=pro, anchor=tk.CENTER,
+                    relief=tk.GROOVE, width=15, font=('Arial', 12)
+                    ).grid(row=0, column=j, columnspan=2)
+            j += 2
+        self.pro_frm.pack()
+
 
 if __name__ == "__main__":
     app = WindowGUI(880, 800)
