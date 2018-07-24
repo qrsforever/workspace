@@ -58,8 +58,15 @@ styles = {
 
             'TButton': {
                 'configure': {
-                    'font'              : ('Calibri', 12)
+                    'font'              : ('Calibri', 12),
+                    'background'        : gColors['LightSteelBlue'],
+                    'foreground'        : gColors['Black'],
+                    'relief'            : 'raised'
                     },
+                'map': {
+                    'foreground'        : [('pressed', 'red'), ('active', 'blue')],
+                    'background'        : [('pressed', '!disabled', 'black'), ('active', 'white')]
+                    }
                 },
 
             'TEntry': {

@@ -6,29 +6,69 @@ strings = {
             'en' : 'Quit',
             'cn' : '退出'
             },
+        'back' : {
+            'en' : 'Back',
+            'cn' : '返回'
+            },
         'title' : {
             'en' : 'MonitorTool',
             'cn' : '监控工具'
             },
         'serverAddr' : {
-            'en' : 'Server Address',
-            'cn' : '服务器地址'
+            'en' : 'Server Address: ',
+            'cn' : '服务器地址: '
             },
         'serverPort' : {
-            'en' : 'Server Port',
-            'cn' : '服务器端口'
+            'en' : 'Server Port: ',
+            'cn' : '服务器端口: '
+            },
+        'host' : {
+            'en' : 'Host Address: ',
+            'cn' : '主机地址: '
+            },
+        'port' : {
+            'en' : 'Host Port: ',
+            'cn' : '主机端口: '
+            },
+        'output' : {
+            'en' : 'Output',
+            'cn' : '输出'
+            },
+        'terminate' : {
+            'en' : 'Terminate',
+            'cn' : '终止'
             },
         'connect' : {
             'en' : 'Connect',
             'cn' : '连接'
             },
+        'connErr' : {
+            'en' : 'Connect Error',
+            'cn' : '连接失败'
+            },
         'basicInfo' : {
             'en' : 'Basic Infomation',
             'cn' : '基本信息'
             },
+        'versionInfo' : {
+            'en' : 'Version Info',
+            'cn' : '版本信息'
+            },
+        'hbVer' : {
+            'en' : 'HomeBrain: ',
+            'cn' : 'HomeBrain: '
+            },
+        'reVer' : {
+            'en' : 'RuleEngine: ',
+            'cn' : 'RuleEngine: '
+            },
         'logSet' : {
             'en' : 'Log Setting',
             'cn' : '日志设置'
+            },
+        'logOutput' : {
+            'en' : 'Log Output',
+            'cn' : '日志输出'
             },
         'devCtrl' : {
             'en' : 'Device Control',
