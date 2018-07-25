@@ -14,12 +14,12 @@ class TCPClient(object):
         self.srv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.srv_socket.settimeout(3);
         try:
-            self.srv_socket.connect((srv_addr, int(srv_port))) 
+            self.srv_socket.connect((srv_addr, int(srv_port)))
             result = self.srv_socket.recv(8).decode('utf-8')
         except Exception as e:
             print("connect error:", e)
             return False
-
+        print("connect result: ", result)
         if result != 'success':
             return False
         self.connectted = True

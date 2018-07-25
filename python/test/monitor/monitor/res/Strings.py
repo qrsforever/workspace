@@ -70,9 +70,9 @@ strings = {
             'en' : 'Log Output',
             'cn' : '日志输出'
             },
-        'devCtrl' : {
-            'en' : 'Device Control',
-            'cn' : '设备控制'
+        'ruleCtrl' : {
+            'en' : 'Rule Control',
+            'cn' : '规则控制'
             },
         'set' : {
             'en' : 'Set',
@@ -125,5 +125,13 @@ strings = {
         'deviceID' : {
             'en' : 'UUID:',
             'cn' : 'UUID:'
+            },
+        'setVal' : {
+            'en' : 'Set',
+            'cn' : '设置'
+            },
+        'refresh' : {
+            'en' : 'Refresh',
+            'cn' : '刷新'
             },
         }

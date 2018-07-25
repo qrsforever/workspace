@@ -24,9 +24,9 @@ styles = {
 
             'TLabel': {
                 'configure': {
+                    'font'              : ('Arial', 12),
                     'borderwidth'       : 2,
-                    'padding'           : 10,               # add spaces for four sides
-                    'font'              : ('Arial', 12)
+                    'padding'           : 10               # add spaces for four sides
                     }
                 },
 
@@ -38,7 +38,7 @@ styles = {
 
             'TNotebook.Tab': {
                 'configure': {
-                    'padding'           : [25, 5], 
+                    'padding'           : [25, 5],
                     'foreground'        : gColors['Black']
                     },
                 'map': {
@@ -49,8 +49,9 @@ styles = {
 
             'TCombobox': {
                 'configure': {
-                    #  'font'              : ('Arial', 14),  # no usefull why ?
-                    'selectbackground'  : gColors['FireBrick'],
+                    'font'              : ('Arial', 14),   # no usefull why ?
+                    'selectbackground'  : [('readonly', gColors['White'])],
+                    'selectforeground'  : [('readonly', gColors['White'])],
                     'fieldbackground'   : gColors['White'],
                     'background'        : gColors['DimGray'],
                     'foreground'        : gColors['Black'],
@@ -59,29 +60,31 @@ styles = {
 
             'TButton': {
                 'configure': {
-                    'font'              : ('Arial', 12),
-                    'background'        : gColors['LightSteelBlue'],
-                    'foreground'        : gColors['Black'],
-                    'relief'            : 'raised'
+                    'font'              : ('Arial', 12),   # it's ok
+                    'background'        : gColors['DimGray'],
+                    'foreground'        : gColors['White'],
+                    'relief'            : 'raised',
+                    'anchor'            : 'center'
                     },
                 'map': {
-                    'foreground'        : [('pressed', 'red'), ('active', 'blue')],
-                    'background'        : [('pressed', '!disabled', 'black'), ('active', 'white')]
+                    'foreground'        : [('pressed', gColors['Black']), ('active', gColors['Black'])],
+                    'background'        : [('pressed', '!disabled', gColors['Gold']), ('active', gColors['BurntSienna'])]
                     }
                 },
 
             'TEntry': {
-                    'configure': {
-                        'foreground'    : 'black'
-                        }
-                    },
+                'configure': {
+                    'font'              : ('Arial', 14),  # no usefull why ?
+                    'foreground'        : 'black'
+                    }
+                },
 
             'Horizontal.TProgressbar': {
-                    'configure': {
+                 'configure': {
                         'background'    : gColors['DimGray']
                         }
                     }
-            } # app
+            } # monitor
         }
 
 

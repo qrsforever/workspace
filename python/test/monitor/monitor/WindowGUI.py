@@ -15,12 +15,14 @@ gColors = Colors.colors
 
 class WindowGUI(object):
 
-    def __init__(self, width, height):# {{{
+    def __init__(self, width, height, svr_addr, svr_port, host_addr, host_port):# {{{
         """ """
         self.lan = 'cn'
         self.tcp = TCPClient(2048)
         self.logthread = LogThread()
         self.log = dict()
+
+        # window
         self.width = width
         self.height = height
         self.win = tk.Tk()
@@ -28,6 +30,19 @@ class WindowGUI(object):
         self.win.resizable(width=True, height=True)
         self.screenwidth = self.win.winfo_screenwidth()
         self.screenheight = self.win.winfo_screenheight()
+
+        # homebrain address / port
+        self.server_addr = tk.StringVar()
+        self.server_port = tk.StringVar()
+        self.server_addr.set(svr_addr)
+        self.server_port.set(svr_port)
+
+        # host address / port
+        self.host_addr = tk.StringVar()
+        self.host_port = tk.StringVar()
+        self.host_addr.set(host_addr)
+        self.host_port.set(host_port)
+
         self.onGlobalConfigure()
         self.createConnectView()
         self.win.mainloop()
@@ -67,18 +82,18 @@ class WindowGUI(object):
         self.win.config(menu=self.menu_bar)
 
         # set tabpage
-        self.tabControl = ttk.Notebook(self.win) 
+        self.tabControl = ttk.Notebook(self.win)
         self.bi_tab = ttk.Frame(self.tabControl)
-        self.tabControl.add(self.bi_tab, text = gStrings['basicInfo'][self.lan]) 
+        self.tabControl.add(self.bi_tab, text = gStrings['basicInfo'][self.lan])
         self.log_tab = ttk.Frame(self.tabControl)
         self.tabControl.add(self.log_tab, text = gStrings['logSet'][self.lan])
         self.dev_tab = ttk.Frame(self.tabControl)
-        self.tabControl.add(self.dev_tab, text = gStrings['devCtrl'][self.lan])
-        self.tabControl.pack(expand=1, fill="both") 
+        self.tabControl.add(self.dev_tab, text = gStrings['ruleCtrl'][self.lan])
+        self.tabControl.pack(expand=1, fill="both")
 
         self.createBasicInfoView(self.bi_tab)
         self.createLogSetView(self.log_tab)
-        self.createDevControlView(self.dev_tab)
+        self.createRuleControlView(self.dev_tab)
 # }}}
 
     def onSwitchLang(self):# {{{
@@ -91,8 +106,8 @@ class WindowGUI(object):
         self.onInitWindow()
 # }}}
 
-    def oShowAbout(self):
-        pass
+    def oShowAbout(self):# {{{
+        pass# }}}}}}
 
     def onCloseWindow(self):# {{{
         if self.logthread:
@@ -125,11 +140,7 @@ class WindowGUI(object):
                 (self.screenwidth - width) / 2,
                 (self.screenheight - height) / 2)
         self.win.geometry(alignstr)
-        self.server_addr = tk.StringVar()
-        self.server_port = tk.StringVar()
-        self.server_addr.set('10.59.68.13')
-        self.server_port.set('8192')
-        self.conn_frm = ttk.Frame(self.win, 
+        self.conn_frm = ttk.Frame(self.win,
                 padding=20, width=width, height=height)
         ttk.Label(self.conn_frm,
                 text = gStrings['serverAddr'][self.lan],
@@ -140,7 +151,7 @@ class WindowGUI(object):
         ttk.Label(self.conn_frm,
                 text = gStrings['serverPort'][self.lan],
                 ).grid(row=2, sticky=tk.E, padx=10, pady=10)
-        ttk.Entry(self.conn_frm, 
+        ttk.Entry(self.conn_frm,
                 textvariable=self.server_port,
                 ).grid(row=2, column=1, sticky=tk.W, padx=10, pady=10)
         ttk.Button(self.conn_frm,
@@ -158,7 +169,7 @@ class WindowGUI(object):
                 (self.screenwidth - width) / 2,
                 (self.screenheight - height) / 2)
         self.win.geometry(alignstr)
-        self.connerr_frm = ttk.Frame(self.win, 
+        self.connerr_frm = ttk.Frame(self.win,
                 padding=20, width=width, height=height)
         ttk.Label(self.connerr_frm,
                 text = gStrings['connErr'][self.lan],
@@ -238,10 +249,6 @@ class WindowGUI(object):
                         ).grid(row=i, column=j+1)
             i = i + 1
 
-        self.host_addr = tk.StringVar()
-        self.host_port = tk.StringVar()
-        self.host_addr.set('10.59.68.13')
-        self.host_port.set('8193')
         log_frm = ttk.Frame(tab)
         ttk.Label(log_frm, text=gStrings['logOutput'][self.lan],
                 foreground=gColors['Tomato'],
@@ -290,7 +297,7 @@ class WindowGUI(object):
 
 # }}}
 
-    def createDevControlView(self, tab):
+    def createRuleControlView(self, tab):# {{{
         sel_frm = ttk.Frame(tab)
         sel_frm.pack()
 
@@ -300,9 +307,9 @@ class WindowGUI(object):
                 font=('Arial', 14)
                 ).pack(side=tk.LEFT)
         self.device_var = tk.StringVar()
-        self.device_list = ttk.Combobox(sel_frm, 
-                takefocus=False,
-                width=15, textvariable=self.device_var,
+        self.device_list = ttk.Combobox(sel_frm,
+                takefocus=False, state='readonly',
+                width=20, textvariable=self.device_var,
                 exportselection=0, font=('Arial', 14))
         result = self.tcp.command('getDevices')
         devices = ('<NONE>')
@@ -315,14 +322,13 @@ class WindowGUI(object):
         ttk.Label(sel_frm, text=gStrings['deviceID'][self.lan],
                 foreground=gColors['Tomato'],
                 font=('Arial', 14)
-                ).pack(side=tk.LEFT, anchor=tk.E, padx=(15, 0))
-
-        self.onInstanceSelected()
+                ).pack(side=tk.LEFT, padx=(15, 0))
 
         #  Instances
         self.ins_var = tk.StringVar()
-        self.ins_list = ttk.Combobox(sel_frm, 
-                width=40, textvariable=self.ins_var,
+        self.ins_list = ttk.Combobox(sel_frm,
+                takefocus=False, state='readonly',
+                width=35, textvariable=self.ins_var,
                 exportselection=0, font=('Arial', 14))
         inses = self.tcp.command('getInstaces', devices[0])
         values = ('<NONE>')
@@ -333,34 +339,71 @@ class WindowGUI(object):
         self.ins_list.bind("<<ComboboxSelected>>", self.onInstanceSelected)
         self.ins_list.pack(side=tk.LEFT)
 
-    def onDeviceSelected(self, *args):
+        ttk.Button(sel_frm, width=5,
+                text=gStrings['refresh'][self.lan],
+                command=self.onInstanceSelected,
+                ).pack(side=tk.LEFT, padx=(20,0))
+
+        self.onInstanceSelected()
+# }}}
+
+    def onDeviceSelected(self, *args):# {{{
         inses = self.tcp.command('getInstaces', self.device_list.get())
-        print("inses:", inses)
         values = ('<NONE>')
         if len(inses) > 0:
             values = inses.split(';')
         self.ins_list['values'] = values
         self.ins_list.current(0)
         self.onInstanceSelected()
+# }}}
 
-    def onInstanceSelected(self, *args):
+    def onInstanceSelected(self, *args):# {{{
         try:
             self.pro_frm.destroy()
+            del self.curslot_vars
         except Exception as e:
             print("don't worry, that's ok!")
         self.pro_frm = ttk.Frame(self.dev_tab)
         slots = ()
+        self.curslot_vars = {}
         result = self.tcp.command('getSlots', self.device_list.get())
         if len(result) > 0:
             slots = result.split(';')
+
         j = 0
         for pro in slots:
             ttk.Label(self.pro_frm, text=pro, anchor=tk.CENTER,
-                    relief=tk.GROOVE, width=15, font=('Arial', 12)
-                    ).grid(row=0, column=j, columnspan=2)
+                    relief=tk.GROOVE, width=15
+                    ).grid(row=1, column=j, columnspan=2, pady=(10,10), padx=(5,5))
+            uuid = self.ins_list.get()
+            if uuid != '<NONE>':
+                self.curslot_vars[pro] = tk.StringVar()
+                val = self.tcp.command('getInstanceValue', uuid, pro)
+                if not val.strip():
+                    val = 'null'
+                self.curslot_vars[pro].set(val)
+                ttk.Entry(self.pro_frm, width=10,
+                        font=('Arial', 12),
+                        textvariable=self.curslot_vars[pro],
+                        ).grid(row=2, column=j, columnspan=2, pady=(10,10))
+                ttk.Button(self.pro_frm, width=5,
+                        text=gStrings['setVal'][self.lan] + 'R',
+                        command=lambda u=uuid, p=pro : self.onUpdateValue('R', u, p),
+                        ).grid(row=3, column=j, pady=5, padx=2, sticky=tk.E)
+                ttk.Button(self.pro_frm, width=5,
+                        text=gStrings['setVal'][self.lan] + 'D',
+                        command=lambda u=uuid, p=pro : self.onUpdateValue('D', u, p),
+                        ).grid(row=3, column=j+1, pady=5, padx=2, sticky=tk.W)
             j += 2
         self.pro_frm.pack()
+# }}}
 
+    def onUpdateValue(self, target, uuid, pro):# {{{
+        if target == 'R':
+            self.tcp.command('updateInstanceValue', uuid, pro, self.curslot_vars[pro].get())
+        else:
+            self.tcp.command('updateDeviceValue', uuid, pro, self.curslot_vars[pro].get())
+# }}}
 
 if __name__ == "__main__":
     app = WindowGUI(880, 800)

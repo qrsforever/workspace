@@ -93,6 +93,7 @@ colors = {
         'LemonChiffon':         '#FFFACD',     #柠檬绸
         'PaleGoldenrod':        '#EEE8AA',     #灰菊黄/苍麒麟色
         'Khaki':                '#F0E68C',     #黄褐色/卡叽布
+        'BurntSienna':          '#EF7645',     #燃烧黄褐色
         'Gold':                 '#FFD700',     #金色
         'Cornsilk':             '#FFF8DC',     #玉米丝色
         'Goldenrod':            '#DAA520',     #金菊黄
