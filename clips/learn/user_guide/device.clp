@@ -14,7 +14,7 @@
 
 (defclass Light
   (is-a DEVICE)
-  (role concrete) (pattern-match reactive) 
+  (role concrete) (pattern-match reactive)
   (slot OnlineState (type NUMBER) (allowed-numbers 2 1))
   (slot PowerOnOff (type NUMBER) (allowed-numbers 2 1))
   (slot Brightness (type NUMBER) (range 1 7))
@@ -22,14 +22,14 @@
 
 (defclass Letv
   (is-a DEVICE)
-  (role concrete) (pattern-match reactive) 
+  (role concrete) (pattern-match reactive)
   (slot OnlineState (type NUMBER) (allowed-numbers 2 1))
   (slot PowerOnOff (type NUMBER) (allowed-numbers 2 1))
 )
 
 (defclass LightSensor
   (is-a DEVICE)
-  (role concrete) (pattern-match reactive) 
+  (role concrete) (pattern-match reactive)
   (slot OnlineState (type NUMBER) (allowed-numbers 2 1))
   (slot Quantity (type NUMBER) (range 0 1000))
   (slot PowerOnOff (type NUMBER) (allowed-numbers 2 1))

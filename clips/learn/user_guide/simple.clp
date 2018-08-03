@@ -76,10 +76,33 @@
 
 (facts)
 
-
 (defclass oic.d.light  (is-a USER)
  (slot a)
  (slot b)
 )
 
+(deftemplate mytest
+    (slot arg (type INTEGER))
+    (multislot args (type INTEGER SYMBOL))
+)
+
+(defrule mytest
+    (mytest (args $?args))
+  =>
+    (printout t "---> " (multifieldp $?args) crlf)
+)
+
+(assert (mytest (arg 1)))
+(assert (mytest (args 1 a)))
+(facts)
+(deftemplate-slot-types mytest args)
+
+(bind $?values (fact-slot-value 3 args))
+
+(multifieldp $?values)
+(nth$ 1 $?values)
+(nth$ 2 $?values)
+
+(agenda)
+(run)
 (exit)

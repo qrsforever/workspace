@@ -69,7 +69,7 @@
 (make-instance Test_D of D
     (x 10)
 )
-(send [Test_D] put-x "20")
+(send [Test_D] put-y "20")
 (send [Test_D] print)
 (class [Test_D])
 (instance-name [Test_D])
