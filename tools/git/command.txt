@@ -1,0 +1,12 @@
+# 补丁
+# 最近的1次commit的patch
+git format-patch HEAD^
+git reset --hard 
+git am xxx.pach
+
+# 保存工作
+git stash save "test-cmd-stash
+git stash pop
+
+
+git pull = git fetch + git merge

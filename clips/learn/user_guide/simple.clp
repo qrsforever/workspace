@@ -89,10 +89,21 @@
 (defrule mytest
     (mytest (args $?args))
   =>
+    (bind ?v1 (nth$ 1 $?args))
+    (if (eq ?v1 nil)
+     then
+        (return)
+    )
     (printout t "---> " (multifieldp $?args) crlf)
 )
 
-(assert (mytest (arg 1)))
+(defrule mytest2
+    (mytest (args ?arg1 ?arg2))
+  =>
+    (printout t "---> " ?arg1 "  ---> " ?arg2 crlf)
+)
+
+; (assert (mytest (arg 1)))
 (assert (mytest (args 1 a)))
 (facts)
 (deftemplate-slot-types mytest args)
