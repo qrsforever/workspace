@@ -113,7 +113,15 @@
 (multifieldp $?values)
 (nth$ 1 $?values)
 (nth$ 2 $?values)
-
 (agenda)
 (run)
+
+(bind ?nn (string-to-field "name"))
+(type ?nn)
+(printout t "---->" ?nn crlf)
+
+
+(bind ?kk 12)
+(printout t "---->" (sym-cat ?nn : ?kk) crlf)
+
 (exit)

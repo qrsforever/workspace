@@ -7,9 +7,11 @@
 )
 
 (defrule find-sound
+    (duck-sound gaga)
     ?duck <- (object
         (is-a DUCK)
-        (sound $?find))
+        (sound $?find)
+        )
   =>
     (printout t "Duck " (instance-name ?duck) " says " ?find crlf)
 )
@@ -30,6 +32,21 @@
 
 (agenda)
 (run)
+
+(send [Dinky_Duck] put-age 30)
+; (send [Dinky_Duck] put-sound "gaga")
+(assert (duck-sound gaga))
+(agenda)
+(run)
+; (send [Dinky_Duck] put-age 30)
+; (send [Dinky_Duck] put-sound "gaga")
+(retract 1)
+(assert (duck-sound gaga))
+(facts)
+(agenda)
+(run)
+(exit)
+
 
 (defrule find-age-over-10
     (hello ?a)
