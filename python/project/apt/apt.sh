@@ -22,6 +22,7 @@ __apt_install python-pandas python3-pandas
 
 # 增强Shell
 __apt_install ipython
+__apt_install jupyter
 sudo pip install wcwidth
 sudo pip install ptyprocess
 

@@ -102,6 +102,4 @@
 (list-defclasses)
 
 (symbol-to-instance-name Test_D)
-
-
 (exit)
