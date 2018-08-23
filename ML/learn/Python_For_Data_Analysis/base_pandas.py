@@ -117,3 +117,11 @@ obj17.sort_index(ascending=False, axis=1)
 obj18 = Series(np.random.randint(1,100,12))
 obj18
 obj18.sort_values()
+
+
+## two data type: obj19 == obj20
+obj19 = DataFrame(data={'col1':[1,2,3,4], 'col2':[4,3,2,1]})
+obj20 = DataFrame(data=[
+    {'col1':1, 'col2':4}, {'col1':2, 'col2':3},
+    {'col1':3, 'col2':2}, {'col1':4, 'col2':1}])
+
