@@ -24,7 +24,7 @@ UTILITY: Do nothing (disable browser shortcut - experimental) ctrl + N
 
 ```
 
-### jedi code complete support
+### jedi code complete support, have some problem, don't try
 
 ```
 ipython profile create
