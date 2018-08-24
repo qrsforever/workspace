@@ -15,7 +15,7 @@ type(db[0]['nutrients']) # list
 len(db[0]['nutrients'])
 db[0]['nutrients'][0]
 
-## 
+##
 nutrients = pd.DataFrame(db[0]['nutrients'])
 nutrients[:7]
 nutrients.describe()
