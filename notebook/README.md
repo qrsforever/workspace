@@ -36,3 +36,12 @@ c.Completer.jedi_compute_type_timeout = 400
 c.Completer.use_jedi = True
 
 ```
+
+### brower, workaround ctrl+n
+
+```
+https://www.opera.com/
+wget https://download.operachina.com/pub/opera/desktop/55.0.2994.44/linux/opera-stable_55.0.2994.44_amd64.deb
+
+jupyter notebook --notebook-dir=$currdir --browser='opera %s' >/dev/null 2>&1 &
+```
