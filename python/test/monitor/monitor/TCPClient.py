@@ -3,6 +3,8 @@
 
 import socket
 import time
+import sys
+
 
 class TCPClient(object):
 
@@ -27,9 +29,12 @@ class TCPClient(object):
 
     def close(self):
         if self.connectted:
-            self.srv_socket.send(b'quit')
-            time.sleep(1)
-            self.srv_socket.close()
+            try:
+                self.srv_socket.send(b'quit')
+                time.sleep(1)
+                self.srv_socket.close()
+            finally:
+                sys.exit(0)
 
     def command(self, cmd, *args):
         if not self.connectted:
@@ -37,7 +42,7 @@ class TCPClient(object):
 
         cmdstr = cmd;
         for arg in args:
-            cmdstr += ';'
+            cmdstr += '^'
             cmdstr += arg
 
         try:
@@ -49,5 +54,8 @@ class TCPClient(object):
             return res;
         except socket.timeout:
             return ""
+        except BrokenPipeError :
+            print("socket error!")
+            sys.exit(0)
         else:
             return ""

@@ -12,7 +12,31 @@ strings = {
             },
         'title' : {
             'en' : 'MonitorTool',
-            'cn' : '监控工具'
+            'cn' : '规则引擎监控工具'
+            },
+        'version' : {
+            'en' : 'Version',
+            'cn' : '版本'
+            },
+        'creator' : {
+            'en' : 'Creator',
+            'cn' : '用户'
+            },
+        'buildtime' : {
+            'en' : 'BuildTime',
+            'cn' : '编译间'
+            },
+        'buildtype' : {
+            'en' : 'BuildType',
+            'cn' : '类型'
+            },
+        'newruletitle' : {
+            'en' : 'New Rule File',
+            'cn' : '新建规则'
+            },
+        'delruletitle' : {
+            'en' : 'Delete Rule File',
+            'cn' : '删除规则'
             },
         'serverAddr' : {
             'en' : 'Server Address:',
@@ -63,8 +87,24 @@ strings = {
             'cn' : 'RuleEngine: '
             },
         'logSet' : {
-            'en' : 'Log Setting',
-            'cn' : '日志设置'
+            'en' : 'Log Level Setting',
+            'cn' : '日志级别'
+            },
+        'logSet2' : {
+            'en' : 'Log Output Setting',
+            'cn' : '日志输出'
+            },
+        'logGrep': {
+            'en' : 'Log Grep Result',
+            'cn' : '日志搜索结果'
+            },
+        'clear' : {
+            'en' : 'Clear',
+            'cn' : '清除'
+            },
+        'watch' : {
+            'en' : 'Watch Item',
+            'cn' : '脚本监控'
             },
         'logOutput' : {
             'en' : 'Log Output',
@@ -73,6 +113,10 @@ strings = {
         'ruleCtrl' : {
             'en' : 'Rule Control',
             'cn' : '规则控制'
+            },
+        'ruleEdit' : {
+            'en' : 'Rule Edit',
+            'cn' : '规则编辑'
             },
         'set' : {
             'en' : 'Set',
@@ -130,8 +174,196 @@ strings = {
             'en' : 'Set',
             'cn' : '设置'
             },
+        'getVal' : {
+            'en' : 'Get',
+            'cn' : '获取'
+            },
         'refresh' : {
             'en' : 'Refresh',
             'cn' : '刷新'
+            },
+        'manualRefresh' : {
+            'en' : 'Manual Refresh',
+            'cn' : '手动刷新'
+            },
+        'autoRefresh' : {
+            'en' : 'Auto Refresh',
+            'cn' : '自动刷新'
+            },
+        'stopRefresh' : {
+            'en' : 'Stop Refresh',
+            'cn' : '停止刷新'
+            },
+        'filter' : {
+            'en' : 'Filter:',
+            'cn' : '过滤:'
+            },
+        'ruleSel' : {
+            'en' : 'Rule:',
+            'cn' : '规则:'
+            },
+        'commit' : {
+            'en' : 'Commit',
+            'cn' : '提交'
+            },
+        'new' : {
+            'en' : 'New',
+            'cn' : '新建'
+            },
+        'save' : {
+            'en' : 'Save',
+            'cn' : '保存'
+            },
+        'cancel' : {
+            'en' : 'Cancel',
+            'cn' : '取消'
+            },
+        'switch' : {
+            'en' : 'Switch',
+            'cn' : '开关'
+            },
+        'start' : {
+            'en' : 'Start',
+            'cn' : '启动'
+            },
+        'stop' : {
+            'en' : 'Stop',
+            'cn' : '停止'
+            },
+        'confirm' : {
+            'en' : 'Confirm',
+            'cn' : '确定'
+            },
+        'filename' : {
+            'en' : 'File Name:',
+            'cn' : '文件名:'
+            },
+        'delete' : {
+            'en' : 'Delete',
+            'cn' : '删除'
+            },
+        'rulePrompt' : {
+            'en' : '* Begin with rul-',
+            'cn' : '以前缀rul-开头'
+            },
+        'sceneAuto' : {
+            'en' : 'SceneAuto',
+            'cn' : '场景联动'
+            },
+        'modeTrigger' : {
+            'en' : 'Mode Trigger',
+            'cn' : '模式触发'
+            },
+        'factTrigger' : {
+            'en' : 'Fact Trigger',
+            'cn' : '事实触发'
+            },
+        'fact' : {
+            'en' : 'Fact',
+            'cn' : '事实'
+            },
+        'template' : {
+            'en' : 'Template',
+            'cn' : '模板'
+            },
+        'class' : {
+            'en' : 'Class',
+            'cn' : '类'
+            },
+        'agenda' : {
+            'en' : 'agenda',
+            'cn' : '议程'
+            },
+        'global' : {
+            'en' : 'Global',
+            'cn' : '全局变量'
+            },
+        'printItem' : {
+            'en' : 'Print',
+            'cn' : '调试项'
+            },
+        'grepText' : {
+            'en' : 'Grep',
+            'cn' : '搜索'
+            },
+        'selectItem' : {
+            'en' : 'Select Item',
+            'cn' : '输出选择'
+            },
+        'instance' : {
+            'en' : 'Instance',
+            'cn' : '实例'
+            },
+        'rule' : {
+            'en' : 'Rule',
+            'cn' : '规则'
+            },
+        'mem' : {
+            'en' : 'Memory',
+            'cn' : '内存'
+            },
+        'assert' : {
+            'en' : 'Assert',
+            'cn' : '断言'
+            },
+        'comehome' : {
+            'en' : 'Come Home',
+            'cn' : '回家模式'
+            },
+        'leavehome' : {
+            'en' : 'Leave Home',
+            'cn' : '离家模式'
+            },
+        'entermovie' : {
+            'en' : 'Enter Movie',
+            'cn' : '进入观影'
+            },
+        'exitmovie' : {
+            'en' : 'Exit Movie',
+            'cn' : '退出观影'
+            },
+        'sleep' : {
+            'en' : 'Sleep Mode',
+            'cn' : '睡眠模式'
+            },
+        'getup' : {
+            'en' : 'Getup Mode',
+            'cn' : '起床模式'
+            },
+        'virtualmode' : {
+            'en' : 'VirtualMode',
+            'cn' : '虚拟云端'
+            },
+        'vnone' : {
+            'en' : 'Null',
+            'cn' : '虚空无'
+            },
+        'vgetup' : {
+            'en' : 'vGetup',
+            'cn' : '虚起床'
+            },
+        'vsleep' : {
+            'en' : 'vSleep',
+            'cn' : '虚睡眠'
+            },
+        'vwater' : {
+            'en' : 'vWater',
+            'cn' : '虚水浸'
+            },
+        'vsmoke' : {
+            'en' : 'vSmoke',
+            'cn' : '虚烟雾'
+            },
+        'vgas' : {
+            'en' : 'vGas',
+            'cn' : '虚毒煤'
+            },
+        'vsos' : {
+            'en' : 'vSos',
+            'cn' : '虚求助'
+            },
+        'vinfrared' : {
+            'en' : 'vInfrared',
+            'cn' : '虚入侵'
             },
         }

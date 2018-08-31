@@ -26,13 +26,14 @@ styles = {
                 'configure': {
                     'font'              : ('Arial', 12),
                     'borderwidth'       : 2,
-                    'padding'           : 10               # add spaces for four sides
+                    'padding'           : 8               # add spaces for four sides
                     }
                 },
 
             'TNotebook': {
                 'configure': {
-                    'padding'           : 5
+                    'padding'           : 5,
+                    'tabmargins'        : [2, 5, 2, 0]
                     }
                 },
 
@@ -52,10 +53,12 @@ styles = {
                     'font'              : ('Arial', 14),   # no usefull why ?
                     'selectbackground'  : [('readonly', gColors['White'])],
                     'selectforeground'  : [('readonly', gColors['White'])],
-                    'fieldbackground'   : gColors['White'],
                     'background'        : gColors['DimGray'],
                     'foreground'        : gColors['Black'],
                     },
+                'map': {
+                    'fieldbackground'   : [('active', gColors['White']), ('disabled',  gColors['DimGray'])],
+                    }
                 },
 
             'TButton': {
@@ -68,7 +71,7 @@ styles = {
                     },
                 'map': {
                     'foreground'        : [('pressed', gColors['Black']), ('active', gColors['Black'])],
-                    'background'        : [('pressed', '!disabled', gColors['Gold']), ('active', gColors['BurntSienna'])]
+                    'background'        : [('pressed', '!disabled', gColors['Gold']), ('active', gColors['BurntSienna'])],
                     }
                 },
 
@@ -76,6 +79,9 @@ styles = {
                 'configure': {
                     'font'              : ('Arial', 14),  # no usefull why ?
                     'foreground'        : 'black'
+                    },
+                'map': {
+                    'fieldbackground'   : [('disabled',  gColors['DimGray'])],
                     }
                 },
 
@@ -83,7 +89,30 @@ styles = {
                  'configure': {
                         'background'    : gColors['DimGray']
                         }
+                    },
+
+            'Treeview.Heading': {
+                 'configure': {
+                        'font'          : ('Arial', 14),
+                        'borderwidth'   : 1,
+                        'background'    : gColors['Green']
+                        }
+                    },
+
+            'Treeview': {
+                 'configure': {
+                        'font'          : ('Arial', 12),
+                        'borderwidth'   : 1,
+                        }
+                    },
+
+            'TCheckbutton': {
+                'configure': {
+                    'font'              : ('Arial', 12),
+                    'borderwidth'       : 2,
+                    'padding'           : 8               # add spaces for four sides
                     }
+                },
             } # monitor
         }
 
