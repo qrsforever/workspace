@@ -1,0 +1,47 @@
+08-31 09:54:58.201  2882  3620 V homebrain: 
+08-31 09:54:58.201  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 2)
+08-31 09:54:58.201  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:54:57] send pkt op:503, seq:19318, len:128
+08-31 09:54:58.201  2882  3620 V homebrain: 
+08-31 09:54:58.206  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:54:57] recv pkt op:503, seq:19318, len:48, errno:0
+08-31 09:54:58.206  2882  3620 V homebrain: 
+08-31 09:54:58.212  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 2))
+08-31 09:54:58.214  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-autolight-service:2, success)
+08-31 09:54:58.214  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-entermovie, success)
+08-31 09:55:16.467  2882  3620 V homebrain: 
+08-31 09:55:16.467  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 1)
+08-31 09:55:16.467  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:55:15] send pkt op:503, seq:19335, len:128
+08-31 09:55:16.467  2882  3620 V homebrain: 
+08-31 09:55:16.468  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 1))
+08-31 09:55:16.470  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03aa-0aa4, value, 1)
+08-31 09:55:16.471  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03aa-0aa4, value, 1)
+08-31 09:55:16.471  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03aa-0aa4, propertyKey: value, value: 1
+08-31 09:55:16.472  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:55:15] recv pkt op:503, seq:19335, len:48, errno:0
+08-31 09:55:16.472  2882  3620 V homebrain: 
+08-31 09:55:16.480  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:144 | SetDevicePropertyValue | 4 | success.
+08-31 09:55:16.480  2895  2895 V homebrain: [INFO]  handler_post id=8, name=Hue lightstrip plus 1
+08-31 09:55:16.481  2895  2895 V homebrain: [INFO]      on=1
+08-31 09:55:16.481  2895  2895 V homebrain: [INFO]  On changed
+08-31 09:55:16.481  2895  2895 V homebrain: [INFO]  hue_set_state: name=Hue lightstrip plus 1, url=http://192.168.124.4/api/IZm2IP2toK9YBReDLbv1uLLkcurinE3KFbz5KlgX/lights/8/state, body={ "on": true }
+08-31 09:55:16.481  2895  2895 V homebrain: 
+08-31 09:55:16.481  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03a6-4a67, value, 1)
+08-31 09:55:16.482  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03a6-4a67, value, 1)
+08-31 09:55:16.482  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03a6-4a67, propertyKey: value, value: 1
+08-31 09:55:16.498  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:144 | SetDevicePropertyValue | 4 | success.
+08-31 09:55:16.499  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03aa-0aa4, ct, 360)
+08-31 09:55:16.499  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03aa-0aa4, ct, 360)
+08-31 09:55:16.499  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03aa-0aa4, propertyKey: ct, value: 360
+08-31 09:55:16.519  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-sleep, success)
+08-31 09:56:03.187  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:02] send pkt op:503, seq:19608, len:128
+08-31 09:56:03.187  2882  3620 V homebrain: 
+08-31 09:56:03.192  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:02] recv pkt op:503, seq:19608, len:48, errno:0
+08-31 09:56:03.192  2882  3620 V homebrain: 
+08-31 09:56:03.195  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 10))
+08-31 09:56:03.197  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-getup, success)
+08-31 09:56:03.198  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-cloud-virtualmode, success)
+08-31 09:56:13.787  2882  3620 V homebrain: 
+08-31 09:56:13.787  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 9)
+08-31 09:56:13.787  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:12] send pkt op:503, seq:19613, len:128
+08-31 09:56:13.787  2882  3620 V homebrain: 
+08-31 09:56:13.792  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:12] recv pkt op:503, seq:19613, len:48, errno:0
+08-31 09:56:13.792  2882  3620 V homebrain: 
+08-31 09:56:13.803  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 9))

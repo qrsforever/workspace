@@ -1,0 +1,40 @@
+08-31 09:56:38.900  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 10)
+08-31 09:56:38.900  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:38] send pkt op:503, seq:19824, len:128
+08-31 09:56:38.900  2882  3620 V homebrain: 
+08-31 09:56:38.904  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:144 | SetDevicePropertyValue | 4 | success.
+08-31 09:56:38.905  2895  2895 V homebrain: [INFO]  handler_post id=8, name=Hue lightstrip plus 1
+08-31 09:56:38.905  2895  2895 V homebrain: [INFO]      bri=0
+08-31 09:56:38.905  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03aa-0aa4, value, 0)
+08-31 09:56:38.905  2895  2895 V homebrain: [INFO]  bri changed
+08-31 09:56:38.905  2895  2895 V homebrain: [INFO]  hue_set_state: name=Hue lightstrip plus 1, url=http://192.168.124.4/api/IZm2IP2toK9YBReDLbv1uLLkcurinE3KFbz5KlgX/lights/8/state, body={ "bri": 0 }
+08-31 09:56:38.905  2895  2895 V homebrain: 
+08-31 09:56:38.905  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03aa-0aa4, value, 0)
+08-31 09:56:38.905  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03aa-0aa4, propertyKey: value, value: 0
+08-31 09:56:38.906  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:38] recv pkt op:503, seq:19824, len:48, errno:0
+08-31 09:56:38.942  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-comehome, success)
+08-31 09:56:38.942  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 10))
+08-31 09:56:38.944  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-autolight-service:2, success)
+08-31 09:56:38.944  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-comehome, success)
+08-31 09:56:38.944  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-cloud-virtualmode, success)
+08-31 09:56:38.945  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-autolight-service:3, success)
+08-31 09:56:38.946  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-comehome, success)
+08-31 09:56:49.771  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:48] recv pkt op:504, seq:585, len:80, errno:0
+08-31 09:56:49.771  2882  3620 V homebrain: 
+08-31 09:56:49.771  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 9)
+08-31 09:56:49.772  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:48] send pkt op:503, seq:19829, len:128
+08-31 09:56:49.772  2882  3620 V homebrain: 
+08-31 09:56:49.772  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 9))
+08-31 09:56:49.774  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03aa-0aa4, value, 1)
+08-31 09:56:49.774  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03aa-0aa4, value, 1)
+08-31 09:56:49.774  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03aa-0aa4, propertyKey: value, value: 1
+08-31 09:56:49.776  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:56:48] recv pkt op:503, seq:19829, len:48, errno:0
+08-31 09:56:49.776  2882  3620 V homebrain: 
+08-31 09:56:49.786  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:144 | SetDevicePropertyValue | 4 | success.
+08-31 09:56:49.787  2895  2895 V homebrain: [INFO]  handler_post id=8, name=Hue lightstrip plus 1
+08-31 09:56:49.787  2895  2895 V homebrain: [INFO]      on=1
+08-31 09:56:49.787  2895  2895 V homebrain: [INFO]  On changed
+08-31 09:56:49.787  2895  2895 V homebrain: [INFO]  hue_set_state: name=Hue lightstrip plus 1, url=http://192.168.124.4/api/IZm2IP2toK9YBReDLbv1uLLkcurinE3KFbz5KlgX/lights/8/state, body={ "on": true }
+08-31 09:56:49.787  2895  2895 V homebrain: 
+08-31 09:56:49.788  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:366 | callInstancePush | 3 | (ins-00a17a88-a01a-03a6-4a67, value, 1)
+08-31 09:56:49.788  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03a6-4a67, value, 1)
+08-31 09:56:49.788  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03a6-4a67, propertyKey: value, value: 1

@@ -1,0 +1,46 @@
+08-31 09:59:21.956  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:21] recv pkt op:504, seq:109, len:80, errno:0
+08-31 09:59:21.956  2882  3620 V homebrain: 
+08-31 09:59:21.956  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 4)
+08-31 09:59:21.956  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:21] send pkt op:503, seq:20857, len:128
+08-31 09:59:21.956  2882  3620 V homebrain: 
+08-31 09:59:21.958  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03a6-4a67 brightness 10)
+08-31 09:59:21.958  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:21.958  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03a6-4a67 value 1)
+08-31 09:59:21.958  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-001-entermovie)
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("scene entermovie, action: " story)
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-entermovie, success)
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("unmake-instance context " <Stale Instance-rul-001-entermovie> " success.")
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 4))
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-cloud-virtualmode)
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("virtualmode " 4)
+08-31 09:59:21.959  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("switch-scene(where: " room0 ", target: " smokealarm)
+08-31 09:59:21.960  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("SceneContext switch-scene-exit: " room0 ", " smokealarm)
+08-31 09:59:21.960  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-001-sosalarm)
+08-31 09:59:36.124  2882  3620 V homebrain: 
+08-31 09:59:36.125  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 6)
+08-31 09:59:36.125  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:35] send pkt op:503, seq:20974, len:128
+08-31 09:59:36.125  2882  3620 V homebrain: 
+08-31 09:59:36.129  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03aa-0aa4 brightness 0)
+08-31 09:59:36.130  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:35] recv pkt op:503, seq:20974, len:48, errno:0
+08-31 09:59:36.130  2882  3620 V homebrain: 
+08-31 09:59:36.130  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:36.130  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03aa-0aa4 ct 500)
+08-31 09:59:36.130  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:36.130  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03aa-0aa4 hue 149)
+08-31 09:59:36.131  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:36.131  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03aa-0aa4 saturation 150)
+08-31 09:59:36.131  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:36.131  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:445 | handleInstancePut | 3 | (ins-00a17a88-a01a-03aa-0aa4 value 0)
+08-31 09:59:36.131  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((datetime (now)))
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-001-entermovie)
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("scene entermovie, action: " story)
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineService.cpp:336 | callMessagePush | 3 | (1, 1, rul-001-entermovie, success)
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("unmake-instance context " <Stale Instance-rul-001-entermovie> " success.")
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 6))
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-cloud-virtualmode)
+08-31 09:59:36.132  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("virtualmode " 6)
+08-31 09:59:36.133  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("switch-scene(where: " room0 ", target: " sosalarm)
+08-31 09:59:36.133  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("SceneContext switch-scene-exit: " room0 ", " sosalarm)
+08-31 09:59:36.133  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:44 | clips_logd | 4 | ("creaate rule context " rul-001-smokealarm)
+08-31 09:59:36.133  2882  3544 V homebrain: 2034181200 | RuleEngineLog.h:43 | clips_logi | 3 | ("scene smokealarm, action: " exit)

@@ -1,0 +1,54 @@
+08-31 09:58:07.505  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 10)
+08-31 09:58:07.505  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:06] send pkt op:503, seq:20447, len:128
+08-31 09:58:07.505  2882  3620 V homebrain: 
+08-31 09:58:07.509  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:06] recv pkt op:503, seq:20447, len:48, errno:0
+08-31 09:58:07.509  2882  3620 V homebrain: 
+08-31 09:58:07.510  2895  2895 V homebrain: [INFO]  curl result: [{"error":{"type":201,"address":"/lights/8/state/bri","description":"parameter, bri, is not modifiable. Device is set to off."}}]
+08-31 09:58:07.510  2895  2895 V homebrain: 
+08-31 09:58:07.510  2895  2895 V homebrain: letv: oc_notify_observers
+08-31 09:58:07.510  2895  2895 V homebrain: letv: coap_notify_observers: Issue GET request to resource
+08-31 09:58:07.510  2895  2895 V homebrain: [INFO]  handler_get id=8, on=0
+08-31 09:58:07.510  2895  2895 V homebrain: letv: coap_notify_observers: notifying observer
+08-31 09:58:07.530  2894  2904 V homebrain: letv: coap_observe_notify: forcing CON notification to check for client liveness
+08-31 09:58:07.530  2894  2904 V homebrain: letv:  num_observers: 1
+08-31 09:58:07.572  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 10))
+08-31 09:58:26.439  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:25] recv pkt op:504, seq:489, len:80, errno:0
+08-31 09:58:26.439  2882  3620 V homebrain: 
+08-31 09:58:26.439  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 9)
+08-31 09:58:26.439  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:25] send pkt op:503, seq:20454, len:128
+08-31 09:58:26.439  2882  3620 V homebrain: 
+08-31 09:58:26.440  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 9))
+08-31 09:58:26.443  2882  3544 V homebrain: 2034181200 | DeviceDataChannel.cpp:79 | send | 3 | setPropertyValue(00a17a88-a01a-03aa-0aa4, value, 1)
+08-31 09:58:26.443  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:139 | SetDevicePropertyValue | 4 | deviceId: 00a17a88-a01a-03aa-0aa4, propertyKey: value, value: 1
+08-31 09:58:26.444  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:25] recv pkt op:503, seq:20454, len:48, errno:0
+08-31 09:58:26.444  2882  3620 V homebrain: 
+08-31 09:58:26.452  2882  3544 V homebrain: 2034181200 | HBDeviceManager.cpp:144 | SetDevicePropertyValue | 4 | success.
+08-31 09:58:44.057  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:43] recv pkt op:504, seq:676, len:80, errno:0
+08-31 09:58:44.057  2882  3620 V homebrain: 
+08-31 09:58:44.057  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 8)
+08-31 09:58:44.057  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:43] send pkt op:503, seq:20592, len:128
+08-31 09:58:44.057  2882  3620 V homebrain: 
+08-31 09:58:44.062  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:43] recv pkt op:503, seq:20592, len:48, errno:0
+08-31 09:58:44.062  2882  3620 V homebrain: 
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | HBDeviceManager.cpp:196 | onOCFDevicePropertyChanged | 4 | deviceId: 00a17a88-a01a-03a6-4a67, propertyKey: brightness, propertyValue: 70
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | DeviceDataChannel.cpp:64 | propertyChanged | 3 | (00a17a88-a01a-03a6-4a67, brightness, 70)
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | HBDeviceManager.cpp:196 | onOCFDevicePropertyChanged | 4 | deviceId: 00a17a88-a01a-03a6-4a67, propertyKey: value, propertyValue: 1
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | DeviceDataChannel.cpp:64 | propertyChanged | 3 | (00a17a88-a01a-03a6-4a67, value, 1)
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | main.cpp:299 | propertyReport | 4 | (00a17a88-a01a-03a6-4a67 value 1)
+08-31 09:58:44.069  2882 14142 V homebrain: 2022896720 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:58:43] send pkt op:503, seq:20593, len:128
+08-31 09:58:44.069  2882 14142 V homebrain: 
+08-31 09:58:44.071  2882  3544 V homebrain: 2034181200 | RuleEngineCore.cpp:114 | assertRun | 3 | ((virtualmode 8))
+08-31 09:58:44.075  2895  2895 V homebrain: [INFO]  curl result: [{"success":{"/lights/8/state/on":true}},{"success":{"/lights/8/state/bri":178}}]
+08-31 09:58:44.075  2895  2895 V homebrain: 
+08-31 09:58:44.076  2895  2895 V homebrain: letv: oc_notify_observers
+08-31 09:58:44.076  2895  2895 V homebrain: letv: coap_notify_observers: Issue GET request to resource
+08-31 09:58:44.076  2895  2895 V homebrain: [INFO]  handler_get id=8, on=1
+08-31 09:58:44.076  2895  2895 V homebrain: letv: coap_notify_observers: notifying observer
+08-31 09:59:04.909  2882  3620 V homebrain: 
+08-31 09:59:04.909  2882  3620 V homebrain: 1970066512 | HBCloudManager.cpp:33 | propertyControl | 4 | (surper.virtual.device mode 6)
+08-31 09:59:04.910  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:04] send pkt op:503, seq:20752, len:128
+08-31 09:59:04.910  2882  3620 V homebrain: 
+08-31 09:59:04.914  2882  3620 V homebrain: 1970066512 | lecloud_interface.cpp:24 | lecloud_print | 4 | [LE-INFO-31#09:59:04] recv pkt op:503, seq:20752, len:48, errno:0
+08-31 09:59:04.914  2882  3620 V homebrain: 
+08-31 09:59:04.930  2895  2895 V homebrain: [INFO]  curl result: [{"success":{"/lights/8/state/on":false}}]
+08-31 09:59:04.930  2895  2895 V homebrain: 
