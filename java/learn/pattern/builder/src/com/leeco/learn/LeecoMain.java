@@ -6,6 +6,11 @@ public class LeecoMain {
        LeecoPC pc = builder.build();
        pc.showDetails();
        System.out.println("PC price: " + pc.getPrices());
+
+       /* method 2 */
+       pc = LeecoPC.builder().build();
+       pc.showDetails();
+       System.out.println("PC price: " + pc.getPrices());
    } 
 }
 

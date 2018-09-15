@@ -103,7 +103,7 @@
     <target name="debug" depends="compile,jar" description="debug target">
         <echo level="info">Debug ${ant.project.name}</echo>
         <java fork="true" classname="${main-class}">
-            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044"/>
+            <!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044"/> -->
             <classpath>
                 <path refid="classpath.run"/>
             </classpath>

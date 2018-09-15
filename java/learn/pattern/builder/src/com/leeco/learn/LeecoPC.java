@@ -29,4 +29,18 @@ public class LeecoPC {
         }
     }
 
+    /* method 2 */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        public LeecoPC build() {
+            LeecoPC pc = new LeecoPC();
+            pc.addAccessory(new CpuAccessory());
+            pc.addAccessory(new MemAccessory());
+            pc.addAccessory(new DiskAccessory());
+            return pc;
+        }
+    } 
 }
