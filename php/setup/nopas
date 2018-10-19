@@ -1,0 +1,2 @@
+
+dpkg-query --status php5-mysql | grep Status
