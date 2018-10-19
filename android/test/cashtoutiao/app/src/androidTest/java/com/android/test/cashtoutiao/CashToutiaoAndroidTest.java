@@ -47,7 +47,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             //         if (i < count / 2)
             //             doLogin("15801310416", "20150505");
             //         else
-            //             doLogin("18811165327", "20150505");
+            //             doLogin("18811165327", "ting1412");
             //     }
             // } catch (UiObjectNotFoundException e) {
             //     Log.d(TAG, "qrs : " + e);
@@ -107,9 +107,9 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     public void doClearApps() throws UiObjectNotFoundException {
         try {
             // android4.4 or below, perhaps no permission
-            Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
+            // Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
             // android5.0 or above
-            // mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+            mDevice.executeShellCommand("am force-stop com.cashtoutiao");
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
             sleep(1000);
