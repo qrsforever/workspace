@@ -15,6 +15,8 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public static final String TAG = QuToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
+    public static int mLoopCount = 24;
+    public static int mNewsCount = 14;
 
     @Override
     protected void setUp() throws Exception {
@@ -25,10 +27,9 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
     @Test
     public void testDemo() throws UiObjectNotFoundException {
         int i, flag = 0;
-        int count = 40;
-        for (i = 0; i < count; ++i) {
+        for (i = 0; i < mLoopCount; ++i) {
             try {
-                Log.d(TAG, "Start QuToutiao");
+                Log.d(TAG, "qrs Start QuToutiao + i = " + i);
                 doStartApp();
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs : " + e);
@@ -36,11 +37,13 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
             try {
                 if (flag == 0) {
-                    Log.d(TAG, "Login");
-                    if (i < count / 2)
+                    if (i < mLoopCount / 2) {
+                        Log.d(TAG, "qrs Login 188");
                         doLogin("18811165327", "20150505");
-                    else
+                    } else {
+                        Log.d(TAG, "qrs Login 158");
                         doLogin("15801310416", "20150505");
+                    }
                 }
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs : " + e);
@@ -70,8 +73,8 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
             // }
 
             try {
-                Log.d(TAG, "Do Entertainment");
-                doEntertainment(20);
+                Log.d(TAG, "Do Entertainment mNewsCount: " + mNewsCount);
+                doEntertainment(mNewsCount);
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs error: " + e);
             }
@@ -82,7 +85,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
             // } catch (UiObjectNotFoundException e) {
             // }
 
-            if ( i == count / 2) {
+            if ( i == mLoopCount / 2) {
                 try {
                     Log.d(TAG, "Logout");
                     doLogout();
@@ -91,6 +94,13 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                     Log.d(TAG, "qrs : " + e);
                 }
             }
+        }
+        try {
+            Log.d(TAG, "qrs end Logout");
+            doLogout();
+            flag = 0;
+        } catch (UiObjectNotFoundException e) {
+            Log.d(TAG, "qrs : " + e);
         }
     }
 
@@ -161,19 +171,41 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         }
     }
 
-    public void doLogin(String u, String c) throws UiObjectNotFoundException {
+    public int onClickMine() throws UiObjectNotFoundException {
         /* 点击我的 */
-        UiObject me = new UiObject(new UiSelector().text("我的"));
-        me.click();
+        try {
+            UiObject me = new UiObject(new UiSelector().text("我的"));
+            me.click();
+        } catch (UiObjectNotFoundException e) {
+            Log.d(TAG, "qrs : " + e);
+        }
 
+        /* 关闭领取红包 */
+        try {
+            UiObject closered = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/p2"));
+            closered.click();
+        } catch (Exception e) {
+            Log.d(TAG, "qrs : " + e);
+        }
+        return 0;
+    }
+
+    public void doLogin(String u, String c) throws UiObjectNotFoundException {
+        /* 点击我的,消除障碍 */
+        onClickMine();
         try {
             UiObject kf = new UiObject(new UiSelector().text("联系客服"));
             kf.click();
             mDevice.pressBack();
         } catch (UiObjectNotFoundException e) {
-            UiObject toutiao = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/jx"));
-            toutiao.click();
-            sleep(1000);
+            /* 已经登录, 转到头条栏 */
+            try {
+                UiObject toutiao = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/jx"));
+                toutiao.click();
+                sleep(1000);
+            } catch (UiObjectNotFoundException e1) { 
+                Log.d(TAG, "qrs : " + e1);
+            }
             return;
         }
 
@@ -192,17 +224,8 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
     public void doLogout() throws UiObjectNotFoundException {
         mDevice.pressBack();
 
-        /* 点击我的 */
-        UiObject me = new UiObject(new UiSelector().text("我的"));
-        me.click();
-
-        /* 关闭领取红包 */
-        try {
-            UiObject closered = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/p2"));
-            closered.click();
-        } catch (Exception e) {
-            Log.d(TAG, "qrs : " + e);
-        }
+        /* 点击我的,消除障碍 */
+        onClickMine();
 
         /* 点击设置 */
         UiScrollable meitems = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ue"));
@@ -255,22 +278,25 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         sleep(1000);
 
         while (loop-- > 0) {
-            Log.d(TAG, "qrs 11111111111111");
+            Log.d(TAG, "qrs doEntertainment: loop = " + loop);
 
-            UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/th"));
-            items.flingBackward();
-            UiObject first = items.getChild(new UiSelector().index(0));
-            first.click();
-            sleep(1000);
-
-            Log.d(TAG, "qrs 22222222222222");
+            try {
+                UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/th"));
+                items.flingBackward();
+                UiObject first = items.getChild(new UiSelector().index(0));
+                first.click();
+                sleep(1000);
+            } catch (UiObjectNotFoundException e) {
+                mDevice.pressBack();
+                sleep(1000);
+                continue;
+            }
 
             try {
                 UiScrollable ni = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ni"));
                 UiObject e1 = ni.getChild(new UiSelector().index(0));
                 e1.click();
                 sleep(1000);
-                Log.d(TAG, "qrs 33333333333333");
                 try {
                     UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ku"));
                     for (int i = 0; i < 4; ++i) {
@@ -287,15 +313,12 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                     back.click();
                     sleep(1000);
                 } catch (UiObjectNotFoundException e) {
-                    Log.d(TAG, "qrs 44444444444444");
                     UiObject close = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/i0"));
                     close.click();
                     sleep(1000);
                 }
             } catch (UiObjectNotFoundException e) {
-                Log.d(TAG, "qrs 55555555555555");
-                sleep(35000);
-                Log.d(TAG, "qrs 66666666666666");
+                sleep(1000);
                 mDevice.pressBack();
                 sleep(1000);
             }
