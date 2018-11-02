@@ -17,6 +17,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
     public UiDevice mDevice = null;
     public static int mLoopCount = 24;
     public static int mNewsCount = 14;
+    public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
 
     @Override
     protected void setUp() throws Exception {
@@ -147,12 +148,23 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         mDevice.pressBack();
         doClearApps();
         mDevice.pressHome();
-        // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
-        // allAppsButton.clickAndWaitForNewWindow();
-        // 如果惠头条在Home桌面
-        UiObject toutiao = new UiObject(new UiSelector().text("趣头条"));
-        toutiao.click();
-        sleep(2000);
+        if (mPhoneType == 1) {
+            // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
+            // allAppsButton.clickAndWaitForNewWindow();
+            // 如果惠头条在Home桌面
+            UiObject toutiao = new UiObject(new UiSelector().text("趣头条"));
+            toutiao.click();
+            sleep(2000);
+        } else if (mPhoneType == 2) {
+            //            try {
+                // android4.4 or below, perhaps no permission
+                mDevice.executeShellCommand("am start -n  com.jifen.qukan/com.jifen.qkbase.start.JumpActivity");
+                sleep(1000);
+                return;
+            } catch (Exception e) {
+                Log.d(TAG, "qrs start qukan activity error: " + e);
+            }
+        }
 
         try {
             UiObject notupdate = new UiObject(new UiSelector().text("以后更新"));
@@ -275,7 +287,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         UiCollection newsTabs = new UiCollection(new UiSelector().resourceId("com.jifen.qukan:id/tv"));
         UiObject entertainment = newsTabs.getChildByText(new UiSelector().className("android.widget.TextView"), "娱乐");
         entertainment.click();
-        sleep(1000);
+        sleep(500);
 
         while (loop-- > 0) {
             Log.d(TAG, "qrs doEntertainment: loop = " + loop);
@@ -285,10 +297,10 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                 items.flingBackward();
                 UiObject first = items.getChild(new UiSelector().index(0));
                 first.click();
-                sleep(1000);
+                sleep(200);
             } catch (UiObjectNotFoundException e) {
                 mDevice.pressBack();
-                sleep(1000);
+                sleep(200);
                 continue;
             }
 
@@ -296,7 +308,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                 UiScrollable ni = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ni"));
                 UiObject e1 = ni.getChild(new UiSelector().index(0));
                 e1.click();
-                sleep(1000);
+                sleep(200);
                 try {
                     UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ku"));
                     for (int i = 0; i < 4; ++i) {
@@ -311,16 +323,14 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                     }
                     UiObject back = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/fp"));
                     back.click();
-                    sleep(1000);
+                    sleep(200);
                 } catch (UiObjectNotFoundException e) {
                     UiObject close = new UiObject(new UiSelector().resourceId("com.jifen.qukan:id/i0"));
                     close.click();
-                    sleep(1000);
+                    sleep(200);
                 }
             } catch (UiObjectNotFoundException e) {
-                sleep(1000);
                 mDevice.pressBack();
-                sleep(1000);
             }
         }
     }

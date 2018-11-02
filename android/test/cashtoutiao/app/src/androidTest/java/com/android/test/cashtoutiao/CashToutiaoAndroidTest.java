@@ -15,8 +15,10 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public static final String TAG = CashToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
-    public static final int mLoopCount = 24;
-    public static final int mNewsCount = 14;
+    public static final int mLoopCount = 8;
+    public static final int mNewsCount = 8;
+    public static final int mVideoCount = 4;
+    public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
 
     @Override
     protected void setUp() throws Exception {
@@ -81,18 +83,18 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             }
 
             try {
+                Log.d(TAG, "Do Video");
+                doVideo(mVideoCount);
+            } catch (UiObjectNotFoundException e) {
+                Log.d(TAG, "qrs : " + e);
+            }
+
+            try {
                 Log.d(TAG, "Do Entertainment");
                 doEntertainment(mNewsCount);
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs : " + e);
             }
-
-            // try {
-            //     Log.d(TAG, "Do Video");
-            //     doVideo(12);
-            // } catch (UiObjectNotFoundException e) {
-            //     Log.d(TAG, "qrs : " + e);
-            // }
 
             if (i == mLoopCount / 2) {
                 try {
@@ -115,20 +117,23 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public void doClearApps() throws UiObjectNotFoundException {
         try {
-            // android4.4 or below, perhaps no permission
-            // Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
-            // android5.0 or above
-            mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+            try {
+                // android4.4 or below, perhaps no permission
+                Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
+            } catch (Exception e) {
+                // android5.0 or above
+                mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+            }
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
-            sleep(1000);
+            sleep(200);
         } catch (Exception e) {
         }
         UiScrollable allApps = new UiScrollable(new UiSelector().resourceId("com.android.systemui:id/recents_container"));
         UiObject app = allApps.getChild(new UiSelector().description("惠头条"));
         if (app.exists()) {
             app.swipeLeft(10);
-            sleep(1000);
+            sleep(200);
             // app.longClick();
             UiObject rmapp = new UiObject(new UiSelector().text("Remove from list"));
             if (rmapp.exists())
@@ -156,21 +161,40 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         mDevice.pressBack();
         doClearApps();
         mDevice.pressHome();
-        // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
-        // allAppsButton.clickAndWaitForNewWindow();
-        // 如果惠头条在Home桌面
-        UiObject toutiao = new UiObject(new UiSelector().text("惠头条"));
-        toutiao.click();
-        sleep(4000);
+
+        Log.d(TAG, "qrs PhoneType: " + mPhoneType);
+        // 乐视手机
+        if (mPhoneType == 1) {
+            UiObject toutiao = new UiObject(new UiSelector().text("惠头条"));
+            toutiao.click();
+            sleep(1000);
+        } else if(mPhoneType == 2) {
+            // 红米手机
+            try {
+                // android4.4 or below, perhaps no permission
+                mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.account.ui.main.MainTabActivity");
+                sleep(1000);
+                return;
+            } catch (Exception e) {
+                Log.d(TAG, "qrs start cashtoutiao activity error: " + e);
+            }
+        }
     }
 
     public void doCloseAD() throws UiObjectNotFoundException {
-        UiObject closeAD = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/img_close"));
-        closeAD.click();
-        sleep(200);
+        // 关闭广告
+        try {
+            UiObject closeAD = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/img_close"));
+            closeAD.click();
+            sleep(200);
+        } catch (UiObjectNotFoundException e) {
+            Log.d(TAG, "qrs : " + e);
+        }
+        // 关闭升级
         try {
             UiObject not = new UiObject(new UiSelector().text("以后再说"));
             not.click();
+            sleep(200);
         } catch (UiObjectNotFoundException e) {
             Log.d(TAG, "qrs : " + e);
         }
@@ -256,7 +280,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             /* 娱乐 */
             UiObject entertainment = new UiObject(new UiSelector().text("娱乐"));
             entertainment.click();
-            sleep(1000);
+            sleep(200);
         } catch (UiObjectNotFoundException e) {
             Log.d(TAG, "qrs : " + e);
         }
@@ -267,7 +291,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             items.flingBackward();
             UiObject first = items.getChild(new UiSelector().index(0));
             first.click();
-            sleep(1000);
+            sleep(200);
 
             UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
             for (int i = 0; i < 6; ++i) {
@@ -282,7 +306,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             }
             UiObject back = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/iv_back"));
             back.click();
-            sleep(1000);
+            sleep(200);
         }
     }
 
@@ -293,7 +317,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         try {
             UiObject task = new UiObject(new UiSelector().text("任务中心"));
             task.click();
-            sleep(1000);
         } catch (UiObjectNotFoundException e) {
             Log.d(TAG, "qrs doTask: e = " + e); 
             return;
@@ -301,46 +324,63 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
         /* Sign */
         try {
+            Log.d(TAG, "qrs sign");
             UiObject sign = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/sign_btn_container"));
             sign.click();
-            sleep(1000);
         } catch (UiObjectNotFoundException e) {
             Log.d(TAG, "qrs doTask: e = " + e); 
             return;
         }
 
         // UiScrollable taskItems = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/task_scroll"));
-        // UiObject videoTask = new UiObject(new UiSelector().textMatches("^视频金币.*"));
-        // taskItems.scrollIntoView(videoTask);
-        // videoTask.click();
-        // sleep(1000);
 
-        /* Video */
-        // UiObject watchTask = new UiObject(new UiSelector().text("立即观看"));
-        // watchTask.click();
-        // sleep(1000);
+        /* news */
         // try {
-        //     doVideo(12);
+        //     Log.d(TAG, "qrs cash news");
+        //     UiObject newsTask = new UiObject(new UiSelector().textMatches("^阅读资讯.*"));
+        //     taskItems.scrollIntoView(newsTask);
+        //     newsTask.click();
+        //     sleep(1000);
+        //     UiObject getNewsCash = new UiObject(new UiSelector().text("立即领取"));
+        //     getNewsCash.click();
         // } catch (UiObjectNotFoundException e) {
+        //     Log.d(TAG, "qrs doTask: e = " + e); 
+        //     return;
+        // }
+
+        // /* Video */
+        // try {
+        //     Log.d(TAG, "qrs cash video");
+        //     UiScrollable taskItems = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/task_scroll"));
+        //     UiObject videoTask = new UiObject(new UiSelector().textMatches("^观看视频.*"));
+        //     taskItems.scrollIntoView(videoTask);
+        //     videoTask.click();
+        //     sleep(1000);
+        //     UiObject getVideoCash = new UiObject(new UiSelector().text("立即领取"));
+        //     getVideoCash.click();
+        // } catch (UiObjectNotFoundException e) {
+        //     Log.d(TAG, "qrs doTask: e = " + e); 
+        //     return;
         // }
     }
 
     public void doVideo(int loop) throws UiObjectNotFoundException {
         /* 视频 */
-        while (loop-- > 0) {
-            UiCollection newsTabs = new UiCollection(new UiSelector().resourceId("com.cashtoutiao:id/tab_news"));
-            UiObject video = newsTabs.getChildByText(new UiSelector().className("android.widget.TextView"), "视频");
+        try {
+            UiObject video = new UiObject(new UiSelector().text("视频"));
             video.click();
-            sleep(30000);
-            mDevice.pressBack();
-        }
-        // while (loop-- > 0) {
-        //     UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/listview"));
-        //     items.scrollForward();
-        //     UiObject first = items.getChild(new UiSelector().index(0));
-        //     first.click();
-        //     sleep(30000);
-        //     mDevice.pressBack();
-        // }
+            sleep(200);
+            while (loop-- > 0) {
+                Log.d(TAG, "qrs doVideo: loop = " + loop); 
+                UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/listview"));
+                items.scrollForward();
+                UiObject first = items.getChild(new UiSelector().index(1));
+                first.click();
+                sleep(32000);
+                mDevice.pressBack();
+            }
+        } catch (UiObjectNotFoundException e) {
+            Log.d(TAG, "qrs doVideo: e = " + e); 
+        } 
     }
 }
