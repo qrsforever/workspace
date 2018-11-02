@@ -119,7 +119,10 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         try {
             try {
                 // android4.4 or below, perhaps no permission
-                Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
+                if (mPhoneType == 2)
+                    mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+                else
+                    Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
             } catch (Exception e) {
                 // android5.0 or above
                 mDevice.executeShellCommand("am force-stop com.cashtoutiao");
