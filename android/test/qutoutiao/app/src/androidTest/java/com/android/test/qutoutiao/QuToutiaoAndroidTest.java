@@ -156,11 +156,9 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
             toutiao.click();
             sleep(2000);
         } else if (mPhoneType == 2) {
-            //            try {
-                // android4.4 or below, perhaps no permission
+            try {
                 mDevice.executeShellCommand("am start -n  com.jifen.qukan/com.jifen.qkbase.start.JumpActivity");
                 sleep(1000);
-                return;
             } catch (Exception e) {
                 Log.d(TAG, "qrs start qukan activity error: " + e);
             }

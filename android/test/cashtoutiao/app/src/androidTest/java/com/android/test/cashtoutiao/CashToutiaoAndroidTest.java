@@ -39,13 +39,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             }
 
             try {
-                Log.d(TAG, "qrs Close AD");
-                doCloseAD();
-            } catch (UiObjectNotFoundException e) {
-                Log.d(TAG, "qrs qrs : " + e);
-            }
-
-            try {
                 if (flag == 0) {
                     if (i < mLoopCount / 2) {
                         Log.d(TAG, "qrs Login 188");
@@ -63,6 +56,13 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
                 }
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs : " + e);
+            }
+
+            try {
+                Log.d(TAG, "qrs Close AD");
+                doCloseAD();
+            } catch (UiObjectNotFoundException e) {
+                Log.d(TAG, "qrs qrs : " + e);
             }
 
             try {
@@ -174,8 +174,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         } else if(mPhoneType == 2) {
             // 红米手机
             try {
-                // android4.4 or below, perhaps no permission
-                mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.account.ui.main.MainTabActivity");
+                mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
                 sleep(1000);
                 return;
             } catch (Exception e) {
