@@ -7,6 +7,8 @@
 sudo pip3 install -U jedi
 sudo pip3 install -U jupyter
 sudo pip3 install -U jupyter_contrib_nbextensions
+
+sudo pip3 install -U jupyterthemes
 ```
 
 ### vim support
@@ -45,3 +47,10 @@ wget https://download.operachina.com/pub/opera/desktop/55.0.2994.44/linux/opera-
 
 jupyter notebook --notebook-dir=$currdir --browser='opera %s' >/dev/null 2>&1 &
 ```
+
+## 其他
+
+修改主题:
+    https://github.com/dunovank/jupyter-themes
+    jt -t oceans16 -f fira -fs 13 -cellw 90% -ofs 11 -dfs 11 -T
+    jt -r (恢复)
