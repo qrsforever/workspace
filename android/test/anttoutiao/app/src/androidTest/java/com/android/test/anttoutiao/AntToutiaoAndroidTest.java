@@ -125,8 +125,6 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
         for (int i = 0; i < loop; i++) {
             Log.d(TAG, "qrs loop: " + i + " vs " + loop);
             try {
-                mDevice.executeShellCommand("am start -n  com.cashnews.spicy/com.cashnews.spicy.splash.activity.MainActivity");
-                Thread.sleep(2000);
                 try {
                     /* 有可能弹出了广告 */
                     int idx = new Random().nextInt(mNewsLists.length);
@@ -153,14 +151,15 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
                 Thread.sleep(1000);
 
                 Log.d(TAG, "enter swipe");
-                for (int j = 0; j < 24; ++j) {
+                for (int j = 0; j < 20; ++j) {
                     Thread.sleep(new Random().nextInt(2000) + 500);
-                    if (j < 12)
+                    if (j < 10)
                         _Input_Swipe(360, 1280, 360, 600, 800);
                     else
                         _Input_Swipe(360, 600, 360, 1280, 800);
                 }
                 Log.d(TAG, "qrs try close this ad.");
+                Thread.sleep(35000);
                 _Input_Tap(1180, 79);
                 Thread.sleep(500);
                 mDevice.pressBack();
