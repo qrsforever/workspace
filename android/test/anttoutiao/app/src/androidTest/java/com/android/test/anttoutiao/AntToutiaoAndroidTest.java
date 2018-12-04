@@ -46,8 +46,8 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         mDevice = getUiDevice();
-        mHeight = mDevice.getDisplayHeight();  
-        mWidth = mDevice.getDisplayWidth(); 
+        mHeight = mDevice.getDisplayHeight();
+        mWidth = mDevice.getDisplayWidth();
     }
 
     @Test
@@ -104,43 +104,51 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
     }
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
-        for (int i = 0; i < loop; loop--) {
-            Log.d(TAG, "qrs loop = " + loop);
+        try {
+            UiObject bottomListView = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/tab_bottom_indicator"));
+            UiObject task = bottomListView.getChild(new UiSelector().index(0));
+            task.click();
+            sleep(200);
+        } catch (Exception e) {
+            Log.d(TAG, "qrs error: " + e);
+            return;
+        }
+        for (int i = 0; i < loop; i++) {
+            Log.d(TAG, "qrs loop: " + i + " vs " + loop);
             try {
+                int idx = new Random().nextInt(mNewsLists.length);
                 try {
-                    UiObject bottomListView = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/tab_bottom_indicator"));
-                    UiObject task = bottomListView.getChild(new UiSelector().index(0));
-                    task.click();
-                    sleep(200);
+                    Log.d(TAG, "qrs news select : " + idx);
+                    UiObject news = new UiObject(new UiSelector().text(mNewsLists[idx]));
+                    news.click();
+                    sleep(2000);
                 } catch (Exception e) {
                     Log.d(TAG, "qrs error: " + e);
                     /* 有可能弹出了广告 */
-                    sleep(12000);
+                    sleep(5000);
+                    Log.d(TAG, "qrs try close this ad.");
                     _Input_Tap(1180, 60);
+                    sleep(1000);
+                    _Input_Swipe(360, 1280, 360, 400, 800);
+                    sleep(2000);
                     mDevice.pressBack();
-                    loop++;
-                    continue;
                 }
 
-                int idx = new Random().nextInt(mNewsLists.length);
-                UiObject news = new UiObject(new UiSelector().text(mNewsLists[idx]));
-                news.click();
-                sleep(200);
+                // UiScrollable pager = new UiScrollable(new UiSelector().resourceId("com.cashnews.spicy:id/viewpager_news"));
+                // pager.flingBackward();
+                // sleep(1000);
 
-                UiScrollable pager = new UiScrollable(new UiSelector().resourceId("com.cashnews.spicy:id/viewpager_news"));
-                pager.flingBackward();
-
-                sleep(1000);
                 UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashnews.spicy:id/recycle_news_list"));
                 idx = new Random().nextInt(4);
-                if (idx == 1) idx = 0;
+                if (idx == 1) idx = 3;
+                Log.d(TAG, "qrs read idx = " + idx);
                 UiObject first = items.getChild(new UiSelector().index(idx));
                 first.click();
-                sleep(200);
+                sleep(1000);
 
                 for (int j = 0; j < 6; ++j) {
-                    _Input_Swipe(360, 1280, 360, 400, 800);
                     sleep(new Random().nextInt(2000) + 500);
+                    _Input_Swipe(360, 1280, 360, 400, 800);
                 }
                 mDevice.pressBack();
             } catch (Exception e) {
