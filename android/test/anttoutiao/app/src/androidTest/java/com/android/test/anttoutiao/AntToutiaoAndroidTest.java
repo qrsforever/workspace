@@ -9,10 +9,16 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiScrollable;
+import android.support.test.uiautomator.Direction;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.Until;
+import android.test.InstrumentationTestCase;
 
 import org.junit.Test;
+import java.util.List;
 
-public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
+public class AntToutiaoAndroidTest extends InstrumentationTestCase {
 
     public static final String TAG = AntToutiaoAndroidTest.class.getSimpleName() + " qrs";
     public UiDevice mDevice = null;
@@ -23,7 +29,7 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
     public static int mNewsCount = 14;
 
     public static String[] mNewsLists = {
-        "推荐", "热点", "搞笑", "健康", "推荐"
+        "推荐", "热点", "搞笑", "健康", "推荐", "热点"
     };
 
     private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
@@ -45,7 +51,7 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mDevice = getUiDevice();
+        mDevice = UiDevice.getInstance(getInstrumentation());
         mHeight = mDevice.getDisplayHeight();
         mWidth = mDevice.getDisplayWidth();
     }
@@ -63,11 +69,11 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
             try {
                 Log.d(TAG, "qrs Do Tasks");
                 if (flag == 0) {
-                    sleep(5000);
+                    Thread.sleep(5000);
                     doTask();
                     flag = 1;
                 }
-            } catch (UiObjectNotFoundException e) {
+            } catch (Exception e) {
                 Log.d(TAG, "qrs : " + e);
             }
             try {
@@ -84,7 +90,7 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
             mDevice.executeShellCommand("am force-stop com.cashnews.spicy");
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
-            sleep(1000);
+            Thread.sleep(1000);
         } catch (Exception e) {
         }
     }
@@ -97,7 +103,7 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
         mDevice.pressHome();
         try {
             mDevice.executeShellCommand("am start -n  com.cashnews.spicy/com.cashnews.spicy.splash.activity.SplashActivity");
-            sleep(6000);
+            Thread.sleep(6000);
         } catch (Exception e) {
             Log.d(TAG, "qrs start lite activity error: " + e);
         }
@@ -105,10 +111,13 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
         try {
-            UiObject bottomListView = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/tab_bottom_indicator"));
-            UiObject task = bottomListView.getChild(new UiSelector().index(0));
-            task.click();
-            sleep(200);
+            UiObject2 bottomListView = mDevice.findObject(By.res("com.cashnews.spicy:id/tab_bottom_indicator"));
+            List<UiObject2> childList = bottomListView.getChildren();
+            if (childList.size() > 0) {
+                UiObject2 task = childList.get(0);
+                task.click();
+            }
+            Thread.sleep(200);
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);
             return;
@@ -116,45 +125,50 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
         for (int i = 0; i < loop; i++) {
             Log.d(TAG, "qrs loop: " + i + " vs " + loop);
             try {
-                int idx = new Random().nextInt(mNewsLists.length);
+                mDevice.executeShellCommand("am start -n  com.cashnews.spicy/com.cashnews.spicy.splash.activity.MainActivity");
+                Thread.sleep(2000);
                 try {
-                    Log.d(TAG, "qrs news select : " + idx);
-                    UiObject news = new UiObject(new UiSelector().text(mNewsLists[idx]));
-                    news.click();
-                    sleep(2000);
+                    /* 有可能弹出了广告 */
+                    int idx = new Random().nextInt(mNewsLists.length);
+                    Log.d(TAG, "qrs news select : " + idx + " name:" + mNewsLists[idx]);
+                    UiObject2 news = mDevice.findObject(By.text(mNewsLists[idx]));
+                    if (news != null)
+                        news.click();
+                    Thread.sleep(3000);
                 } catch (Exception e) {
                     Log.d(TAG, "qrs error: " + e);
-                    /* 有可能弹出了广告 */
-                    sleep(5000);
-                    Log.d(TAG, "qrs try close this ad.");
-                    _Input_Tap(1180, 60);
-                    sleep(1000);
-                    _Input_Swipe(360, 1280, 360, 400, 800);
-                    sleep(2000);
                     mDevice.pressBack();
                 }
 
-                // UiScrollable pager = new UiScrollable(new UiSelector().resourceId("com.cashnews.spicy:id/viewpager_news"));
-                // pager.flingBackward();
-                // sleep(1000);
-
-                UiScrollable items = new UiScrollable(new UiSelector().resourceId("com.cashnews.spicy:id/recycle_news_list"));
-                idx = new Random().nextInt(4);
+                UiObject2 news_list = mDevice.findObject(By.res("com.cashnews.spicy:id/recycle_news_list"));
+                int idx = new Random().nextInt(4);
                 if (idx == 1) idx = 3;
-                Log.d(TAG, "qrs read idx = " + idx);
-                UiObject first = items.getChild(new UiSelector().index(idx));
+                List<UiObject2> items = news_list.getChildren(); 
+                if (items.size() == 0)
+                    continue;
+                if (idx >= items.size())
+                    idx = 0;
+                UiObject2 first = items.get(idx);
                 first.click();
-                sleep(1000);
+                Thread.sleep(1000);
 
-                for (int j = 0; j < 6; ++j) {
-                    sleep(new Random().nextInt(2000) + 500);
-                    _Input_Swipe(360, 1280, 360, 400, 800);
+                Log.d(TAG, "enter swipe");
+                for (int j = 0; j < 24; ++j) {
+                    Thread.sleep(new Random().nextInt(2000) + 500);
+                    if (j < 12)
+                        _Input_Swipe(360, 1280, 360, 600, 800);
+                    else
+                        _Input_Swipe(360, 600, 360, 1280, 800);
                 }
+                Log.d(TAG, "qrs try close this ad.");
+                _Input_Tap(1180, 79);
+                Thread.sleep(500);
                 mDevice.pressBack();
             } catch (Exception e) {
                 Log.d(TAG, "qrs error: " + e);
                 mDevice.pressBack();
             }
+            mDevice.pressBack();
         }
     }
 
@@ -164,11 +178,11 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
             UiObject bottomListView = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/tab_bottom_indicator"));
             UiObject task = bottomListView.getChild(new UiSelector().index(2));
             task.click();
-            sleep(1000);
+            Thread.sleep(1000);
             Log.d(TAG, "------------> sign");
             UiObject sign = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/iv_task_sign_in"));
             sign.click();
-            sleep(200);
+            Thread.sleep(200);
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);
             mDevice.pressBack();
@@ -179,22 +193,22 @@ public class AntToutiaoAndroidTest extends UiAutomatorTestCase {
             UiObject bottomListView = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/tab_bottom_indicator"));
             UiObject task = bottomListView.getChild(new UiSelector().index(0));
             task.click();
-            sleep(1000);
+            Thread.sleep(1000);
             Log.d(TAG, "qrs ------------> clock");
             UiObject clock = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/img_clock_news"));
             clock.click();
-            sleep(200);
+            Thread.sleep(200);
 
             Log.d(TAG, "qrs ------------> sign-once");
             UiObject pan = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/img_sign_in_news"));
             pan.click();
-            sleep(200);
+            Thread.sleep(200);
 
             _Input_Tap(620, 970);
 
             UiObject lottery = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/img_close_lottery_web"));
             lottery.click();
-            sleep(200);
+            Thread.sleep(200);
             mDevice.pressBack();
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);
