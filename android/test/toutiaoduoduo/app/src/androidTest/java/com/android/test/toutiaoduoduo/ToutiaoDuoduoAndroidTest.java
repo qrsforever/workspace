@@ -14,9 +14,12 @@ import org.junit.Test;
 
 public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
-    public static final String TAG = ToutiaoDuoduoAndroidTest.class.getSimpleName();
+    public static final String TAG = ToutiaoDuoduoAndroidTest.class.getSimpleName() + " qrs";
     public UiDevice mDevice = null;
-    public static int mLoopCount = 24;
+    public static int mHeight = 1920;
+    public static int mWidth = 1280;
+
+    public static int mLoopCount = 2;
     public static int mNewsCount = 14;
 
     public static final String[] mSoso = {
@@ -51,6 +54,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         mDevice = getUiDevice();
+        mHeight = mDevice.getDisplayHeight();  
+        mWidth = mDevice.getDisplayWidth(); 
     }
 
     @Test
@@ -58,7 +63,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         int i, flag = 0;
         for (i = 0; i < mLoopCount; ++i) {
             try {
-                Log.d(TAG, "qrs Start Toutiaoduoduo + i = " + i);
+                Log.d(TAG, "qrs Start anttoutiao + i = " + i);
                 doStartApp();
             } catch (UiObjectNotFoundException e) {
                 Log.d(TAG, "qrs : " + e);
@@ -140,12 +145,12 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 UiObject et = new UiObject(new UiSelector().text("推荐"));
                 et.click();
                 sleep(1000);
-                mDevice.executeShellCommand("input swipe 350 400 350 750 800");
+                _Input_Swipe(620, 720, 620, 1350, 800);
                 sleep(1000);
-                mDevice.executeShellCommand("input tap 350 350");
+                _Input_Tap(620, 620);
                 sleep(3000);
                 for (int i = 0; i < 6; ++i) {
-                    mDevice.executeShellCommand("input swipe 350 950 350 250 1000");
+                    _Input_Swipe(620, 1125, 620, 450, 1000);
                     sleep(2000);
                 }
                 mDevice.pressBack();
@@ -156,13 +161,31 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         mDevice.pressBack();
     }
 
+    private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
+        int x_1 = (int)((x1 * mWidth) / 1280);
+        int y_1 = (int)((y1 * mHeight) / 1920);
+        int x_2 = (int)((x2 * mWidth) / 1280);
+        int y_2 = (int)((y2 * mHeight) / 1920);
+
+        mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+    }
+
+    private void _Input_Tap(int x1, int y1) throws Exception {
+        int x_1 = (int)((x1 * mWidth) / 1280);
+        int y_1 = (int)((y1 * mHeight) / 1920);
+
+        mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+    }
+
     public void doTask() throws UiObjectNotFoundException {
         /* 底部的任务 */
         try {
             UiObject task = new UiObject(new UiSelector().text("赚钱"));
             task.click();
             sleep(1000);
-            mDevice.executeShellCommand("input tap 650 80");
+            _Input_Tap(1150, 140);
+            sleep(3000);
+            _Input_Tap(900, 590);
             mDevice.pressBack();
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);
@@ -172,14 +195,14 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         task2.click();
         sleep(1000);
 
-        for (int i = 0; i < 30; ++i) {
+        for (int i = 0; i < 15; ++i) {
             try {
                 UiObject so1 = new UiObject(new UiSelector().text("搜索或输入网址"));
                 so1.click();
                 sleep(200);
 
                 /* 撸搜索(主动) */
-                if (i < 7) {
+                if (i < 2) {
                     try {
                         int idx = new Random().nextInt(mSoso.length);
                         UiObject so2 = new UiObject(new UiSelector().text("搜你想搜的"));
@@ -196,9 +219,9 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 }
 
                 /* 撸搜索(热点) */
-                if (i > 6) {
+                if (i >= 2) {
                     try {
-                        mDevice.executeShellCommand("input tap 350 350");
+                        _Input_Tap(620, 620);
                         sleep(1000);
                     } catch (Exception e) {
                         Log.d(TAG, "qrs error: " + e);
@@ -209,13 +232,13 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
                 try {
                     for (int j = 0; j < 3; ++j) {
-                        mDevice.executeShellCommand("input swipe 350 950 350 250 1000");
+                        _Input_Swipe(620, 1690, 620, 480, 1000);
                         sleep(1000);
                     }
-                    mDevice.executeShellCommand("input tap 350 350");
+                    _Input_Tap(620, 620);
                     sleep(1000);
                     for (int j = 0; j < 5; ++j) {
-                        mDevice.executeShellCommand("input swipe 350 950 350 250 1000");
+                        _Input_Swipe(620, 1690, 620, 480, 1000);
                         sleep(1000);
                     }
                 } catch (Exception e) {

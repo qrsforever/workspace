@@ -293,7 +293,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             items.flingBackward();
             UiObject first = items.getChild(new UiSelector().index(0));
             first.click();
-            sleep(200);
+            sleep(1000);
 
             UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
             for (int i = 0; i < 6; ++i) {
