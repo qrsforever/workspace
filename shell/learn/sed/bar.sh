@@ -14,3 +14,7 @@ cat /tmp/sed-tmp.txt
 sed -i "s/12345/adbce/g" `grep 12345 -rl /tmp/sed-*.txt`
 echo "现文:"
 cat /tmp/sed-tmp.txt
+
+
+# 显示某几行的内容
+sed -n '13,17p' < /etc/passwd

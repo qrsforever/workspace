@@ -139,21 +139,24 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
                 }
 
                 UiObject2 news_list = mDevice.findObject(By.res("com.cashnews.spicy:id/recycle_news_list"));
-                int idx = new Random().nextInt(4);
-                if (idx == 1) idx = 3;
-                List<UiObject2> items = news_list.getChildren(); 
-                if (items.size() == 0)
-                    continue;
-                if (idx >= items.size())
-                    idx = 0;
-                UiObject2 first = items.get(idx);
-                first.click();
-                Thread.sleep(1000);
+                if (news_list != null) {
+                    int idx = new Random().nextInt(4);
+                    if (idx == 1) idx = 3;
+                    List<UiObject2> items = news_list.getChildren(); 
+                    if (items.size() == 0)
+                        continue;
+                    if (idx >= items.size())
+                        idx = 0;
+                    UiObject2 first = items.get(idx);
+                    first.click();
+                } else
+                    _Input_Tap(640, 390);
+                Thread.sleep(2000);
 
                 Log.d(TAG, "enter swipe");
                 for (int j = 0; j < 20; ++j) {
                     Thread.sleep(new Random().nextInt(2000) + 500);
-                    if (j < 10)
+                    if (j < 12)
                         _Input_Swipe(360, 1280, 360, 600, 800);
                     else
                         _Input_Swipe(360, 600, 360, 1280, 800);
@@ -179,8 +182,9 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
             task.click();
             Thread.sleep(1000);
             Log.d(TAG, "------------> sign");
-            UiObject sign = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/iv_task_sign_in"));
-            sign.click();
+            // UiObject sign = new UiObject(new UiSelector().resourceId("com.cashnews.spicy:id/iv_task_sign_in"));
+            // sign.click();
+            _Input_Tap(640, 390);
             Thread.sleep(200);
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);

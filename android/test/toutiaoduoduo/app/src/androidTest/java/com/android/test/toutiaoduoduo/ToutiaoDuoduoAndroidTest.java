@@ -10,6 +10,8 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiScrollable;
 
+import android.graphics.Rect;
+
 import org.junit.Test;
 
 public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
@@ -20,7 +22,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     public static int mWidth = 1280;
 
     public static int mLoopCount = 2;
-    public static int mNewsCount = 14;
+    public static int mNewsCount = 28;
 
     public static final String[] mSoso = {
         "李宇春","张靓颖","周笔畅","何洁","刘亦菲","张含韵","陈好","尚雯婕",
@@ -48,6 +50,10 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         "胡静","陈冲","刘怡君","韦唯","龚雪","周彦宏","刘丹","傅艺伟",
         "谢东娜","朱媛媛","黑鸭子","周璇","吕丽萍","杨欣","陈小艺","伍宇娟",
         "苏瑾","李玲玉","张凯丽","潘虹","沈丹萍","岳红","赵静怡","宋晓英"
+    };
+
+    public static String[] mNewsLists = {
+        "推荐", "娱乐", "推荐"
     };
 
     @Override
@@ -112,47 +118,79 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     }
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
-        try {
-            UiObject task2 = new UiObject(new UiSelector().text("首页"));
-            task2.click();
-            sleep(1000);
-        } catch (Exception e) {
+        while (loop-- > 0) {
             try {
-                Log.d(TAG, "qrs error: " + e);
-                mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
-                sleep(6000);
                 UiObject task2 = new UiObject(new UiSelector().text("首页"));
                 task2.click();
                 sleep(1000);
-            } catch (Exception e1) {
-                Log.d(TAG, "qrs error: " + e1);
-            }
-        }
-        while (loop-- > 0) {
-            try {
-                Log.d(TAG, "qrs doEntertainment: loop = " + loop);
-                /* 娱乐 */
+            } catch (Exception e) {
                 try {
-                    UiObject task = new UiObject(new UiSelector().text("首页"));
-                    task.click();
+                    Log.d(TAG, "qrs error: " + e);
+                    mDevice.pressBack();
+                    mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+                    sleep(3000);
+                    mDevice.pressBack();
+                    UiObject task2 = new UiObject(new UiSelector().text("首页"));
+                    task2.click();
                     sleep(1000);
                 } catch (Exception e1) {
+                    mDevice.pressBack();
                     Log.d(TAG, "qrs error: " + e1);
-                    mDevice.pressBack();
-                    mDevice.pressBack();
                 }
-
-                UiObject et = new UiObject(new UiSelector().text("推荐"));
+            }
+            try {
+                Log.d(TAG, "qrs doEntertainment: loop = " + loop);
+                int idx = new Random().nextInt(mNewsLists.length);
+                Log.d(TAG, "qrs news select : " + idx + " name:" + mNewsLists[idx]);
+                UiObject et = new UiObject(new UiSelector().text(mNewsLists[idx]));
                 et.click();
                 sleep(1000);
-                _Input_Swipe(620, 720, 620, 1350, 800);
-                sleep(1000);
-                _Input_Tap(620, 620);
+                _Input_Swipe(620, 720, 620, 1250, 800);
                 sleep(3000);
-                for (int i = 0; i < 6; ++i) {
-                    _Input_Swipe(620, 1125, 620, 450, 1000);
-                    sleep(2000);
+                int i = mNewsLists[idx].contains("推荐") ? 0 : 5;
+                for (i = 0;i < 5; ++i) {
+                    try {
+                        mDevice.pressBack();
+                        UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
+                        Rect rect = red.getBounds();
+                        Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
+                        int x0 = rect.left;
+                        int y0 = rect.bottom;
+                        // int x1 = rect.right;
+                        // int y1 = rect.bottom;
+                        x0 += 500;
+                        y0 += 30;
+                        Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
+                        mDevice.click(x0, y0);
+                        break;
+                    } catch (Exception e1) {
+                        Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
+                        _Input_Swipe(620, 1625, 620, 450, 500);
+                    }
                 }
+
+                if (i == 5) {
+                    try {
+                        UiObject ad = new UiObject(new UiSelector().className("android.widget.TextView").text("广告"));
+                        Rect rect = ad.getBounds();
+                        Log.d(TAG, "Ad [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
+                        int x1 = rect.left;
+                        int y1 = rect.bottom;
+                        x1 += 500;
+                        y1 += 330;
+                        Log.d(TAG, "Hit [" + x1 + "," + y1 + "]");
+                        mDevice.click(x1, y1);
+                    } catch (Exception e2) {
+                        Log.d(TAG, "qrs error: " + e2);
+                        _Input_Tap(620, 820);
+                    }
+                }
+                for (i = 0; i < 20; ++i) {
+                    sleep(500);
+                    _Input_Swipe(620, 1625, 620, 450, 600);
+                }
+                sleep(500);
+                _Input_Swipe(620, 450, 620, 1125, 1000);
                 mDevice.pressBack();
             } catch (Exception e) {
                 Log.d(TAG, "qrs error: " + e);
@@ -195,14 +233,14 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         task2.click();
         sleep(1000);
 
-        for (int i = 0; i < 15; ++i) {
+        for (int i = 0; i < 4; ++i) {
             try {
                 UiObject so1 = new UiObject(new UiSelector().text("搜索或输入网址"));
                 so1.click();
                 sleep(200);
 
                 /* 撸搜索(主动) */
-                if (i < 2) {
+                if (i == 0) {
                     try {
                         int idx = new Random().nextInt(mSoso.length);
                         UiObject so2 = new UiObject(new UiSelector().text("搜你想搜的"));
@@ -219,7 +257,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 }
 
                 /* 撸搜索(热点) */
-                if (i >= 2) {
+                if (i != 0) {
                     try {
                         _Input_Tap(620, 620);
                         sleep(1000);
