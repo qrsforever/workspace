@@ -15,8 +15,8 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public static final String TAG = QuToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
-    public static int mLoopCount = 14;
-    public static int mNewsCount = 10;
+    public static int mLoopCount = 8;
+    public static int mNewsCount = 20;
     public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
 
     @Override
@@ -36,21 +36,21 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                 Log.d(TAG, "qrs : " + e);
             }
 
-            try {
-                if (flag == 0) {
-                    if (i < mLoopCount / 2) {
-                        Log.d(TAG, "qrs Login 158");
-                        // doLogin("15311435439", "nufront123");
-                        doLogin("15801310416", "20150505");
-                    } else {
-                        Log.d(TAG, "qrs Login 188");
-                        doLogin("18811165327", "20150505");
-                        // doLogin("13366352927", "nufront123");
-                    }
-                }
-            } catch (UiObjectNotFoundException e) {
-                Log.d(TAG, "qrs : " + e);
-            }
+            // try {
+            //     if (flag == 0) {
+            //         if (i < mLoopCount / 2) {
+            //             Log.d(TAG, "qrs Login 158");
+            //             // doLogin("15311435439", "nufront123");
+            //             doLogin("15801310416", "20150505");
+            //         } else {
+            //             Log.d(TAG, "qrs Login 188");
+            //             doLogin("18811165327", "20150505");
+            //             // doLogin("13366352927", "nufront123");
+            //         }
+            //     }
+            // } catch (UiObjectNotFoundException e) {
+            //     Log.d(TAG, "qrs : " + e);
+            // }
 
             try {
                 Log.d(TAG, "Hit Recieve");
@@ -88,23 +88,23 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
             // } catch (UiObjectNotFoundException e) {
             // }
 
-            if ( i == mLoopCount / 2) {
-                try {
-                    flag = 0;
-                    Log.d(TAG, "Logout");
-                    doLogout();
-                } catch (UiObjectNotFoundException e) {
-                    Log.d(TAG, "qrs : " + e);
-                }
-            }
+            // if ( i == mLoopCount / 2) {
+            //     try {
+            //         flag = 0;
+            //         Log.d(TAG, "Logout");
+            //         doLogout();
+            //     } catch (UiObjectNotFoundException e) {
+            //         Log.d(TAG, "qrs : " + e);
+            //     }
+            // }
         }
-        try {
-            Log.d(TAG, "qrs end Logout");
-            flag = 0;
-            doLogout();
-        } catch (UiObjectNotFoundException e) {
-            Log.d(TAG, "qrs : " + e);
-        }
+        // try {
+        //     Log.d(TAG, "qrs end Logout");
+        //     flag = 0;
+        //     doLogout();
+        // } catch (UiObjectNotFoundException e) {
+        //     Log.d(TAG, "qrs : " + e);
+        // }
     }
 
     public void doClearApps() throws UiObjectNotFoundException {

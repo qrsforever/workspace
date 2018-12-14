@@ -1,7 +1,6 @@
 package com.android.test.toutiaoduoduo;
 
 import android.util.Log;
-import java.util.Random;
 import android.support.test.uiautomator.UiAutomatorTestCase;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -13,6 +12,7 @@ import android.support.test.uiautomator.UiScrollable;
 import android.graphics.Rect;
 
 import org.junit.Test;
+import java.util.Random;
 
 public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
@@ -22,7 +22,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     public static int mWidth = 1280;
 
     public static int mLoopCount = 2;
-    public static int mNewsCount = 28;
+    public static int mNewsCount = 14;
 
     public static final String[] mSoso = {
         "李宇春","张靓颖","周笔畅","何洁","刘亦菲","张含韵","陈好","尚雯婕",
@@ -233,7 +233,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         task2.click();
         sleep(1000);
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 5; ++i) {
             try {
                 UiObject so1 = new UiObject(new UiSelector().text("搜索或输入网址"));
                 so1.click();
