@@ -113,19 +113,19 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
            //     Log.d(TAG, "qrs : " + e);
            // }
 
-            try {
-                Log.d(TAG, "qrs Close AD");
-                doCloseAD();
-            } catch (UiObjectNotFoundException e) {
-                Log.d(TAG, "qrs qrs : " + e);
-            }
+           try {
+               Log.d(TAG, "qrs Close AD");
+               doCloseAD();
+           } catch (UiObjectNotFoundException e) {
+               Log.d(TAG, "qrs qrs : " + e);
+           }
 
-            try {
-                Log.d(TAG, "Hit Recieve");
-                doRecieve50();
-            } catch (UiObjectNotFoundException e) {
-                Log.d(TAG, "qrs : " + e);
-            }
+           try {
+               Log.d(TAG, "Hit Recieve");
+               doRecieve50();
+           } catch (UiObjectNotFoundException e) {
+               Log.d(TAG, "qrs : " + e);
+           }
 
            try {
                Log.d(TAG, "Do Tasks");
@@ -360,7 +360,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
                 }
 
                 UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
-                for (int i = 0; i < 6; ++i) {
+                for (int i = 0; i < 5; ++i) {
                     webpage.flingForward();
                     sleep(2000);
                     webpage.flingForward();
@@ -375,8 +375,9 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
                     Thread.sleep(300);
                     /* 分享 */
                     UiObject2 qq = mDevice.findObject(By.text("QQ好友"));
-                    Rect r = qq.getVisibleBounds();
-                    _Input_Tap(r.left + 30, r.top - 30);
+                    qq.click();
+                    // Rect r = qq.getVisibleBounds();
+                    // _Input_Tap(r.left + 100, r.top - 100);
                     Thread.sleep(2000);
 
                     UiObject2 lu = mDevice.findObject(By.text("撸世界"));

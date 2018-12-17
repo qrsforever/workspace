@@ -110,6 +110,7 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
     }
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
+        mDevice.pressBack();
         try {
             UiObject2 bottomListView = mDevice.findObject(By.res("com.cashnews.spicy:id/tab_bottom_indicator"));
             List<UiObject2> childList = bottomListView.getChildren();
@@ -120,7 +121,7 @@ public class AntToutiaoAndroidTest extends InstrumentationTestCase {
             Thread.sleep(200);
         } catch (Exception e) {
             Log.d(TAG, "qrs error: " + e);
-            return;
+            mDevice.pressBack();
         }
         for (int i = 0; i < loop; i++) {
             Log.d(TAG, "qrs loop: " + i + " vs " + loop);
