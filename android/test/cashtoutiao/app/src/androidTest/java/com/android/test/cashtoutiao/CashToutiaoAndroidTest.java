@@ -22,7 +22,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     public static final String TAG = CashToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
     public static final int mLoopCount = 3;
-    public static final int mNewsCount = 12;
+    public static final int mNewsCount = 16;
     public static final int mVideoCount = 6;
     public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
     public static int mHeight = 1920;
@@ -231,7 +231,8 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
             // 红米手机
             try {
                 mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
-                sleep(1000);
+                sleep(5000);
+                mDevice.pressBack();
                 return;
             } catch (Exception e) {
                 Log.d(TAG, "qrs start cashtoutiao activity error: " + e);
@@ -360,17 +361,17 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
                 }
 
                 UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.cashtoutiao:id/web_layout"));
-                for (int i = 0; i < 5; ++i) {
+
+                int lcnt = new Random().nextInt(3) + 3;
+                for (int i = 0; i < lcnt; ++i) {
                     webpage.flingForward();
                     sleep(2000);
                     webpage.flingForward();
-                    sleep(2000);
-                    webpage.flingBackward();
                     sleep(2000);
                     webpage.flingBackward();
                     sleep(2000);
                 }
-                if (loop % 5 == 0) {
+                if (loop % 7 == 0) {
                     _Input_Tap(1280 - 60, 1920 - 60);
                     Thread.sleep(300);
                     /* 分享 */

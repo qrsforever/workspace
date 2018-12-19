@@ -56,6 +56,22 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         "推荐", "娱乐", "推荐"
     };
 
+    private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
+        int x_1 = (int)((x1 * mWidth) / 1280);
+        int y_1 = (int)((y1 * mHeight) / 1920);
+        int x_2 = (int)((x2 * mWidth) / 1280);
+        int y_2 = (int)((y2 * mHeight) / 1920);
+
+        mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+    }
+
+    private void _Input_Tap(int x1, int y1) throws Exception {
+        int x_1 = (int)((x1 * mWidth) / 1280);
+        int y_1 = (int)((y1 * mHeight) / 1920);
+
+        mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -77,7 +93,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
             try {
                 Log.d(TAG, "qrs Do Tasks");
                 if (flag == 0) {
-                    sleep(5000);
+                    sleep(3000);
                     doTask();
                     flag = 1;
                 }
@@ -115,9 +131,11 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         } catch (Exception e) {
             Log.d(TAG, "qrs start lite activity error: " + e);
         }
+        mDevice.pressBack();
     }
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
+        mDevice.pressBack();
         while (loop-- > 0) {
             try {
                 UiObject task2 = new UiObject(new UiSelector().text("首页"));
@@ -197,22 +215,6 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
             }
         }
         mDevice.pressBack();
-    }
-
-    private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
-        int x_1 = (int)((x1 * mWidth) / 1280);
-        int y_1 = (int)((y1 * mHeight) / 1920);
-        int x_2 = (int)((x2 * mWidth) / 1280);
-        int y_2 = (int)((y2 * mHeight) / 1920);
-
-        mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
-    }
-
-    private void _Input_Tap(int x1, int y1) throws Exception {
-        int x_1 = (int)((x1 * mWidth) / 1280);
-        int y_1 = (int)((y1 * mHeight) / 1920);
-
-        mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
     }
 
     public void doTask() throws UiObjectNotFoundException {

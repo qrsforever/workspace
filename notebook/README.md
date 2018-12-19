@@ -3,7 +3,7 @@
 
 ### jupyter
 
-``` 
+```
 sudo pip3 install -U jedi
 sudo pip3 install -U jupyter
 sudo pip3 install -U jupyter_contrib_nbextensions
@@ -21,7 +21,7 @@ chmod -R go-w vim_binding
 jupyter nbextension enable vim_binding/vim_binding
 
 
-chrome://extensions/shortcuts 
+chrome://extensions/shortcuts
 UTILITY: Do nothing (disable browser shortcut - experimental) ctrl + N
 
 ```
@@ -33,7 +33,7 @@ ipython profile create
 
 vim ~/.ipython/profile_default/ipython_config.py
 
-c.Completer.greedy = True 
+c.Completer.greedy = True
 c.Completer.jedi_compute_type_timeout = 400
 c.Completer.use_jedi = True
 
@@ -53,4 +53,24 @@ jupyter notebook --notebook-dir=$currdir --browser='opera %s' >/dev/null 2>&1 &
 修改主题:
     https://github.com/dunovank/jupyter-themes
     jt -t oceans16 -f fira -fs 13 -cellw 90% -ofs 11 -dfs 11 -T
+    jt -t xxx -vim (使用~/.local/share/jupyter/nbextensions/vim_binding/vim_binding.css)
     jt -r (恢复)
+
+个人爱好:insert和normal颜色互换:
+
+vim ~/.local/share/jupyter/nbextensions/vim_binding/vim_binding.css
+
+```css
+
+/* Jupyter cell is in normal mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused.cm-fat-cursor {
+  /* background-color: #F5F6EB; */
+  background-color: #F6EBF1;
+}
+/* Jupyter cell is in insert mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused:not(.cm-fat-cursor) {
+  /* background-color: #F6EBF1; */
+  background-color: #F5F6EB;
+}
+
+```

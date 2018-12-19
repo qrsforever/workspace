@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiScrollable;
 
 import org.junit.Test;
+import java.util.Random;
 
 public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
@@ -181,6 +182,8 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         } catch (Exception e) {
             Log.d(TAG, "qrs : " + e);
         }
+
+        mDevice.pressBack();
     }
 
     public int onClickMine() throws UiObjectNotFoundException {
@@ -283,6 +286,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
     }
 
     public void doEntertainment(int loop) throws UiObjectNotFoundException {
+        mDevice.pressBack();
         /* 娱乐 */
         UiCollection newsTabs = new UiCollection(new UiSelector().resourceId("com.jifen.qukan:id/tv"));
         UiObject entertainment = newsTabs.getChildByText(new UiSelector().className("android.widget.TextView"), "娱乐");
@@ -311,14 +315,15 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
                 // e1.click();
                 // sleep(500);
                 try {
+                    int lcnt = new Random().nextInt(3) + 3;
                     UiScrollable webpage = new UiScrollable(new UiSelector().resourceId("com.jifen.qukan:id/ku"));
-                    for (int i = 0; i < 4; ++i) {
+                    for (int i = 0; i < lcnt; ++i) {
                         webpage.flingForward();
                         sleep(4000);
                         webpage.flingForward();
                         sleep(4000);
-                        webpage.flingBackward();
-                        sleep(4000);
+                        // webpage.flingBackward();
+                        // sleep(4000);
                         webpage.flingBackward();
                         sleep(4000);
                     }
@@ -345,6 +350,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public void doTask() throws UiObjectNotFoundException {
         /* 底部的任务 */
+        mDevice.pressBack();
         UiObject task = new UiObject(new UiSelector().text("任务"));
         task.click();
         sleep(1000);
