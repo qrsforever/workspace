@@ -30,3 +30,5 @@ if [ ${str%.*} == "test.apk" ]
 then
     echo "test.apk"
 fi
+
+echo "Length: ${#str}"
