@@ -6,9 +6,14 @@
 ```
 sudo pip3 install -U jedi
 sudo pip3 install -U jupyter
-sudo pip3 install -U jupyter_contrib_nbextensions
+sudo pip3 install -U jupyter_contrib_nbextensions jupyter_nbextensions_configurator
+
 
 sudo pip3 install -U jupyterthemes
+
+sudo jupyter contrib nbextension install
+sudo jupyter nbextensions_configurator enable
+
 ```
 
 ### vim support
@@ -71,6 +76,12 @@ vim ~/.local/share/jupyter/nbextensions/vim_binding/vim_binding.css
 .edit_mode .cell.selected .CodeMirror-focused:not(.cm-fat-cursor) {
   /* background-color: #F6EBF1; */
   background-color: #F5F6EB;
+}
+
+
+/* 插入模式下， 括号看不清 */
+div.CodeMirror span.CodeMirror-matchingbracket {
+    color: #0000FF;
 }
 
 ```

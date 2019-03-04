@@ -100,7 +100,7 @@ __pip_install gensim
 __pip_install flake8 pylint pyflakes
 
 #机器学习
-__pip_install sklearn-pandas
+__pip_install sklearn-pandas 
 
 # 分布式任务调度
 __pip_install Celery
@@ -123,6 +123,8 @@ __pip_install scrapy
 
 # anaconda : https://www.continuum.io/
 
+# Pandas依赖(support: excel)
+__pip_install xlrd
 
 # vim-plugin
 __pip_install jedi

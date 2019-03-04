@@ -371,36 +371,36 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
                     webpage.flingBackward();
                     sleep(2000);
                 }
-                if (loop % 7 == 0) {
-                    _Input_Tap(1280 - 60, 1920 - 60);
-                    Thread.sleep(300);
-                    /* 分享 */
-                    UiObject2 qq = mDevice.findObject(By.text("QQ好友"));
-                    qq.click();
-                    // Rect r = qq.getVisibleBounds();
-                    // _Input_Tap(r.left + 100, r.top - 100);
-                    Thread.sleep(2000);
+                // if (loop % 7 == 0) {
+                    // _Input_Tap(1280 - 60, 1920 - 60);
+                    // Thread.sleep(300);
+                    // [> 分享 <]
+                    // UiObject2 qq = mDevice.findObject(By.text("QQ好友"));
+                    // qq.click();
+                    // // Rect r = qq.getVisibleBounds();
+                    // // _Input_Tap(r.left + 100, r.top - 100);
+                    // Thread.sleep(2000);
 
-                    UiObject2 lu = mDevice.findObject(By.text("撸世界"));
-                    lu.click();
-                    Thread.sleep(1000);
-                    UiObject2 luto = mDevice.findObject(By.res("com.tencent.mobileqq:id/dialogRightBtn"));
-                    luto.click();
-                    Thread.sleep(3000);
-                    UiObject2 lugo = mDevice.findObject(By.res("com.tencent.mobileqq:id/dialogRightBtn"));
-                    lugo.click();
-                    Thread.sleep(2000);
-                    _Input_Tap(600, 1500);
-                    Thread.sleep(5000);
-                    _Input_Swipe(360, 1280, 360, 800, 200);
-                    Thread.sleep(300);
-                    mDevice.pressBack();
-                    Thread.sleep(300);
-                    mDevice.pressBack();
-                    Thread.sleep(300);
-                    mDevice.pressBack();
-                    Thread.sleep(300);
-                }
+                    // UiObject2 lu = mDevice.findObject(By.text("撸世界"));
+                    // lu.click();
+                    // Thread.sleep(1000);
+                    // UiObject2 luto = mDevice.findObject(By.res("com.tencent.mobileqq:id/dialogRightBtn"));
+                    // luto.click();
+                    // Thread.sleep(3000);
+                    // UiObject2 lugo = mDevice.findObject(By.res("com.tencent.mobileqq:id/dialogRightBtn"));
+                    // lugo.click();
+                    // Thread.sleep(2000);
+                    // _Input_Tap(600, 1500);
+                    // Thread.sleep(5000);
+                    // _Input_Swipe(360, 1280, 360, 800, 200);
+                    // Thread.sleep(300);
+                    // mDevice.pressBack();
+                    // Thread.sleep(300);
+                    // mDevice.pressBack();
+                    // Thread.sleep(300);
+                    // mDevice.pressBack();
+                    // Thread.sleep(300);
+                // }
                 UiObject back = new UiObject(new UiSelector().resourceId("com.cashtoutiao:id/iv_back"));
                 back.click();
                 sleep(200);
