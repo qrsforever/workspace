@@ -19,28 +19,20 @@ import android.app.ActivityManager;
 import android.text.TextUtils;
 
 public class MainActivity extends Activity {
-    protected String TAG = "MainActivity";
+    static final String TAG = "QRS-MainActivity";
     CommandService mService;
     MyReceiver mReceiver;
-    // Button mBtnStart, mBtnStop;
+    Button mBtnStart, mBtnStop;
     TextView mTxt;
     Intent mIntent;
     private MyApplication myApplication;
-
-    /* Define activity command */
-    static final int CMD_START_SERVICE = 0x00;
-    static final int CMD_STOP_SERVICE = 0x01;
-    static final int CMD_SYSTEM_EXIT  = 0x02;
-    static final int CMD_SHOW_TOAST   = 0x03;
-    static final int CMD_SEND_DATA    = 0x04;
-    static final int CMD_SHOW_INFO    = 0x05;
 
     public static boolean isServiceRunning(Context context, String ServiceName) {
         if (TextUtils.isEmpty(ServiceName))
             return false;
         ActivityManager myManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         ArrayList<ActivityManager.RunningServiceInfo> runningService =
-            (ArrayList<ActivityManager.RunningServiceInfo>)myManager.getRunningServices(30);
+            (ArrayList<ActivityManager.RunningServiceInfo>)myManager.getRunningServices(80);
         for (int i = 0; i < runningService.size(); i++) {
             if (runningService.get(i).service.getClassName().toString().equals(ServiceName))
                 return true;
@@ -58,22 +50,15 @@ public class MainActivity extends Activity {
 
         mTxt = (TextView)findViewById(R.id.showInfo);
 
-        // mBtnStart = (Button)findViewById(R.id.start);
-        // mBtnStart.setTag(CMD_START_SERVICE);
-        // mBtnStart.setOnClickListener(new onButtonClickListener());
-        // mBtnStop = (Button)findViewById(R.id.stop);
-        // mBtnStop.setTag(CMD_STOP_SERVICE);
-        // mBtnStop.setOnClickListener(new onButtonClickListener());
+        mBtnStart = (Button)findViewById(R.id.start);
+        mBtnStart.setTag(Constants.CMD_START_SERVICE);
+        mBtnStart.setOnClickListener(new onButtonClickListener());
+        mBtnStop = (Button)findViewById(R.id.stop);
+        mBtnStop.setTag(Constants.CMD_STOP_SERVICE);
+        mBtnStop.setOnClickListener(new onButtonClickListener());
         mIntent = new Intent(MainActivity.this, CommandService.class);
-        boolean running = isServiceRunning(this, "com.android.test.cmdserver.CommandService");
-        if (!running) {
-            mTxt.setText("StartService...");
-            Log.i(TAG, "startService :" + running);
-            startService(mIntent);
-        } else {
-            // mBtnStart.setEnabled(false);
-            // mBtnStop.setEnabled(true);
-        }
+        mBtnStart.setEnabled(false);
+        mBtnStop.setEnabled(false);
     }
 
     @Override
@@ -99,6 +84,15 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
+        boolean running = isServiceRunning(this, "com.android.test.cmdserver.CommandService");
+        if (!running) {
+            mTxt.setText("StartService...");
+            Log.i(TAG, "startService :" + running);
+            startService(mIntent);
+        } else {
+            mTxt.setText("Service is running!");
+            mBtnStop.setEnabled(true);
+        }
         mReceiver = new MyReceiver(mTxt);
         IntentFilter mFilter= new IntentFilter();
         mFilter.addAction("android.intent.action.cmdactivity");
@@ -109,7 +103,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy");
-        mySendBroadcast(CMD_STOP_SERVICE, 0);
+        mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
         if ( mReceiver != null ) {
             MainActivity.this.unregisterReceiver(mReceiver);
         }
@@ -131,12 +125,21 @@ public class MainActivity extends Activity {
                 Bundle bundle = intent.getExtras();
                 int cmd = bundle.getInt("cmd");
 
-                if (cmd == CMD_SHOW_TOAST) {
-                    myShowToast(bundle.getString("str"));
-                } else if (cmd == CMD_SYSTEM_EXIT) {
-                    System.exit(0);
-                } else if (cmd == CMD_SHOW_INFO) {
-                    mInfo.setText(bundle.getString("str"));
+                switch (cmd) {
+                    case Constants.CMD_SHOW_INFO:
+                        mInfo.setText(bundle.getString("str"));
+                        break;
+                    case Constants.CMD_SHOW_TOAST:
+                        myShowToast(bundle.getString("str"));
+                        break;
+                    case Constants.CMD_LUALU_RUNNING:
+                        // mBtnStop.setEnabled(true);
+                        break;
+                    case Constants.CMD_SYSTEM_EXIT:
+                        System.exit(0);
+                        break;
+                    default:
+                        ;
                 }
             }
         }
@@ -158,7 +161,7 @@ public class MainActivity extends Activity {
         intent.putExtra("cmd", cmd);
         intent.putExtra("value", value);
         sendBroadcast(intent);
-        Log.d(TAG, "sendBroadcast: " + CMD_SEND_DATA + " " + value);
+        Log.d(TAG, "sendBroadcast: " + Constants.CMD_SEND_DATA + " " + value);
     }
 
     /*
@@ -168,10 +171,10 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             // send broadcast
-            int cmd = CMD_SEND_DATA;
+            // int cmd = Constants.CMD_SEND_DATA;
             int value = (Integer)v.getTag();
             switch (value) {
-                case CMD_START_SERVICE:
+                case Constants.CMD_START_SERVICE:
                     Intent intent = new Intent(MainActivity.this, CommandService.class);
                     boolean running = isServiceRunning(MainActivity.this, "com.android.test.cmdserver.CommandService");
                     if (!running) {
@@ -179,8 +182,8 @@ public class MainActivity extends Activity {
                         startService(intent);
                     }
                     break;
-                case CMD_STOP_SERVICE:
-                    mySendBroadcast(cmd, value);
+                case Constants.CMD_STOP_SERVICE:
+                    mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
                     break;
                 default:
                     ;

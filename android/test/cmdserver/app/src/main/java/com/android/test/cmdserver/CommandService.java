@@ -12,18 +12,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class CommandService extends Service {
-	protected String TAG = "CommandService";
-	public boolean mQuitFlag = true;
+	protected String TAG = "QRS-CommandService";
+	public boolean mQuitFlag = false;
 	MyThread mThread;
 	CommandReceiver mCmdReceiver;
 
-	/* Define service command */
-	static final int CMD_START_SERVICE = 0x00;
-	static final int CMD_STOP_SERVICE = 0x01;
-	static final int CMD_SYSTEM_EXIT  = 0x02;
-	static final int CMD_SHOW_TOAST   = 0x03;
-	static final int CMD_SEND_DATA    = 0x04;
-    static final int CMD_SHOW_INFO    = 0x05;
+    int mPid = -1;
+    static int mScriptPid = -1;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -46,14 +41,17 @@ public class CommandService extends Service {
 	/* Called when Activity startService */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
+		Log.i(TAG, "onStartCommand");
 
+        mPid = android.os.Process.myPid();
 		mCmdReceiver = new CommandReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.intent.action.cmdservice");
 		registerReceiver(mCmdReceiver, filter);
 
 		myStartService();
-		return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
 	}
 
 	@Override
@@ -73,9 +71,22 @@ public class CommandService extends Service {
 		}
 	}
 
+    // Process[pid=2869]
+    public int getPIDFromProcessToString(String s) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                stringBuilder.append(s.charAt(i));
+            }
+        }
+        return Integer.valueOf(stringBuilder.toString());
+    }
+
     public void sudo(String cmd) {
         try{
             Process su = Runtime.getRuntime().exec("su");
+            mScriptPid = getPIDFromProcessToString(su.toString());
+            Log.d(TAG, "sudo program pid: " + mScriptPid);
             DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
             outputStream.writeBytes(cmd + "\n");
             outputStream.flush();
@@ -96,6 +107,7 @@ public class CommandService extends Service {
 		@Override
 		public void run() {
 			super.run();
+            Log.d(TAG, "Thread run...");
             int i = 5;
             try {
                 while (i-- > 0) {
@@ -105,14 +117,20 @@ public class CommandService extends Service {
             } catch (Exception e) {
 
             }
-			while(mQuitFlag) {
+            Intent intent = new Intent();
+            intent.putExtra("cmd", Constants.CMD_LUALU_RUNNING);
+            intent.setAction("android.intent.action.cmdactivity");
+            sendBroadcast(intent);
+			while(!mQuitFlag) {
 				try {
-                    showToast("lua num:" + i);
-                    Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh");
-                    sudo("/system/bin/sh /data/auto_lualu.sh");
-                    ++i;
+                    Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh " + mPid);
+                    sudo("/system/bin/sh /data/auto_lualu.sh " + mPid);
+                    if (mQuitFlag)
+                        break;
 					Thread.sleep(10000);
+                    Log.d(TAG, "quit, again");
 				} catch(Exception e){
+                    Log.d(TAG, "error");
 					e.printStackTrace();
 				}
 			}
@@ -124,7 +142,7 @@ public class CommandService extends Service {
 	 */
 	public void showToast(String str) {
     	Intent intent = new Intent();
-		intent.putExtra("cmd", CMD_SHOW_TOAST);
+		intent.putExtra("cmd", Constants.CMD_SHOW_TOAST);
 		intent.putExtra("str", str);
 		intent.setAction("android.intent.action.cmdactivity");
 		sendBroadcast(intent);
@@ -132,7 +150,7 @@ public class CommandService extends Service {
 
 	public void showInfo(String str) {
     	Intent intent = new Intent();
-		intent.putExtra("cmd", CMD_SHOW_INFO);
+		intent.putExtra("cmd", Constants.CMD_SHOW_INFO);
 		intent.putExtra("str", str);
 		intent.setAction("android.intent.action.cmdactivity");
 		sendBroadcast(intent);
@@ -143,7 +161,8 @@ public class CommandService extends Service {
 	 */
 	private void myStartService() {
 		//TODO initialize device
-		mQuitFlag = true;
+        Log.d(TAG, "myStartService");
+		mQuitFlag = false;
 		mThread = new MyThread();
 		mThread.start();
 	}
@@ -152,7 +171,9 @@ public class CommandService extends Service {
 	 * Service stop after thread close
 	 */
 	public void myStopService() {
-		mQuitFlag = false;
+		mQuitFlag = true;
+        Log.d(TAG, "myStopService, scriptpid: " + mScriptPid);
+        android.os.Process.killProcess(mScriptPid);
 		stopSelf();
 	}
 
@@ -166,9 +187,9 @@ public class CommandService extends Service {
 				int cmd = intent.getIntExtra("cmd", -1);
 				int value = intent.getIntExtra("value", -1);
                 switch (cmd) {
-                    case CMD_STOP_SERVICE:
+                    case Constants.CMD_STOP_SERVICE:
                         myStopService();
-                    case CMD_SEND_DATA:
+                    case Constants.CMD_SEND_DATA:
                         myHandlerData(value);
                     default:
                         ;
