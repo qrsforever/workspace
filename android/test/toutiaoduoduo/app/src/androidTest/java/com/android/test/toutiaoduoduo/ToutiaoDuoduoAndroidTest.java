@@ -22,7 +22,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     public static int mWidth = 1280;
 
     public static int mLoopCount = 2;
-    public static int mNewsCount = 14;
+    public static int mNewsCount = 12;
 
     public static final String[] mSoso = {
         "李宇春","张靓颖","周笔畅","何洁","刘亦菲","张含韵","陈好","尚雯婕",
@@ -167,23 +167,27 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 sleep(3000);
                 int i = mNewsLists[idx].contains("推荐") ? 0 : 5;
                 for (i = 0;i < 5; ++i) {
-                    try {
-                        mDevice.pressBack();
-                        UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
-                        Rect rect = red.getBounds();
-                        Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
-                        int x0 = rect.left;
-                        int y0 = rect.bottom;
-                        // int x1 = rect.right;
-                        // int y1 = rect.bottom;
-                        x0 += 500;
-                        y0 += 30;
-                        Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
-                        mDevice.click(x0, y0);
-                        break;
-                    } catch (Exception e1) {
-                        Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
+                    if (i < 2) {
                         _Input_Swipe(620, 1625, 620, 450, 500);
+                    } else {
+                        try {
+                            mDevice.pressBack();
+                            UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
+                            Rect rect = red.getBounds();
+                            Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
+                            int x0 = rect.left;
+                            int y0 = rect.bottom;
+                            // int x1 = rect.right;
+                            // int y1 = rect.bottom;
+                            x0 += 500;
+                            y0 += 30;
+                            Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
+                            mDevice.click(x0, y0);
+                            break;
+                        } catch (Exception e1) {
+                            Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
+                            _Input_Swipe(620, 1625, 620, 450, 500);
+                        }
                     }
                 }
 
@@ -242,7 +246,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 sleep(200);
 
                 /* 撸搜索(主动) */
-                if (i == 0) {
+                if (i < 2) {
                     try {
                         int idx = new Random().nextInt(mSoso.length);
                         UiObject so2 = new UiObject(new UiSelector().text("搜你想搜的"));
@@ -259,7 +263,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 }
 
                 /* 撸搜索(热点) */
-                if (i != 0) {
+                if (i > 1) {
                     try {
                         _Input_Tap(620, 620);
                         sleep(1000);
