@@ -8,6 +8,7 @@ sid=`getprop ro.boot.serialno`
 # xiaomi: 56ed266
 # leshi: b37da191
 # shixuan: LE67A06120111457
+# google: 06816cef0b3535c2
 
 if [[ ! -f $pid_file ]]
 then
@@ -25,7 +26,7 @@ fi
 
 echo $$ > $pid_file 
 
-max=22
+max=23
 min=7
 
 setenforce 0
@@ -35,11 +36,6 @@ do
     hour=`date +"%-H"`
     day=`date +"%-d"`
     echo "now hour: $hour" >> $log_file
-    if (( $day == "04" || $day == "05" || $day == "06" || $day == "07" ))
-    then
-        max=20
-        min=10
-    fi
         
     if (( $hour > $max || $hour < $min ))
     then

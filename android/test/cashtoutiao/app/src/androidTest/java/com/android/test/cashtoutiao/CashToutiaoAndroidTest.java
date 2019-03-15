@@ -16,6 +16,8 @@ import android.graphics.Rect;
 import org.junit.Test;
 import java.util.List;
 import java.util.Random;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
@@ -56,6 +58,21 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         "苏瑾","李玲玉","张凯丽","潘虹","沈丹萍","岳红","赵静怡","宋晓英"
     };
 
+    public void sudo(String cmd) {
+        try{
+            Process su = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+            outputStream.writeBytes(cmd + "\n");
+            outputStream.flush();
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            su.waitFor();
+        }catch(IOException e){
+             e.printStackTrace();
+        }catch(InterruptedException e){
+             e.printStackTrace();
+        }
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -71,14 +88,16 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         int x_2 = (int)((x2 * mWidth) / 1280);
         int y_2 = (int)((y2 * mHeight) / 1920);
 
-        mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+        // mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+        sudo("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
     }
 
     private void _Input_Tap(int x1, int y1) throws Exception {
         int x_1 = (int)((x1 * mWidth) / 1280);
         int y_1 = (int)((y1 * mHeight) / 1920);
 
-        mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+        // mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+        sudo("input tap " + x_1 + " " + y_1);
     }
 
     @Test
@@ -175,13 +194,15 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         try {
             try {
                 // android4.4 or below, perhaps no permission
-                if (mPhoneType == 2)
-                    mDevice.executeShellCommand("am force-stop com.cashtoutiao");
-                else
+                if (mPhoneType == 2) {
+                    // mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+                    sudo("am force-stop com.cashtoutiao");
+                } else
                     Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
             } catch (Exception e) {
                 // android5.0 or above
-                mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+                // mDevice.executeShellCommand("am force-stop com.cashtoutiao");
+                sudo("am force-stop com.cashtoutiao");
             }
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
@@ -230,7 +251,8 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         } else if(mPhoneType == 2) {
             // 红米手机
             try {
-                mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
+                // mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
+                sudo("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
                 sleep(5000);
                 mDevice.pressBack();
                 return;

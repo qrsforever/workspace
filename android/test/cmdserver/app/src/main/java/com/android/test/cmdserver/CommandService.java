@@ -85,8 +85,6 @@ public class CommandService extends Service {
     public void sudo(String cmd) {
         try{
             Process su = Runtime.getRuntime().exec("su");
-            mScriptPid = getPIDFromProcessToString(su.toString());
-            Log.d(TAG, "sudo program pid: " + mScriptPid);
             DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
             outputStream.writeBytes(cmd + "\n");
             outputStream.flush();

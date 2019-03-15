@@ -13,6 +13,8 @@ import android.graphics.Rect;
 
 import org.junit.Test;
 import java.util.Random;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
@@ -56,20 +58,38 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         "推荐", "娱乐", "推荐"
     };
 
+    public void sudo(String cmd) {
+        try{
+            Process su = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+            outputStream.writeBytes(cmd + "\n");
+            outputStream.flush();
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            su.waitFor();
+        }catch(IOException e){
+             e.printStackTrace();
+        }catch(InterruptedException e){
+             e.printStackTrace();
+        }
+    }
+
     private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
         int x_1 = (int)((x1 * mWidth) / 1280);
         int y_1 = (int)((y1 * mHeight) / 1920);
         int x_2 = (int)((x2 * mWidth) / 1280);
         int y_2 = (int)((y2 * mHeight) / 1920);
 
-        mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+        // mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
+        sudo("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
     }
 
     private void _Input_Tap(int x1, int y1) throws Exception {
         int x_1 = (int)((x1 * mWidth) / 1280);
         int y_1 = (int)((y1 * mHeight) / 1920);
 
-        mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+        // mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
+        sudo("input tap " + x_1 + " " + y_1);
     }
 
     @Override
@@ -111,7 +131,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
     public void doClearApps() throws UiObjectNotFoundException {
         try {
-            mDevice.executeShellCommand("am force-stop com.lite.infoflow");
+            // mDevice.executeShellCommand("am force-stop com.lite.infoflow");
+            sudo("am force-stop com.lite.infoflow");
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
             sleep(1000);
@@ -126,7 +147,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         doClearApps();
         mDevice.pressHome();
         try {
-            mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+            // mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+            sudo("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
             sleep(6000);
         } catch (Exception e) {
             Log.d(TAG, "qrs start lite activity error: " + e);
@@ -145,7 +167,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 try {
                     Log.d(TAG, "qrs error: " + e);
                     mDevice.pressBack();
-                    mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+                    // mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+                    sudo("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
                     sleep(3000);
                     mDevice.pressBack();
                     UiObject task2 = new UiObject(new UiSelector().text("首页"));
@@ -294,7 +317,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
             } catch (Exception e) {
                 Log.d(TAG, "qrs error: " + e);
                 try {
-                    mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+                    // mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
+                    sudo("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
                     sleep(4000);
                 } catch (Exception e1) {
                     Log.d(TAG, "qrs error: " + e1);
