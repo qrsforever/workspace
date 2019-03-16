@@ -8,6 +8,7 @@ sid=`getprop ro.boot.serialno`
 # xiaomi: 56ed266
 # leshi: b37da191
 # shixuan: LE67A06120111457
+# google: 06816cef0b3535c2
 
 if [[ ! -f $pid_file ]]
 then
@@ -15,6 +16,13 @@ then
 fi
 
 last_pid=`cat $pid_file`
+
+kill -9 $last_pid
+
+if [[ x$1 == xkill ]]
+then
+    exit 0	
+fi
 
 echo "shell pid $$, caller pid: $1, last pid: $last_pid" > $log_file
 
@@ -35,12 +43,6 @@ do
     hour=`date +"%-H"`
     day=`date +"%-d"`
     echo "now hour: $hour" >> $log_file
-    if (( $day == "04" || $day == "05" || $day == "06" || $day == "07" ))
-    then
-        max=20
-        min=10
-    fi
-        
     if (( $hour > $max || $hour < $min ))
     then
         echo "sleep..."
@@ -64,10 +66,10 @@ do
 
     input keyevent HOME
 
-    r=`expr $RANDOM % 4`
+    (( r=$RANDOM % 4 ))
     hui=1
     qu=1
-    duo=1
+    duo=0
     sltm=10
 
     echo "random: $r" >> $log_file

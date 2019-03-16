@@ -14,11 +14,11 @@ import java.io.IOException;
 public class CommandService extends Service {
 	protected String TAG = "QRS-CommandService";
 	public boolean mQuitFlag = false;
-	MyThread mThread;
+	MyThread mThread = null;
 	CommandReceiver mCmdReceiver;
 
     int mPid = -1;
-    static int mScriptPid = -1;
+    // static int mScriptPid = -1;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -59,16 +59,8 @@ public class CommandService extends Service {
 		Log.i(TAG, "onDestroy()");
 		super.onDestroy();
 		this.unregisterReceiver(mCmdReceiver);
-		mQuitFlag = false;
-		boolean retry = true;
-		while (retry) {
-			try {
-				retry = false;
-				mThread.join();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        if (mThread != null)
+            myStopService();
 	}
 
     // Process[pid=2869]
@@ -85,8 +77,8 @@ public class CommandService extends Service {
     public void sudo(String cmd) {
         try{
             Process su = Runtime.getRuntime().exec("su");
-            mScriptPid = getPIDFromProcessToString(su.toString());
-            Log.d(TAG, "sudo program pid: " + mScriptPid);
+            // mScriptPid = getPIDFromProcessToString(su.toString());
+            // Log.d(TAG, "sudo program pid: " + mScriptPid);
             DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
             outputStream.writeBytes(cmd + "\n");
             outputStream.flush();
@@ -134,6 +126,10 @@ public class CommandService extends Service {
 					e.printStackTrace();
 				}
 			}
+            intent = new Intent();
+            intent.putExtra("cmd", Constants.CMD_LUALU_QUIT);
+            intent.setAction("android.intent.action.cmdactivity");
+            sendBroadcast(intent);
 		}
 	}
 
@@ -162,18 +158,43 @@ public class CommandService extends Service {
 	private void myStartService() {
 		//TODO initialize device
         Log.d(TAG, "myStartService");
-		mQuitFlag = false;
-		mThread = new MyThread();
-		mThread.start();
+        mQuitFlag = false;
+        if (mThread == null) {
+            mThread = new MyThread();
+            mThread.start();
+        }
 	}
 
 	/*
 	 * Service stop after thread close
 	 */
 	public void myStopService() {
+        Log.d(TAG, "myStopService");
 		mQuitFlag = true;
-        Log.d(TAG, "myStopService, scriptpid: " + mScriptPid);
-        android.os.Process.killProcess(mScriptPid);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+				try {
+                    Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
+                    sudo("/system/bin/sh /data/auto_lualu.sh kill");
+				} catch(Exception e){
+                    Log.d(TAG, "error");
+					e.printStackTrace();
+				}
+            }
+        }).start();
+		boolean retry = true;
+		while (retry) {
+			try {
+				retry = false;
+				mThread.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+        mThread = null;
+        // Log.d(TAG, "myStopService, scriptpid: " + mScriptPid);
+        // android.os.Process.killProcess(mScriptPid);
 		stopSelf();
 	}
 

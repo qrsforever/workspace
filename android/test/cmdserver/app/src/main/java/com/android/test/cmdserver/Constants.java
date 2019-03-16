@@ -9,4 +9,6 @@ public class Constants {
     static final int CMD_SEND_DATA     = 0x04;
     static final int CMD_SHOW_INFO     = 0x05;
     static final int CMD_LUALU_RUNNING = 0x06;
+    static final int CMD_LUALU_QUIT    = 0x07;
+
 }

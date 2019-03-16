@@ -91,6 +91,7 @@ public class MainActivity extends Activity {
             startService(mIntent);
         } else {
             mTxt.setText("Service is running!");
+            mBtnStart.setEnabled(false);
             mBtnStop.setEnabled(true);
         }
         mReceiver = new MyReceiver(mTxt);
@@ -103,7 +104,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy");
-        mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
+        // mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
         if ( mReceiver != null ) {
             MainActivity.this.unregisterReceiver(mReceiver);
         }
@@ -133,7 +134,16 @@ public class MainActivity extends Activity {
                         myShowToast(bundle.getString("str"));
                         break;
                     case Constants.CMD_LUALU_RUNNING:
-                        // mBtnStop.setEnabled(true);
+                        Log.d(TAG, "RUNNING");
+                        mBtnStart.setEnabled(false);
+                        mBtnStop.setEnabled(true);
+                        mTxt.setText("Service is running!");
+                        break;
+                    case Constants.CMD_LUALU_QUIT:
+                        Log.d(TAG, "QUIT");
+                        mTxt.setText("薅羊毛");
+                        mBtnStart.setEnabled(true);
+                        mBtnStop.setEnabled(false);
                         break;
                     case Constants.CMD_SYSTEM_EXIT:
                         System.exit(0);
@@ -176,11 +186,11 @@ public class MainActivity extends Activity {
             switch (value) {
                 case Constants.CMD_START_SERVICE:
                     Intent intent = new Intent(MainActivity.this, CommandService.class);
-                    boolean running = isServiceRunning(MainActivity.this, "com.android.test.cmdserver.CommandService");
-                    if (!running) {
-                        Log.i(TAG, "startService :" + running);
+                    // boolean running = isServiceRunning(MainActivity.this, "com.android.test.cmdserver.CommandService");
+                    // if (!running) {
+                        // Log.i(TAG, "startService :" + running);
                         startService(intent);
-                    }
+                    // }
                     break;
                 case Constants.CMD_STOP_SERVICE:
                     mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
