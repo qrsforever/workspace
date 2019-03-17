@@ -21,15 +21,34 @@ kill -9 $last_pid
 
 if [[ x$1 == xkill ]]
 then
+    echo "kill $last_pid" > $log_file
+    pid1=`ps | grep "com.android.test.qutoutiao"`
+    pid2=`ps | grep "com.android.test.cashtoutiao"`
+    pid3=`ps | grep "com.android.test.toutiaoduoduo"`
+    if [[ x$pid1 != x ]]
+    then
+        pid=`echo "$pid1" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
+
+    if [[ x$pid2 != x ]]
+    then
+        pid=`echo "$pid2" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
+
+    if [[ x$pid3 != x ]]
+    then
+        pid=`echo "$pid3" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
     exit 0	
 fi
 
 echo "shell pid $$, caller pid: $1, last pid: $last_pid" > $log_file
-
-if [[ x$last_pid != x ]]
-then
-    kill -9 $last_pid
-fi
 
 echo $$ > $pid_file 
 
@@ -49,6 +68,8 @@ do
         sleep 900
         continue
     fi
+
+    input keyevent WAKEUP
 
     # 破锁屏
     if [[ x$sid == x"c060751" ]]

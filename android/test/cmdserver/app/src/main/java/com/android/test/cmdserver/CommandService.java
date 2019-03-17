@@ -18,7 +18,7 @@ public class CommandService extends Service {
 	CommandReceiver mCmdReceiver;
 
     int mPid = -1;
-    // static int mScriptPid = -1;
+    static int mScriptPid = -1;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -74,11 +74,13 @@ public class CommandService extends Service {
         return Integer.valueOf(stringBuilder.toString());
     }
 
-    public void sudo(String cmd) {
+    public void sudo(String cmd, int flg) {
         try{
             Process su = Runtime.getRuntime().exec("su");
-            // mScriptPid = getPIDFromProcessToString(su.toString());
-            // Log.d(TAG, "sudo program pid: " + mScriptPid);
+            if (1 == flg) {
+                mScriptPid = getPIDFromProcessToString(su.toString());
+                Log.d(TAG, "sudo program pid: " + mScriptPid);
+            }
             DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
             outputStream.writeBytes(cmd + "\n");
             outputStream.flush();
@@ -115,8 +117,9 @@ public class CommandService extends Service {
             sendBroadcast(intent);
 			while(!mQuitFlag) {
 				try {
-                    Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh " + mPid);
-                    sudo("/system/bin/sh /data/auto_lualu.sh " + mPid);
+                    Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mPid);
+                    sudo("/system/bin/sh /data/auto_lualu.sh " + mPid, 1);
+                    Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mPid);
                     if (mQuitFlag)
                         break;
 					Thread.sleep(10000);
@@ -126,10 +129,12 @@ public class CommandService extends Service {
 					e.printStackTrace();
 				}
 			}
+            Log.d(TAG, "MyThread Quit");
             intent = new Intent();
             intent.putExtra("cmd", Constants.CMD_LUALU_QUIT);
             intent.setAction("android.intent.action.cmdactivity");
             sendBroadcast(intent);
+            mThread = null;
 		}
 	}
 
@@ -171,30 +176,29 @@ public class CommandService extends Service {
 	public void myStopService() {
         Log.d(TAG, "myStopService");
 		mQuitFlag = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        // new Thread(new Runnable() {
+            // @Override
+            // public void run() {
 				try {
                     Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
-                    sudo("/system/bin/sh /data/auto_lualu.sh kill");
+                    sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
+					Thread.sleep(2000);
 				} catch(Exception e){
                     Log.d(TAG, "error");
 					e.printStackTrace();
 				}
-            }
-        }).start();
-		boolean retry = true;
-		while (retry) {
-			try {
-				retry = false;
-				mThread.join();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-        mThread = null;
-        // Log.d(TAG, "myStopService, scriptpid: " + mScriptPid);
-        // android.os.Process.killProcess(mScriptPid);
+            // }
+        // }).start();
+        // try { 
+        //     Log.i(TAG, "LUALU JOIN");
+        //     mThread.join();
+        //     Log.i(TAG, "LUALU END");
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+		// }
+        // mThread = null;
+        Log.d(TAG, "myStopService, scriptpid: " + mScriptPid);
+        android.os.Process.killProcess(mScriptPid);
 		stopSelf();
 	}
 
