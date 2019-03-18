@@ -17,12 +17,38 @@ fi
 
 last_pid=`cat $pid_file`
 
-echo "shell pid $$, caller pid: $1, last pid: $last_pid" > $log_file
+kill -9 $last_pid
 
-if [[ x$last_pid != x ]]
+if [[ x$1 == xkill ]]
 then
-    kill -9 $last_pid
+    echo "kill $last_pid" > $log_file
+    pid1=`ps | grep "com.android.test.qutoutiao"`
+    pid2=`ps | grep "com.android.test.cashtoutiao"`
+    pid3=`ps | grep "com.android.test.toutiaoduoduo"`
+    if [[ x$pid1 != x ]]
+    then
+        pid=`echo "$pid1" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
+
+    if [[ x$pid2 != x ]]
+    then
+        pid=`echo "$pid2" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
+
+    if [[ x$pid3 != x ]]
+    then
+        pid=`echo "$pid3" | busybox cut -d\  -f4`
+        kill -9 $pid
+        echo "kill com.android.test: $pid" >> $log_file
+    fi
+    exit 0	
 fi
+
+echo "shell pid $$, caller pid: $1, last pid: $last_pid" > $log_file
 
 echo $$ > $pid_file 
 
@@ -36,13 +62,14 @@ do
     hour=`date +"%-H"`
     day=`date +"%-d"`
     echo "now hour: $hour" >> $log_file
-        
     if (( $hour > $max || $hour < $min ))
     then
         echo "sleep..."
         sleep 900
         continue
     fi
+
+    input keyevent WAKEUP
 
     # 破锁屏
     if [[ x$sid == x"c060751" ]]
@@ -60,10 +87,10 @@ do
 
     input keyevent HOME
 
-    r=`expr $RANDOM % 4`
+    (( r=$RANDOM % 4 ))
     hui=1
     qu=1
-    duo=1
+    duo=0
     sltm=10
 
     echo "random: $r" >> $log_file
