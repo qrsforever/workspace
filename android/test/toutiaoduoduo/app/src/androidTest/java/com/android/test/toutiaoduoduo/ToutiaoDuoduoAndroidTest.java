@@ -11,6 +11,7 @@ import android.support.test.uiautomator.UiScrollable;
 
 import android.graphics.Rect;
 
+import android.os.Build;
 import org.junit.Test;
 import java.util.Random;
 import java.io.DataOutputStream;
@@ -23,6 +24,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     public static int mHeight = 1920;
     public static int mWidth = 1280;
 
+    public static final int mSDK = Build.VERSION.SDK_INT;
     public static int mLoopCount = 2;
     public static int mNewsCount = 12;
 
@@ -59,19 +61,25 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     };
 
     public void sudo(String cmd) {
+        Log.d(TAG, "begin cmd = " + cmd);
         try{
-            Process su = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
-            outputStream.writeBytes(cmd + "\n");
-            outputStream.flush();
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            su.waitFor();
+            if (mSDK >= 23) {
+                mDevice.executeShellCommand(cmd);
+            } else {
+                Process su = Runtime.getRuntime().exec("su");
+                DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+                outputStream.writeBytes(cmd + "\n");
+                outputStream.flush();
+                outputStream.writeBytes("exit\n");
+                outputStream.flush();
+                su.waitFor();
+            }
         }catch(IOException e){
              e.printStackTrace();
         }catch(InterruptedException e){
              e.printStackTrace();
         }
+        Log.d(TAG, "end cmd = " + cmd);
     }
 
     private void _Input_Swipe(int x1, int y1, int x2, int y2, int tm) throws Exception {
@@ -102,6 +110,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
     @Test
     public void testDemo() throws UiObjectNotFoundException {
+        Log.d(TAG, "testDemo sdk: " + mSDK);
         int i, flag = 0;
         for (i = 0; i < mLoopCount; ++i) {
             try {
@@ -189,32 +198,28 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 _Input_Swipe(620, 720, 620, 1250, 800);
                 sleep(3000);
                 int i = mNewsLists[idx].contains("推荐") ? 0 : 5;
-                for (i = 0;i < 5; ++i) {
-                    if (i < 2) {
+                for (i = 0; i < 3; ++i) {
+                    try {
+                        mDevice.pressBack();
+                        UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
+                        Rect rect = red.getBounds();
+                        Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
+                        int x0 = rect.left;
+                        int y0 = rect.bottom;
+                        // int x1 = rect.right;
+                        // int y1 = rect.bottom;
+                        x0 += 500;
+                        y0 += 30;
+                        Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
+                        mDevice.click(x0, y0);
+                        break;
+                    } catch (Exception e1) {
+                        Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
                         _Input_Swipe(620, 1625, 620, 450, 500);
-                    } else {
-                        try {
-                            mDevice.pressBack();
-                            UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
-                            Rect rect = red.getBounds();
-                            Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
-                            int x0 = rect.left;
-                            int y0 = rect.bottom;
-                            // int x1 = rect.right;
-                            // int y1 = rect.bottom;
-                            x0 += 500;
-                            y0 += 30;
-                            Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
-                            mDevice.click(x0, y0);
-                            break;
-                        } catch (Exception e1) {
-                            Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
-                            _Input_Swipe(620, 1625, 620, 450, 500);
-                        }
                     }
                 }
 
-                if (i == 5) {
+                if (i == 3) {
                     try {
                         UiObject ad = new UiObject(new UiSelector().className("android.widget.TextView").text("广告"));
                         Rect rect = ad.getBounds();
@@ -262,7 +267,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         task2.click();
         sleep(1000);
 
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 4; ++i) {
             try {
                 UiObject so1 = new UiObject(new UiSelector().text("搜索或输入网址"));
                 so1.click();

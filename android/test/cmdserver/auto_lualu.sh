@@ -55,6 +55,11 @@ echo $$ > $pid_file
 max=23
 min=7
 
+hui=1
+qu=1
+duo=1
+sltm=10
+
 setenforce 0
 
 while ((1))
@@ -88,10 +93,6 @@ do
     input keyevent HOME
 
     (( r=$RANDOM % 4 ))
-    hui=1
-    qu=1
-    duo=0
-    sltm=10
 
     echo "random: $r" >> $log_file
     if [[ x$r == x"0" ]]
@@ -168,3 +169,6 @@ do
 done
 
 echo "never run here" >> $log_file
+
+# adb uninstall com.android.test.[qutoutiao|cashtoutiao|toutiaoduoduo]
+# adb uninstall com.android.test.[qutoutiao|cashtoutiao|toutiaoduoduo].test

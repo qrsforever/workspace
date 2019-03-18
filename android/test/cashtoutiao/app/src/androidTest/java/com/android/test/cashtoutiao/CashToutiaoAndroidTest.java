@@ -12,6 +12,7 @@ import android.support.test.uiautomator.Direction;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiObject2;
 
+import android.os.Build;
 import android.graphics.Rect;
 import org.junit.Test;
 import java.util.List;
@@ -21,14 +22,14 @@ import java.io.IOException;
 
 public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
-    public static final String TAG = CashToutiaoAndroidTest.class.getSimpleName();
+    public static final String TAG = "QRS-" + CashToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
     public static final int mLoopCount = 3;
     public static final int mNewsCount = 16;
     public static final int mVideoCount = 6;
-    public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
     public static int mHeight = 1920;
     public static int mWidth = 1280;
+    public static final int mSDK = Build.VERSION.SDK_INT;
 
     public static final String[] mSoso = {
         "李宇春","张靓颖","周笔畅","何洁","刘亦菲","张含韵","陈好","尚雯婕",
@@ -59,19 +60,25 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     };
 
     public void sudo(String cmd) {
+        Log.d(TAG, "begin cmd = " + cmd);
         try{
-            Process su = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
-            outputStream.writeBytes(cmd + "\n");
-            outputStream.flush();
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            su.waitFor();
+            if (mSDK >= 23) {
+                mDevice.executeShellCommand(cmd);
+            } else {
+                Process su = Runtime.getRuntime().exec("su");
+                DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+                outputStream.writeBytes(cmd + "\n");
+                outputStream.flush();
+                outputStream.writeBytes("exit\n");
+                outputStream.flush();
+                su.waitFor();
+            }
         }catch(IOException e){
-             e.printStackTrace();
+            e.printStackTrace();
         }catch(InterruptedException e){
-             e.printStackTrace();
+            e.printStackTrace();
         }
+        Log.d(TAG, "end cmd = " + cmd);
     }
 
     @Override
@@ -88,7 +95,6 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         int x_2 = (int)((x2 * mWidth) / 1280);
         int y_2 = (int)((y2 * mHeight) / 1920);
 
-        // mDevice.executeShellCommand("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
         sudo("input swipe " + x_1 + " " + y_1 + " " + x_2 + " " + y_2 + " " + tm);
     }
 
@@ -96,13 +102,13 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         int x_1 = (int)((x1 * mWidth) / 1280);
         int y_1 = (int)((y1 * mHeight) / 1920);
 
-        // mDevice.executeShellCommand("input tap " + x_1 + " " + y_1);
         sudo("input tap " + x_1 + " " + y_1);
     }
 
     @Test
     public void testDemo() throws UiObjectNotFoundException {
         int i, flag = 0;
+        Log.d(TAG, "testDemo sdk: " + mSDK);
         for (i = 0; i < mLoopCount; ++i) {
             Log.d(TAG, "qrs testDemo: i = " + i);
             try {
@@ -192,18 +198,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
 
     public void doClearApps() throws UiObjectNotFoundException {
         try {
-            try {
-                // android4.4 or below, perhaps no permission
-                if (mPhoneType == 2) {
-                    // mDevice.executeShellCommand("am force-stop com.cashtoutiao");
-                    sudo("am force-stop com.cashtoutiao");
-                } else
-                    Runtime.getRuntime().exec("am force-stop com.cashtoutiao");
-            } catch (Exception e) {
-                // android5.0 or above
-                // mDevice.executeShellCommand("am force-stop com.cashtoutiao");
-                sudo("am force-stop com.cashtoutiao");
-            }
+            sudo("am force-stop com.cashtoutiao");
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
             sleep(200);
@@ -242,23 +237,14 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
         doClearApps();
         mDevice.pressHome();
 
-        Log.d(TAG, "qrs PhoneType: " + mPhoneType);
-        // 乐视手机
-        if (mPhoneType == 1) {
-            UiObject toutiao = new UiObject(new UiSelector().text("惠头条"));
-            toutiao.click();
-            sleep(1000);
-        } else if(mPhoneType == 2) {
-            // 红米手机
-            try {
-                // mDevice.executeShellCommand("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
-                sudo("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
-                sleep(5000);
-                mDevice.pressBack();
-                return;
-            } catch (Exception e) {
-                Log.d(TAG, "qrs start cashtoutiao activity error: " + e);
-            }
+        // 红米手机
+        try {
+            sudo("am start -n com.cashtoutiao/com.cashtoutiao.common.ui.SplashActivity");
+            sleep(5000);
+            mDevice.pressBack();
+            return;
+        } catch (Exception e) {
+            Log.d(TAG, "qrs start cashtoutiao activity error: " + e);
         }
     }
 

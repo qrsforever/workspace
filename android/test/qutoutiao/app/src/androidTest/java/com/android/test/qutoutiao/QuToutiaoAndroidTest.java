@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiScrollable;
 
+import android.os.Build;
 import org.junit.Test;
 import java.util.Random;
 import java.io.DataOutputStream;
@@ -16,26 +17,32 @@ import java.io.IOException;
 
 public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
-    public static final String TAG = QuToutiaoAndroidTest.class.getSimpleName();
+    public static final String TAG = "QRS-" + QuToutiaoAndroidTest.class.getSimpleName();
     public UiDevice mDevice = null;
     public static int mLoopCount = 8;
     public static int mNewsCount = 20;
-    public static final int mPhoneType = 2; // 1: leshi 2: xiaomi
+    public static final int mSDK = Build.VERSION.SDK_INT;
 
     public void sudo(String cmd) {
+        Log.d(TAG, "begin cmd = " + cmd);
         try{
-            Process su = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
-            outputStream.writeBytes(cmd + "\n");
-            outputStream.flush();
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            su.waitFor();
+            if (mSDK >= 23) {
+                mDevice.executeShellCommand(cmd);
+            } else {
+                Process su = Runtime.getRuntime().exec("su");
+                DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+                outputStream.writeBytes(cmd + "\n");
+                outputStream.flush();
+                outputStream.writeBytes("exit\n");
+                outputStream.flush();
+                su.waitFor();
+            }
         }catch(IOException e){
              e.printStackTrace();
         }catch(InterruptedException e){
              e.printStackTrace();
         }
+        Log.d(TAG, "end cmd = " + cmd);
     }
 
     @Override
@@ -46,6 +53,7 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
 
     @Test
     public void testDemo() throws UiObjectNotFoundException {
+        Log.d(TAG, "testDemo sdk: " + mSDK);
         int i, flag = 0;
         for (i = 0; i < mLoopCount; ++i) {
             try {
@@ -132,7 +140,6 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
             // Runtime.getRuntime().exec("am force-stop com.jifen.qukan");
             // android5.0 or above
             sudo("am force-stop com.jifen.qukan");
-            // mDevice.executeShellCommand("am force-stop com.jifen.qukan");
             Log.d(TAG, "Press Pecent apps");
             mDevice.pressRecentApps();
             sleep(1000);
@@ -170,21 +177,11 @@ public class QuToutiaoAndroidTest extends UiAutomatorTestCase {
         mDevice.pressBack();
         doClearApps();
         mDevice.pressHome();
-        if (mPhoneType == 1) {
-            // UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
-            // allAppsButton.clickAndWaitForNewWindow();
-            // 如果惠头条在Home桌面
-            UiObject toutiao = new UiObject(new UiSelector().text("趣头条"));
-            toutiao.click();
-            sleep(200);
-        } else if (mPhoneType == 2) {
-            try {
-                sudo("am start -n  com.jifen.qukan/com.jifen.qkbase.start.JumpActivity");
-                // mDevice.executeShellCommand("am start -n  com.jifen.qukan/com.jifen.qkbase.start.JumpActivity");
-                sleep(1000);
-            } catch (Exception e) {
-                Log.d(TAG, "qrs start qukan activity error: " + e);
-            }
+        try {
+            sudo("am start -n com.jifen.qukan/com.jifen.qkbase.start.JumpActivity");
+            sleep(1000);
+        } catch (Exception e) {
+            Log.d(TAG, "qrs start qukan activity error: " + e);
         }
 
         try {
