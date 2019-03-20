@@ -14,18 +14,22 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Switch;
 import java.util.ArrayList;
 import android.app.ActivityManager;
 import android.text.TextUtils;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnCheckedChangeListener {
     static final String TAG = "QRS-MainActivity";
     CommandService mService;
-    MyReceiver mReceiver;
+    MyReceiver mReceiver = null;
     Button mBtnStart, mBtnStop;
+    Switch mSwHui, mSwQu, mSwDuo;
     TextView mTxt;
-    Intent mIntent;
     private MyApplication myApplication;
+    int mSwitchVals[] = { 1, 1, 1 };
 
     public static boolean isServiceRunning(Context context, String ServiceName) {
         if (TextUtils.isEmpty(ServiceName))
@@ -50,15 +54,43 @@ public class MainActivity extends Activity {
 
         mTxt = (TextView)findViewById(R.id.showInfo);
 
+        mSwQu  = (Switch)findViewById(R.id.qutoutiao_sw);
+        mSwHui = (Switch)findViewById(R.id.huitoutiao_sw);
+        mSwDuo = (Switch)findViewById(R.id.toutiaoduoduo_sw);
+
+        mSwQu.setOnCheckedChangeListener(this);
+        mSwHui.setOnCheckedChangeListener(this);
+        mSwDuo.setOnCheckedChangeListener(this);
+
         mBtnStart = (Button)findViewById(R.id.start);
-        mBtnStart.setTag(Constants.CMD_START_SERVICE);
+        // mBtnStart.setTag(Constants.CMD_START_SERVICE);
         mBtnStart.setOnClickListener(new onButtonClickListener());
         mBtnStop = (Button)findViewById(R.id.stop);
-        mBtnStop.setTag(Constants.CMD_STOP_SERVICE);
+        // mBtnStop.setTag(Constants.CMD_STOP_SERVICE);
         mBtnStop.setOnClickListener(new onButtonClickListener());
-        mIntent = new Intent(MainActivity.this, CommandService.class);
-        mBtnStart.setEnabled(false);
-        mBtnStop.setEnabled(false);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int flg = 0;
+        switch (buttonView.getId()) {
+            case R.id.huitoutiao_sw:
+                flg = 0;
+                break;
+            case R.id.qutoutiao_sw:
+                flg = 1;
+                break;
+            case R.id.toutiaoduoduo_sw:
+                flg = 2;
+                break;
+            default:
+                return;
+        }
+        if (isChecked) {
+            mSwitchVals[flg] = 1;
+        } else {
+            mSwitchVals[flg] = 0;
+        }
     }
 
     @Override
@@ -85,19 +117,17 @@ public class MainActivity extends Activity {
         super.onResume();
         Log.i(TAG, "onResume");
         boolean running = isServiceRunning(this, "com.android.test.cmdserver.CommandService");
-        if (!running) {
-            mTxt.setText("StartService...");
-            Log.i(TAG, "startService :" + running);
-            startService(mIntent);
-        } else {
-            mTxt.setText("Service is running!");
+        if (running) {
+            mTxt.setText("正在努力薅羊毛..");
             mBtnStart.setEnabled(false);
             mBtnStop.setEnabled(true);
         }
-        mReceiver = new MyReceiver(mTxt);
-        IntentFilter mFilter= new IntentFilter();
-        mFilter.addAction("android.intent.action.cmdactivity");
-        MainActivity.this.registerReceiver(mReceiver, mFilter);
+        if (mReceiver == null) {
+            mReceiver = new MyReceiver(mTxt);
+            IntentFilter mFilter= new IntentFilter();
+            mFilter.addAction("android.intent.action.cmdactivity");
+            MainActivity.this.registerReceiver(mReceiver, mFilter);
+        }
     }
 
     @Override
@@ -108,6 +138,7 @@ public class MainActivity extends Activity {
         if ( mReceiver != null ) {
             MainActivity.this.unregisterReceiver(mReceiver);
         }
+        mReceiver = null;
         myApplication.removeActivity(this);
     }
 
@@ -137,11 +168,11 @@ public class MainActivity extends Activity {
                         Log.d(TAG, "RUNNING");
                         mBtnStart.setEnabled(false);
                         mBtnStop.setEnabled(true);
-                        mTxt.setText("Service is running!");
+                        mTxt.setText("正在努力薅羊毛..");
                         break;
                     case Constants.CMD_LUALU_QUIT:
                         Log.d(TAG, "QUIT");
-                        mTxt.setText("薅羊毛");
+                        mTxt.setText("继续薅羊毛");
                         mBtnStart.setEnabled(true);
                         mBtnStop.setEnabled(false);
                         break;
@@ -180,20 +211,27 @@ public class MainActivity extends Activity {
     public class onButtonClickListener implements OnClickListener{
         @Override
         public void onClick(View v) {
+            Log.d(TAG, "on click: " + v.getId());
             // send broadcast
             // int cmd = Constants.CMD_SEND_DATA;
-            int value = (Integer)v.getTag();
-            switch (value) {
-                case Constants.CMD_START_SERVICE:
+            // int value = (Integer)v.getTag();
+            switch (v.getId()) {
+                case R.id.start:
                     Intent intent = new Intent(MainActivity.this, CommandService.class);
-                    // boolean running = isServiceRunning(MainActivity.this, "com.android.test.cmdserver.CommandService");
-                    // if (!running) {
-                        // Log.i(TAG, "startService :" + running);
-                        startService(intent);
-                    // }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(String.valueOf(mSwitchVals[0])).append(" ");
+                    sb.append(String.valueOf(mSwitchVals[1])).append(" ");
+                    sb.append(String.valueOf(mSwitchVals[2])).append(" ");
+                    intent.putExtra("args", sb.toString());
+                    Log.d(TAG, "start");
+                    startService(intent);
                     break;
-                case Constants.CMD_STOP_SERVICE:
-                    mySendBroadcast(Constants.CMD_STOP_SERVICE, 0);
+                case R.id.stop:
+                    Intent intent2 = new Intent();
+                    intent2.setAction("android.intent.action.cmdservice");
+                    intent2.putExtra("cmd", Constants.CMD_STOP_SERVICE);
+                    Log.d(TAG, "stop");
+                    sendBroadcast(intent2);
                     break;
                 default:
                     ;

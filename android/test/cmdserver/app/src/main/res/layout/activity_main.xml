@@ -23,6 +23,103 @@
             android:layout_weight="1"
             android:text="@string/hello_world" />
 
+        <LinearLayout
+            android:id="@+id/_ll_1"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            >
+
+            <TextView
+                android:id="@+id/huitoutiao_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="惠头条" />
+
+            <Switch
+                android:id="@+id/huitoutiao_sw"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:switchMinWidth="20dp"
+                android:textOn="on"
+                android:textOff="off"
+                android:checked="true"
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/_ll_2"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            >
+
+            <TextView
+                android:id="@+id/qutoutiao_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="趣头条" />
+
+            <Switch
+                android:id="@+id/qutoutiao_sw"
+                android:layout_alignRight="@id/huitoutiao_sw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:switchMinWidth="20dp"
+                android:textOn="on"
+                android:textOff="off"
+                android:checked="true"
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/_ll_3"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            >
+
+            <TextView
+                android:id="@+id/toutiaoduoduo_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="头条多多" />
+
+            <Switch
+                android:id="@+id/toutiaoduoduo_sw"
+                android:layout_alignRight="@id/huitoutiao_sw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:switchMinWidth="20dp"
+                android:textOn="on"
+                android:textOff="off"
+                android:checked="true"
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/start"
             android:layout_width="fill_parent"
@@ -35,7 +132,20 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="@string/stop" /> 
+            android:text="@string/stop" />
     </LinearLayout>
 
 </RelativeLayout>
+
+
+<!-- textOn：控件打开时显示的文字 -->
+<!-- textOff：控件关闭时显示的文字 -->
+<!-- thumb：控件开关的图片 -->
+<!-- track：控件开关的轨迹图片 -->
+<!-- typeface：设置字体类型 -->
+<!-- switchMinWidth：开关最小宽度 -->
+<!-- switchPadding：设置开关 与文字的空白距离 -->
+<!-- switchTextAppearance：设置文本的风格 -->
+<!-- checked：设置初始选中状态 -->
+<!-- splitTrack：是否设置一个间隙，让滑块与底部图片分隔（API 21及以上） -->
+<!-- showText：设置是否显示开关上的文字（API 21及以上） -->

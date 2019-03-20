@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.os.Bundle;
 import android.util.Log;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -16,6 +19,7 @@ public class CommandService extends Service {
 	public boolean mQuitFlag = false;
 	MyThread mThread = null;
 	CommandReceiver mCmdReceiver;
+    String mArgs;
 
     int mPid = -1;
     static int mScriptPid = -1;
@@ -50,7 +54,8 @@ public class CommandService extends Service {
 		filter.addAction("android.intent.action.cmdservice");
 		registerReceiver(mCmdReceiver, filter);
 
-		myStartService();
+        Bundle bundle = intent.getExtras();
+        myStartService(bundle.getString("args", ""));
         return START_STICKY;
 	}
 
@@ -59,8 +64,13 @@ public class CommandService extends Service {
 		Log.i(TAG, "onDestroy()");
 		super.onDestroy();
 		this.unregisterReceiver(mCmdReceiver);
-        if (mThread != null)
-            myStopService();
+        // if (mThread != null)
+        //     myStopService();
+        // Intent intent = new Intent(this, MainActivity.class);
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        // AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        // mAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, restartIntent);
 	}
 
     // Process[pid=2869]
@@ -102,24 +112,24 @@ public class CommandService extends Service {
 		public void run() {
 			super.run();
             Log.d(TAG, "Thread run...");
-            int i = 5;
-            try {
-                while (i-- > 0) {
-                    showInfo("start lua: " + i);
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
+            // int i = 5;
+            // try {
+                // while (i-- > 0) {
+                    // showInfo("start lua: " + i);
+                    // Thread.sleep(1000);
+                // }
+            // } catch (Exception e) {
 
-            }
+            // }
             Intent intent = new Intent();
             intent.putExtra("cmd", Constants.CMD_LUALU_RUNNING);
             intent.setAction("android.intent.action.cmdactivity");
             sendBroadcast(intent);
 			while(!mQuitFlag) {
 				try {
-                    Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mPid);
-                    sudo("/system/bin/sh /data/auto_lualu.sh " + mPid, 1);
-                    Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mPid);
+                    Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mArgs);
+                    sudo("/system/bin/sh /data/auto_lualu.sh " + mArgs, 1);
+                    Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mArgs);
                     if (mQuitFlag)
                         break;
 					Thread.sleep(10000);
@@ -135,6 +145,7 @@ public class CommandService extends Service {
             intent.setAction("android.intent.action.cmdactivity");
             sendBroadcast(intent);
             mThread = null;
+            mQuitFlag = false;
 		}
 	}
 
@@ -160,7 +171,8 @@ public class CommandService extends Service {
 	/*
 	 * Called by onStartCommand, initialize and start runtime thread
 	 */
-	private void myStartService() {
+	private void myStartService(String args) {
+        mArgs = args;
 		//TODO initialize device
         Log.d(TAG, "myStartService");
         mQuitFlag = false;
@@ -210,12 +222,15 @@ public class CommandService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals("android.intent.action.cmdservice")) {
 				int cmd = intent.getIntExtra("cmd", -1);
+                Log.d(TAG, "get cmd: " + cmd);
 				int value = intent.getIntExtra("value", -1);
                 switch (cmd) {
                     case Constants.CMD_STOP_SERVICE:
                         myStopService();
+                        break;
                     case Constants.CMD_SEND_DATA:
                         myHandlerData(value);
+                        break;
                     default:
                         ;
                 }
