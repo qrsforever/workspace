@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/system/bin/sh
+
+setenforce 0
 
 log_file=/data/lualu.txt
 pid_file=/data/lualu.pid
@@ -12,6 +14,12 @@ sid=`getprop ro.boot.serialno`
 # shixuan: LE67A06120111457
 # google: 06816cef0b3535c2
 
+if [[ $sid == "b37da191" ]]
+then
+    # first parameter is ui
+    shift
+fi
+
 if [[ ! -f $pid_file ]]
 then
     touch $pid_file
@@ -21,7 +29,10 @@ last_pid=`cat $pid_file`
 
 echo "shell pid $$, caller args: $*, last pid: $last_pid" > $log_file
 
-kill -9 $last_pid
+if [[ x$last_pid != x ]]
+then
+    kill -9 $last_pid
+fi
 
 if [[ x$1 == xkill ]]
 then
@@ -85,8 +96,6 @@ if [[ x$3 == x0 ]]
 then
     duo=0
 fi
-
-setenforce 0
 
 sleep 3
 

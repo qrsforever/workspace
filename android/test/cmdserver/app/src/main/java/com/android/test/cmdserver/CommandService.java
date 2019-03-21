@@ -14,12 +14,17 @@ import android.app.PendingIntent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import java.lang.reflect.Method;
+import android.os.Build;
+
 public class CommandService extends Service {
-	protected String TAG = "QRS-CommandService";
+	final static String TAG = "QRS-CommandService";
 	public boolean mQuitFlag = false;
 	MyThread mThread = null;
 	CommandReceiver mCmdReceiver;
     String mArgs;
+
+    String mProduct = Build.PRODUCT;
 
     int mPid = -1;
     static int mScriptPid = -1;
@@ -72,6 +77,17 @@ public class CommandService extends Service {
         // AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         // mAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, restartIntent);
 	}
+
+    public static void setProperty(String key, String value) {    
+        try {    
+            Class<?> c = Class.forName("android.os.SystemProperties");  
+            Method set = c.getMethod("set", String.class, String.class);
+            set.invoke(c, key, value );
+        } catch (Exception e) {
+            Log.d(TAG, "setProperty====exception=");
+            e.printStackTrace();
+        }  
+    }
 
     // Process[pid=2869]
     public int getPIDFromProcessToString(String s) {
@@ -128,12 +144,17 @@ public class CommandService extends Service {
 			while(!mQuitFlag) {
 				try {
                     Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mArgs);
-                    sudo("/system/bin/sh /data/auto_lualu.sh " + mArgs, 1);
-                    Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mArgs);
-                    if (mQuitFlag)
-                        break;
-					Thread.sleep(10000);
-                    Log.d(TAG, "quit, again");
+                    if (mProduct.equals("LeMax2_CN")) {
+                        setProperty("ctl.start", "letv_fts_service:" + mArgs);
+                        Thread.sleep(1000);
+                    } else {
+                        sudo("/system/bin/sh /data/auto_lualu.sh " + mArgs, 1);
+                        Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mArgs);
+                        if (mQuitFlag)
+                            break;
+                        Thread.sleep(10000);
+                        Log.d(TAG, "quit, again");
+                    }
 				} catch(Exception e){
                     Log.d(TAG, "error");
 					e.printStackTrace();
@@ -174,7 +195,7 @@ public class CommandService extends Service {
 	private void myStartService(String args) {
         mArgs = args;
 		//TODO initialize device
-        Log.d(TAG, "myStartService");
+        Log.d(TAG, "myStartService: " + mProduct);
         mQuitFlag = false;
         if (mThread == null) {
             mThread = new MyThread();
@@ -193,7 +214,11 @@ public class CommandService extends Service {
             // public void run() {
 				try {
                     Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
-                    sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
+                    if (mProduct.equals("LeMax2_CN")) {
+                        setProperty("ctl.stop", "letv_fts_service");
+                    } else {
+                        sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
+                    }
 					Thread.sleep(2000);
 				} catch(Exception e){
                     Log.d(TAG, "error");
