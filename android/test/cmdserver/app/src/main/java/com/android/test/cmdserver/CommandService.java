@@ -78,17 +78,6 @@ public class CommandService extends Service {
         // mAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, restartIntent);
 	}
 
-    public static void setProperty(String key, String value) {    
-        try {    
-            Class<?> c = Class.forName("android.os.SystemProperties");  
-            Method set = c.getMethod("set", String.class, String.class);
-            set.invoke(c, key, value );
-        } catch (Exception e) {
-            Log.d(TAG, "setProperty====exception=");
-            e.printStackTrace();
-        }  
-    }
-
     // Process[pid=2869]
     public int getPIDFromProcessToString(String s) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -141,11 +130,15 @@ public class CommandService extends Service {
             intent.putExtra("cmd", Constants.CMD_LUALU_RUNNING);
             intent.setAction("android.intent.action.cmdactivity");
             sendBroadcast(intent);
+            int flag = 0;
 			while(!mQuitFlag) {
 				try {
-                    Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mArgs);
                     if (mProduct.equals("LeMax2_CN")) {
-                        setProperty("ctl.start", "letv_fts_service:" + mArgs);
+                        if (flag == 0) {
+                            Log.i(TAG, "BEG: /system/bin/sh /data/auto_lualu.sh " + mArgs);
+                            Utils.setProperty("ctl.start", "letv_fts_service:" + mArgs);
+                            flag = 1;
+                        }
                         Thread.sleep(1000);
                     } else {
                         sudo("/system/bin/sh /data/auto_lualu.sh " + mArgs, 1);
@@ -215,7 +208,7 @@ public class CommandService extends Service {
 				try {
                     Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
                     if (mProduct.equals("LeMax2_CN")) {
-                        setProperty("ctl.stop", "letv_fts_service");
+                        Utils.setProperty("ctl.stop", "letv_fts_service");
                     } else {
                         sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
                     }

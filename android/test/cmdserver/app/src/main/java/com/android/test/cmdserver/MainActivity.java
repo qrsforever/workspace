@@ -20,6 +20,8 @@ import android.widget.Switch;
 import java.util.ArrayList;
 import android.app.ActivityManager;
 import android.text.TextUtils;
+import android.os.Build;
+import java.lang.reflect.Method;
 
 public class MainActivity extends Activity implements OnCheckedChangeListener {
     static final String TAG = "QRS-MainActivity";
@@ -31,18 +33,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
     private MyApplication myApplication;
     int mSwitchVals[] = { 1, 1, 1 };
 
-    public static boolean isServiceRunning(Context context, String ServiceName) {
-        if (TextUtils.isEmpty(ServiceName))
-            return false;
-        ActivityManager myManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        ArrayList<ActivityManager.RunningServiceInfo> runningService =
-            (ArrayList<ActivityManager.RunningServiceInfo>)myManager.getRunningServices(80);
-        for (int i = 0; i < runningService.size(); i++) {
-            if (runningService.get(i).service.getClassName().toString().equals(ServiceName))
-                return true;
-        }
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +106,18 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-        boolean running = isServiceRunning(this, "com.android.test.cmdserver.CommandService");
+        boolean running = Utils.isServiceRunning(this, "com.android.test.cmdserver.CommandService");
         if (running) {
             mTxt.setText("正在努力薅羊毛..");
             mBtnStart.setEnabled(false);
             mBtnStop.setEnabled(true);
+        } else {
+            if (Build.PRODUCT.equals("LeMax2_CN")) {
+                String value = Utils.getProperty("init.svc.letv_fts_service");
+                if ("running".equals(value))
+                    Utils.setProperty("ctl.stop", "letv_fts_service");
+            }
+            mBtnStop.setEnabled(false);
         }
         if (mReceiver == null) {
             mReceiver = new MyReceiver(mTxt);
