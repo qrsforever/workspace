@@ -5,74 +5,94 @@ setenforce 0
 log_file=/data/lualu.txt
 pid_file=/data/lualu.pid
 
-busybox=`which busybox`
+mv $log_file ${log_file}_bak
+echo "shell pid $$, caller args: $*" > $log_file
 
+cut="cut"
 sid=`getprop ro.boot.serialno`
-# redmi: c060751
-# xiaomi: 56ed266
-# leshi: b37da191
-# shixuan: LE67A06120111457
-# google: 06816cef0b3535c2
-
-if [[ $sid == "b37da191" ]]
+if [[ $sid == "c060751" ]]
 then
+    __myecho "red mi"
+    cut="toybox cut"
+elif [[ $sid == "56ed266" ]]
+then
+    __myecho "xiao mi"
+elif [[ $sid == "b37da191" ]]
+then
+    __myecho "leshi"
     # first parameter is ui
     shift
-fi
-
-if [[ ! -f $pid_file ]]
+elif [[ $sid == "88e0b2bb" ]]
 then
-    touch $pid_file
+    __myecho "oppo"
+    cut="busybox cut"
 fi
 
-last_pid=`cat $pid_file`
+__myecho() {
+    dt=`date`
+    echo "$dt:$*" >> $log_file
+}
 
-echo "shell pid $$, caller args: $*, last pid: $last_pid" > $log_file
+_kill_android_test() {
+    pidstr=`ps | grep "com.android.test.$1"`
+    if [[ x$pidstr != x ]]
+    then
+        __myecho "test: $pidstr"
+        pid=`echo $pidstr | $cut -d\  -f2`
+        __myecho "parse pid = $pid"
+        if [[ x$pid != x ]]
+        then
+            kill -9 $pid
+            __myecho "kill com.android.test.$1[$pid]"
+        else
+            __myecho "no com.android.test.$1 pid"
+        fi
+    else
+        __myecho "no com.android.test.$1 process"
+    fi
+}
+
+_kill_android_test qutoutiao
+_kill_android_test cashtoutiao
+_kill_android_test toutiaoduoduo
+
+__read_pid() {
+    if [[ ! -f $pid_file ]]
+    then
+        pid=
+    else
+        pid=`cat $pid_file`
+    fi
+    echo $pid
+}
+
+last_pid=$(__read_pid)
 
 if [[ x$last_pid != x ]]
 then
     kill -9 $last_pid
+    __myecho "kill last pid: $last_pid"
+    rm $pid_file
 fi
 
 if [[ x$1 == xkill ]]
 then
-    echo "kill last pid: $last_pid" >> $log_file
-    pid1=`ps | grep "com.android.test.qutoutiao"`
-    pid2=`ps | grep "com.android.test.cashtoutiao"`
-    pid3=`ps | grep "com.android.test.toutiaoduoduo"`
-    if [[ x$pid1 != x ]]
-    then
-        pid=`echo "$pid1" | $busybox cut -d\  -f4`
-        if [[ x$pid != x ]]
-        then
-            kill -9 $pid
-            echo "kill com.android.test: $pid" >> $log_file
-        fi
-    fi
-
-    if [[ x$pid2 != x ]]
-    then
-        pid=`echo "$pid2" | $busybox cut -d\  -f4`
-        if [[ x$pid != x ]]
-        then
-            kill -9 $pid
-            echo "kill com.android.test: $pid" >> $log_file
-        fi
-    fi
-
-    if [[ x$pid3 != x ]]
-    then
-        pid=`echo "$pid3" | $busybox cut -d\  -f4`
-        if [[ x$pid != x ]]
-        then
-            kill -9 $pid
-            echo "kill com.android.test: $pid" >> $log_file
-        fi
-    fi
     exit 0	
 fi
 
-echo $$ > $pid_file 
+curr_pid=$$
+echo $curr_pid > $pid_file 
+
+_run_am_instrument() {
+    __myecho "run am : $1"
+    am instrument -w com.android.test.$1.test/android.support.test.runner.AndroidJUnitRunner
+    if [[ x$curr_pid != x$(__read_pid) ]]
+    then
+        __myecho "curr_pid:$curr_pid vs last_pid: $last_pid"
+        exit -1
+    fi
+    sleep $sltm
+}
 
 max=23
 min=7
@@ -97,22 +117,16 @@ then
     duo=0
 fi
 
-sleep 3
-
-_run_am_instrument() {
-    echo "run am : $1" >> $log_file
-    am instrument -w com.android.test.$1.test/android.support.test.runner.AndroidJUnitRunner
-    sleep $sltm
-}
+sleep 2
 
 while ((1))
 do
     hour=`date +"%-H"`
     day=`date +"%-d"`
-    echo "now hour: $hour" >> $log_file
+    __myecho "now hour: $hour"
     if (( $hour > $max || $hour < $min ))
     then
-        echo "sleep..."
+        __myecho "sleep..."
         sleep 900
         continue
     fi
@@ -148,7 +162,7 @@ do
 
     (( r=$RANDOM % 3 ))
 
-    echo "random: $r" >> $log_file
+    __myecho "random: $r"
     if [[ x$r == x"0" ]]
     then
         if [[ x$hui == x"1" ]]
@@ -194,7 +208,7 @@ do
     fi
 done
 
-echo "never run here" >> $log_file
+__myecho "never run here"
 
 # adb uninstall com.android.test.[qutoutiao|cashtoutiao|toutiaoduoduo]
 # adb uninstall com.android.test.[qutoutiao|cashtoutiao|toutiaoduoduo].test

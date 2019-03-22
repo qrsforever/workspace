@@ -57,7 +57,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
     };
 
     public static String[] mNewsLists = {
-        "推荐", "娱乐", "推荐"
+        "推荐", "娱乐", "养生", "国内", "推荐"
     };
 
     public void sudo(String cmd) {
@@ -123,6 +123,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 Log.d(TAG, "qrs Do Tasks");
                 if (flag == 0) {
                     sleep(3000);
+                    mDevice.pressBack();
                     doTask();
                     flag = 1;
                 }
@@ -158,7 +159,9 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
         try {
             // mDevice.executeShellCommand("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
             sudo("am start -n  com.lite.infoflow/com.lite.infoflow.launcher.LauncherActivity");
-            sleep(6000);
+            sleep(4000);
+            mDevice.pressBack();
+            sleep(2000);
         } catch (Exception e) {
             Log.d(TAG, "qrs start lite activity error: " + e);
         }
@@ -196,30 +199,30 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                 et.click();
                 sleep(1000);
                 _Input_Swipe(620, 720, 620, 1250, 800);
-                sleep(3000);
-                int i = mNewsLists[idx].contains("推荐") ? 0 : 5;
-                for (i = 0; i < 3; ++i) {
-                    try {
-                        mDevice.pressBack();
-                        UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
-                        Rect rect = red.getBounds();
-                        Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
-                        int x0 = rect.left;
-                        int y0 = rect.bottom;
-                        // int x1 = rect.right;
-                        // int y1 = rect.bottom;
-                        x0 += 500;
-                        y0 += 30;
-                        Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
-                        mDevice.click(x0, y0);
-                        break;
-                    } catch (Exception e1) {
-                        Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
-                        _Input_Swipe(620, 1625, 620, 450, 500);
+                sleep(1000);
+                int i;
+                if (mNewsLists[idx].contains("推荐")) {
+                    for (i = 0; i < 2; ++i) {
+                        try {
+                            mDevice.pressBack();
+                            UiObject red = new UiObject(new UiSelector().className("android.widget.TextView").textStartsWith("[红包]"));
+                            Rect rect = red.getBounds();
+                            Log.d(TAG, "Red [" + rect.left + "," + rect.top + ", " + rect.right + ", " + rect.bottom + "]");
+                            int x0 = rect.left;
+                            int y0 = rect.bottom;
+                            // int x1 = rect.right;
+                            // int y1 = rect.bottom;
+                            x0 += 500;
+                            y0 += 30;
+                            Log.d(TAG, "Hit [" + x0 + "," + y0 + "]");
+                            mDevice.click(x0, y0);
+                            break;
+                        } catch (Exception e1) {
+                            Log.d(TAG, "not found redpack, turn swipe screen to find: " + i);
+                            _Input_Swipe(620, 1625, 620, 450, 500);
+                        }
                     }
-                }
-
-                if (i == 3) {
+                } else {
                     try {
                         UiObject ad = new UiObject(new UiSelector().className("android.widget.TextView").text("广告"));
                         Rect rect = ad.getBounds();
@@ -231,7 +234,7 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                         Log.d(TAG, "Hit [" + x1 + "," + y1 + "]");
                         mDevice.click(x1, y1);
                     } catch (Exception e2) {
-                        Log.d(TAG, "qrs error: " + e2);
+                        Log.d(TAG, "qrs not found ad: " + e2);
                         _Input_Tap(620, 820);
                     }
                 }
@@ -251,30 +254,33 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
 
     public void doTask() throws UiObjectNotFoundException {
         /* 底部的任务 */
-        try {
-            UiObject task = new UiObject(new UiSelector().text("赚钱"));
-            task.click();
-            sleep(1000);
-            _Input_Tap(1150, 140);
-            sleep(3000);
-            _Input_Tap(900, 590);
-            mDevice.pressBack();
-        } catch (Exception e) {
-            Log.d(TAG, "qrs error: " + e);
+        for (int i = 0; i < 2; ++i) {
+            try {
+                UiObject task = new UiObject(new UiSelector().text("赚钱"));
+                task.click();
+                sleep(1000);
+                _Input_Tap(1150, 140);
+                sleep(3000);
+                _Input_Tap(900, 590);
+                mDevice.pressBack();
+            } catch (Exception e) {
+                Log.d(TAG, "qrs error: " + e);
+                mDevice.pressBack();
+            }
         }
 
         UiObject task2 = new UiObject(new UiSelector().text("首页"));
         task2.click();
         sleep(1000);
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 3; ++i) {
             try {
                 UiObject so1 = new UiObject(new UiSelector().text("搜索或输入网址"));
                 so1.click();
                 sleep(200);
 
                 /* 撸搜索(主动) */
-                if (i < 2) {
+                if (i == 0) {
                     try {
                         int idx = new Random().nextInt(mSoso.length);
                         UiObject so2 = new UiObject(new UiSelector().text("搜你想搜的"));
@@ -288,10 +294,8 @@ public class ToutiaoDuoduoAndroidTest extends UiAutomatorTestCase {
                         mDevice.pressBack();
                         continue;
                     }
-                }
-
-                /* 撸搜索(热点) */
-                if (i > 1) {
+                } else {
+                    /* 撸搜索(热点) */
                     try {
                         _Input_Tap(620, 620);
                         sleep(1000);
