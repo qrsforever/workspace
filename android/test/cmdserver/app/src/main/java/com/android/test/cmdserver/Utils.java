@@ -16,11 +16,11 @@ public class Utils {
         try {    
             Class<?> c = Class.forName("android.os.SystemProperties");  
             Method get = c.getMethod("get", String.class, String.class);
-            String value = (String)(get.invoke(c, key, "stop"));
+            String value = (String)(get.invoke(c, key, "stopped"));
             Log.d(TAG, "value = " + value);
             return value;
         } catch (Exception e) {
-            Log.d(TAG, "getProperty====exception=");
+            Log.d(TAG, "getProperty");
             e.printStackTrace();
         }  
         return null;
@@ -32,7 +32,7 @@ public class Utils {
             Method set = c.getMethod("set", String.class, String.class);
             set.invoke(c, key, value );
         } catch (Exception e) {
-            Log.d(TAG, "setProperty====exception=");
+            Log.d(TAG, "setProperty");
             e.printStackTrace();
         }  
     }

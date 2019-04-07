@@ -209,10 +209,12 @@ public class CommandService extends Service {
                     Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
                     if (mProduct.equals("LeMax2_CN")) {
                         Utils.setProperty("ctl.stop", "letv_fts_service");
+                        Thread.sleep(1000);
+                        Utils.setProperty("ctl.start", "letv_fts_service:kill");
                     } else {
                         sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
                     }
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch(Exception e){
                     Log.d(TAG, "error");
 					e.printStackTrace();
