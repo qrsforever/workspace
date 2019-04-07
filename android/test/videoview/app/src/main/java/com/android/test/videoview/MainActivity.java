@@ -5,7 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
+import java.io.OutputStream;
+import java.io.IOException;
 
+import android.util.Log;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -24,23 +28,29 @@ import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Environment;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	// 自定义VideoView
+	final static String TAG = "QRS-MainActivity";
+
+    private static final int REQUEST_DISCOVERY = 0x1;
 	private FullScreenVideoView mVideo;
-
-	// 头部View
 	private View mTopView;
-
-	// 底部View
 	private View mBottomView;
-	// 视频播放拖动条
 	private SeekBar mSeekBar;
 	private ImageView mPlay;
 	private TextView mPlayTime;
@@ -50,28 +60,38 @@ public class MainActivity extends Activity implements OnClickListener {
 	private AudioManager mAudioManager;
 
 	// 屏幕宽高
-	private float width;
-	private float height;
+	private float mWidth;
+	private float mHeight;
 
 	// 视频播放时间
 	private int playTime;
 
-	// private String videoUrl = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
     private String videoUrl = "";
-    
+
 	// 自动隐藏顶部和底部View的时间
 	private static final int HIDE_TIME = 5000;
 
 	// 声音调节Toast
 	private VolumnController volumnController;
 
-	// 原始屏幕亮度
-	private int orginalLight;
+    // 建立蓝牙通信的UUID
+    // private static final UUID mUuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    // 自带的蓝牙适配器
+    // private BluetoothAdapter mBluetoothAdapter = null;
+    // 扫描得到的蓝牙设备
+    // private BluetoothDevice mDevice = null;
+    // 蓝牙通信socket
+    // private BluetoothSocket mBtSocket = null;
+    // 手机输出流
+    // private OutputStream mOutStream = null;
+    // public static BluetoothReceiver mReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        videoUrl = "android.resource://" + getPackageName() + "/" + R.raw.test;
+
+        // 视频路径: res/raw/seabird.mp4
+        videoUrl = "android.resource://" + getPackageName() + "/" + R.raw.seabird;
 		setContentView(R.layout.activity_main);
 		volumnController = new VolumnController(this);
 		mVideo = (FullScreenVideoView) findViewById(R.id.videoview);
@@ -84,26 +104,100 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-		width = DensityUtil.getWidthInPx(this);
-		height = DensityUtil.getHeightInPx(this);
+		mWidth = DensityUtil.getWidthInPx(this);
+		mHeight = DensityUtil.getHeightInPx(this);
 		threshold = DensityUtil.dip2px(this, 18);
-
-		orginalLight = LightnessController.getLightness(this);
 
 		mPlay.setOnClickListener(this);
 		mSeekBar.setOnSeekBarChangeListener(mSeekBarChangeListener);
 
+        // mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // bluetoothAction();
+        // connectToDevice();
         playVideo();
 	}
+
+
+    // public void bluetoothAction() {
+    //     if (mBluetoothAdapter != null) {
+    //         if (!mBluetoothAdapter.isEnabled()) {
+    //             Log.d(TAG, "enable blue");
+    //             mBluetoothAdapter.enable();
+
+    //             mBluetoothAdapter.startDiscovery();
+    //             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+    //             mReceiver = new BluetoothReceiver();
+    //             registerReceiver(mReceiver, filter);
+    //         }
+    //     } else
+    //         this.finish();
+    // }
+
+    // public void connectToDevice() {
+    //     if (mBluetoothAdapter.isEnabled()) {
+    //         Intent intent = new Intent(this, DiscoveryActivity.class);
+    //         displayLongToast("请选择一个蓝牙设备进行连接！");
+    //         this.startActivityForResult(intent, REQUEST_DISCOVERY);
+    //     } else {
+    //         this.finish();
+    //     }
+    // }
+
+    // private class BluetoothReceiver extends BroadcastReceiver {
+
+    //     @Override
+    //     public void onReceive(Context context, Intent intent) {
+    //     } 
+    // }
+
+    // @Override
+    // protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //     Log.d(TAG, "onActivityResult(" + requestCode + ", " + resultCode + ")");
+    //     if (requestCode != REQUEST_DISCOVERY) {
+    //         return;
+    //     }
+    //     if (resultCode != RESULT_OK) {
+    //         return;
+    //     }
+
+    //     String addressStr = data.getStringExtra("address");
+    //     mDevice = mBluetoothAdapter.getRemoteDevice(addressStr);
+    //     try {
+    //         mBtSocket = mDevice.createRfcommSocketToServiceRecord(mUuid);
+    //     } catch (Exception e) {
+    //         displayLongToast("通信通道创建失败！");
+    //     }
+
+    //     if (mBtSocket != null) {
+    //         try {
+    //             mBtSocket.connect();
+    //             displayLongToast("通信通道连接成功！");
+    //         } catch (IOException ioe) {
+    //             displayLongToast("通信通道连接失败！");
+    //             try {
+    //                 mBtSocket.close();
+    //                 displayLongToast("通信通道已关闭！");
+    //             } catch (IOException ioe2) {
+    //                 displayLongToast("通信通道尚未连接，无法关闭！");
+    //             }
+    //         }
+    //         try {
+    //             mOutStream = mBtSocket.getOutputStream();
+    //         } catch (IOException e) {
+    //             displayLongToast("数据流创建失败！");
+    //         }
+    //     }
+    // }
+
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			height = DensityUtil.getWidthInPx(this);
-			width = DensityUtil.getHeightInPx(this);
+			mHeight = DensityUtil.getWidthInPx(this);
+			mWidth = DensityUtil.getHeightInPx(this);
 		} else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-			width = DensityUtil.getWidthInPx(this);
-			height = DensityUtil.getHeightInPx(this);
+			mWidth = DensityUtil.getWidthInPx(this);
+			mHeight = DensityUtil.getHeightInPx(this);
 		}
 		super.onConfigurationChanged(newConfig);
 	}
@@ -111,7 +205,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		LightnessController.setLightness(this, orginalLight);
 	}
 
 	private OnSeekBarChangeListener mSeekBarChangeListener = new OnSeekBarChangeListener() {
@@ -138,7 +231,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void backward(float delataX) {
 		int current = mVideo.getCurrentPosition();
-		int backwardTime = (int) (delataX / width * mVideo.getDuration());
+		int backwardTime = (int) (delataX / mWidth * mVideo.getDuration());
 		int currentTime = current - backwardTime;
 		mVideo.seekTo(currentTime);
 		mSeekBar.setProgress(currentTime * 100 / mVideo.getDuration());
@@ -147,7 +240,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void forward(float delataX) {
 		int current = mVideo.getCurrentPosition();
-		int forwardTime = (int) (delataX / width * mVideo.getDuration());
+		int forwardTime = (int) (delataX / mWidth * mVideo.getDuration());
 		int currentTime = current + forwardTime;
 		mVideo.seekTo(currentTime);
 		mSeekBar.setProgress(currentTime * 100 / mVideo.getDuration());
@@ -157,7 +250,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private void volumeDown(float delatY) {
 		int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		int current = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		int down = (int) (delatY / height * max * 3);
+		int down = (int) (delatY / mHeight * max * 3);
 		int volume = Math.max(current - down, 0);
 		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
 		int transformatVolume = volume * 100 / max;
@@ -167,23 +260,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	private void volumeUp(float delatY) {
 		int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		int current = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		int up = (int) ((delatY / height) * max * 3);
+		int up = (int) ((delatY / mHeight) * max * 3);
 		int volume = Math.min(current + up, max);
 		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
 		int transformatVolume = volume * 100 / max;
 		volumnController.show(transformatVolume);
-	}
-
-	private void lightDown(float delatY) {
-		int down = (int) (delatY / height * 255 * 3);
-		int transformatLight = LightnessController.getLightness(this) - down;
-		LightnessController.setLightness(this, transformatLight);
-	}
-
-	private void lightUp(float delatY) {
-		int up = (int) (delatY / height * 255 * 3);
-		int transformatLight = LightnessController.getLightness(this) + up;
-		LightnessController.setLightness(this, transformatLight);
 	}
 
 	@Override
@@ -214,7 +295,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					mPlayTime.setText("00:00");
 					mSeekBar.setProgress(0);
 				}
-				
+
 				break;
 			case 2:
 				showOrHide();
@@ -322,20 +403,11 @@ public class MainActivity extends Activity implements OnClickListener {
 					return true;
 				}
 				if (isAdjustAudio) {
-					if (x < width / 2) {
-						if (deltaY > 0) {
-							lightDown(absDeltaY);
-						} else if (deltaY < 0) {
-							lightUp(absDeltaY);
-						}
-					} else {
-						if (deltaY > 0) {
-							volumeDown(absDeltaY);
-						} else if (deltaY < 0) {
-							volumeUp(absDeltaY);
-						}
-					}
-
+                    if (deltaY > 0) {
+                        volumeDown(absDeltaY);
+                    } else if (deltaY < 0) {
+                        volumeUp(absDeltaY);
+                    }
 				} else {
 					if (deltaX > 0) {
 						forward(absDeltaX);
@@ -444,4 +516,17 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	}
 
+    public void displayLongToast(String str) {
+        Toast toast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.TOP, 0, (int)(mHeight/2));
+        toast.show();
+        Log.d(TAG, str);
+    }
+
+    public void displayShortToast(String str) {
+        Toast toast = Toast.makeText(this, str, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP, 0, (int)(mHeight/2));
+        toast.show();
+        Log.d(TAG, str);
+    }
 }
