@@ -137,6 +137,7 @@ public class BluetoothActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "onClick: v.getId() = " + v.getId());
         if (v.getId() == R.id.tv_discovery) {
             beginDiscovery();
         }
@@ -157,12 +158,14 @@ public class BluetoothActivity extends AppCompatActivity implements
     private Runnable mRefresh = new Runnable() {
         @Override
         public void run() {
+            Log.d(TAG, "postDelayed 2000");
             beginDiscovery();
             mHandler.postDelayed(this, 2000);
         }
     };
 
     private void beginDiscovery() {
+        Log.d(TAG, "beginDiscovery");
         if (mBluetooth.isDiscovering() != true) {
             mDeviceList.clear();
             BlueListAdapter adapter = new BlueListAdapter(BluetoothActivity.this, mDeviceList);
@@ -173,6 +176,7 @@ public class BluetoothActivity extends AppCompatActivity implements
     }
 
     private void cancelDiscovery() {
+        Log.d(TAG, "remove refresh");
         mHandler.removeCallbacks(mRefresh);
         tv_discovery.setText("取消搜索蓝牙设备");
         if (mBluetooth.isDiscovering() == true) {
@@ -182,6 +186,7 @@ public class BluetoothActivity extends AppCompatActivity implements
 
     @Override
     protected void onStart() {
+        Log.d(TAG, "onStart");
         super.onStart();
         mHandler.postDelayed(mRefresh, 50);
         blueReceiver = new BluetoothReceiver();
@@ -205,10 +210,10 @@ public class BluetoothActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d(TAG, "onReceive action=" + action);
             // 获得已经搜索到的蓝牙设备
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.d(TAG, "name: " + device.getName() + " address: " + device.getAddress() + " state: " + device.getBondState());
                 BlueDevice item = new BlueDevice(device.getName(), device.getAddress(), device.getBondState() - 10);
                 mDeviceList.add(item);
                 BlueListAdapter adapter = new BlueListAdapter(BluetoothActivity.this, mDeviceList);
@@ -223,7 +228,7 @@ public class BluetoothActivity extends AppCompatActivity implements
                     tv_discovery.setText("正在配对" + device.getName());
                 } else if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                     tv_discovery.setText("完成配对" + device.getName());
-                    mHandler.postDelayed(mRefresh, 50);
+                    // mHandler.postDelayed(mRefresh, 50);
                 } else if (device.getBondState() == BluetoothDevice.BOND_NONE) {
                     tv_discovery.setText("取消配对" + device.getName());
                 }
