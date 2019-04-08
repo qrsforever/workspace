@@ -154,6 +154,9 @@ do
             input keyevent POWER
         fi
         input swipe 500 1080 500 600 500
+    elif [[ x$sid == x"LE67A06120111457" ]]
+    then
+        input swipe 500 1080 500 200 500
     else
         input swipe 500 1080 500 600 500
     fi

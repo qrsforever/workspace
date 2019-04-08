@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView mPlayTime;
 	private TextView mDurationTime;
 
+
 	// 音频管理器
 	private AudioManager mAudioManager;
 
