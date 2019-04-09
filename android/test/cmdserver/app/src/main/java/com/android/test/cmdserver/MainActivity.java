@@ -117,6 +117,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
                 if ("running".equals(value))
                     Utils.setProperty("ctl.stop", "letv_fts_service");
             }
+            mBtnStart.setEnabled(true);
             mBtnStop.setEnabled(false);
         }
         if (mReceiver == null) {

@@ -12,8 +12,11 @@ cut="cut"
 sid=`getprop ro.boot.serialno`
 if [[ $sid == "c060751" ]]
 then
-    __myecho "red mi"
+    __myecho "red mi 5A Note"
     cut="toybox cut"
+elif [[ $sid == "2855c05b7cf5" ]]
+then
+    __myecho "red mi 5A"
 elif [[ $sid == "56ed266" ]]
 then
     __myecho "xiao mi"
@@ -24,7 +27,7 @@ then
     shift
 elif [[ $sid == "88e0b2bb" ]]
 then
-    __myecho "oppo"
+    __myecho "unkown"
     cut="busybox cut"
 fi
 
