@@ -9,6 +9,7 @@ mv $log_file ${log_file}_bak
 echo "shell pid $$, caller args: $*" > $log_file
 
 cut="cut"
+ff=2
 sid=`getprop ro.boot.serialno`
 if [[ $sid == "c060751" ]]
 then
@@ -25,6 +26,9 @@ then
     __myecho "leshi"
     # first parameter is ui
     shift
+elif [[ $sid == "d635a8fa" ]]
+then
+    __myecho "max1"
 elif [[ $sid == "88e0b2bb" ]]
 then
     __myecho "unkown"
@@ -33,6 +37,7 @@ fi
 
 __myecho() {
     dt=`date`
+    echo "$dt:$*"
     echo "$dt:$*" >> $log_file
 }
 
@@ -41,7 +46,7 @@ _kill_android_test() {
     if [[ x$pidstr != x ]]
     then
         __myecho "test: $pidstr"
-        pid=`echo $pidstr | $cut -d\  -f2`
+        pid=`echo $pidstr | $cut -d\  -f$ff`
         __myecho "parse pid = $pid"
         if [[ x$pid != x ]]
         then
@@ -87,13 +92,14 @@ curr_pid=$$
 echo $curr_pid > $pid_file 
 
 _run_am_instrument() {
-    __myecho "run am : $1"
-    am instrument -w com.android.test.$1.test/android.support.test.runner.AndroidJUnitRunner
+    __myecho "currpid: $curr_pid vs $(__read_pid)"
     if [[ x$curr_pid != x$(__read_pid) ]]
     then
         __myecho "curr_pid:$curr_pid vs last_pid: $last_pid"
         exit -1
     fi
+    __myecho "run am : $1"
+    am instrument -w com.android.test.$1.test/android.support.test.runner.AndroidJUnitRunner
     sleep $sltm
 }
 
@@ -139,11 +145,14 @@ do
     # 破锁屏
     if [[ x$sid == x"c060751" ]]
     then
-        # if [ "$(dumpsys power | grep state= | grep -oE '(ON|OFF)')" == OFF ]
-        # then
-        #     input keyevent POWER
-        # fi
         input swipe 500 1080 500 600 500
+    elif [[ $sid == "d635a8fa" ]]
+    then
+        if [ "$(dumpsys power | grep state= | grep -oE '(ON|OFF)')" == OFF ]
+        then
+            input keyevent POWER
+        fi
+        input swipe 500 1080 500 200 500
     elif [[ x$sid == x"56ed266" ]]
     then
         input swipe 500 1080 500 600 500

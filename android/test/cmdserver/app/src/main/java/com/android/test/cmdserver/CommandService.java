@@ -147,6 +147,13 @@ public class CommandService extends Service {
                             flag = 1;
                         }
                         Thread.sleep(1000);
+                    } else if (mProduct.equals("max1")) {
+                        if (flag == 0) {
+                            Log.i(TAG, "BEG: ctl.start tinyproxy:" + mArgs);
+                            Utils.setProperty("ctl.start", "tinyproxy:" + mArgs);
+                            flag = 1;
+                        }
+                        Thread.sleep(1000);
                     } else {
                         sudo("/system/bin/sh /data/auto_lualu.sh " + mArgs, 1);
                         Log.i(TAG, "END: /system/bin/sh /data/auto_lualu.sh " + mArgs);
@@ -222,6 +229,10 @@ public class CommandService extends Service {
                         Utils.setProperty("ctl.stop", "wechatproxy");
                         Thread.sleep(1000);
                         Utils.setProperty("ctl.start", "wechatproxy:kill");
+                    } else if (mProduct.equals("max1")) {
+                        Utils.setProperty("ctl.stop", "tinyproxy");
+                        Thread.sleep(1000);
+                        Utils.setProperty("ctl.start", "tinyproxy:kill");
                     } else {
                         sudo("/system/bin/sh /data/auto_lualu.sh kill", 0);
                     }
