@@ -2,7 +2,7 @@
 import scrapy
 import re
 
-from crawlstocks.items import StockCodeItem
+from crawlstocks.items import GuchengStockCodeItem
 
 re_name_code = re.compile(r'(?P<name>.+)\((?P<code>[0369]\d{5})\)')
 
@@ -12,11 +12,11 @@ class GuchengstocklistSpider(scrapy.Spider):
     start_urls = ['https://hq.gucheng.com/gpdmylb.html']
 
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.CrawlListPipeline':200}
+            'ITEM_PIPELINES' : {'crawlstocks.pipelines.GuchengCrawlListPipeline':200}
             }
 
     def parse(self, response):
-        item = StockCodeItem()
+        item = GuchengStockCodeItem()
         for stock in response.xpath('//section[has-class("stockTable")]/a/text()').getall():
             res = re_name_code.search(stock)
             if res is None:

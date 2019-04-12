@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
-import scrapy
+import re
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from crawlstocks.items import StockInfoItem
+from crawlstocks.items import GuchengStockInfoItem
 
 class GuchengstockinfoSpider(CrawlSpider):
     name = 'GuchengStockInfo'
@@ -12,7 +12,7 @@ class GuchengstockinfoSpider(CrawlSpider):
     start_urls = ['https://hq.gucheng.com/gpdmylb.html']
 
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.CrawlInfoPipeline':200}
+            'ITEM_PIPELINES' : {'crawlstocks.pipelines.GuchengCrawlInfoPipeline':200}
             }
 
     # 提取需要请求的链接 (SZ SH)
@@ -50,9 +50,9 @@ class GuchengstockinfoSpider(CrawlSpider):
 
     def parse_item(self, response):
         # self.logger.info(response.url)
-        item = StockInfoItem()
+        item = GuchengStockInfoItem()
         # 股票名字
-        item['name'] = response.xpath('//header/h1/text()').get()
+        item['name'] = re.sub(r'\s+', '', response.xpath('//header/h1/text()').get())
         # 股票代码
         item['code'] = response.xpath('//header/h2/text()').get()
         selector = response.xpath('//section[@class="stock_company stock_f10 cwzyzb"]/div/table[1]/tbody')
