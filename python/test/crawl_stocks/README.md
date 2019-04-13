@@ -9,7 +9,7 @@ date: 2019-04-11 15:03:18 tags: [test] categories: [python]
 # 准备
 
 1. `sudo pip3 install fake-useragent`
-2. `sudo pip install scrapy-splash`
+2. `sudo pip3 install scrapy-splash`
 3. `sudo docker run -p 8050:8050 scrapinghub/splash`
 
 # 创建工程
@@ -40,6 +40,8 @@ date: 2019-04-11 15:03:18 tags: [test] categories: [python]
 
 2019.04之后`https://quote.eastmoney.com/stocklist.html`已经不能方便获取所有股票信息了,
 可以结合股城网一起爬取数据.
+
+(封号严重)
 
 1. 股城网爬取所有股票的代码, 保存到文件中
 2. 东方财富网根据具体的股票代码获取更多的信息, 把1中的文件通过-a NAME=VALUE传给spider

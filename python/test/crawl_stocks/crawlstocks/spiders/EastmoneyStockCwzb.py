@@ -12,7 +12,6 @@ class EastmoneystockcwzbSpider(scrapy.Spider):
     allowed_domains = [
             'quote.eastmoney.com',
             'f9.eastmoney.com',
-            'hq.gucheng.com',
             ]
     custom_settings = {
             'ITEM_PIPELINES': {
@@ -20,7 +19,6 @@ class EastmoneystockcwzbSpider(scrapy.Spider):
                 },
             'SPLASH_URL': 'http://localhost:8050',
             'DOWNLOADER_MIDDLEWARES': {
-               #  'crawlstocks.middlewares.CustomRandomMiddleware.RandomProxyMiddleware': 300,
                'crawlstocks.middlewares.CustomRandomMiddleware.RandomUserAgentMiddleware': 543,
                'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
                'scrapy_splash.SplashCookiesMiddleware': 723,
@@ -34,7 +32,7 @@ class EastmoneystockcwzbSpider(scrapy.Spider):
             'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage'
             }
     # 调试
-    start_urls = ['http://quote.eastmoney.com/sh600365.html']
+    start_urls = ['http://quote.eastmoney.com/sh600751.html']
 
     def __init__(self, filename=None):
         if filename:
