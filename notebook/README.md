@@ -14,6 +14,12 @@ sudo pip3 install -U jupyterthemes
 sudo jupyter contrib nbextension install
 sudo jupyter nbextensions_configurator enable
 
+
+### 中文
+
+sudo apt-get install font-manager
+
+必要时: rm ~/.cache/matplotlib -fr (没作用)
 ```
 
 ### vim support
