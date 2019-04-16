@@ -1,4 +1,5 @@
 **/**/stock_*.txt
 **/**/crawl.log
 **/**/crawl.pid
+**/**/split_urls
 

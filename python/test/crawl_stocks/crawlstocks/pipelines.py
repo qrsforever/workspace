@@ -97,7 +97,6 @@ class GuchengCrawlInfoPipeline(object):
         except:
             print("close error")
 
-
 class EastmoneyCrawlUrlsPipeline(object):
     def __init__(self, filepath):
         self.filepath = filepath

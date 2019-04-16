@@ -7,7 +7,7 @@ from fake_useragent import UserAgent
 class RandomUserAgentMiddleware(UserAgentMiddleware):
     def __init__(self, type):
         #  self.user_agent_list = agents
-        self.ua = UserAgent(use_cache_server=False)
+        self.ua = UserAgent(use_cache_server=True)
         self.ua_type = type
 
     @classmethod

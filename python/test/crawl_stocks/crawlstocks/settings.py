@@ -14,8 +14,9 @@ BOT_NAME = 'crawlstocks'
 SPIDER_MODULES = ['crawlstocks.spiders']
 NEWSPIDER_MODULE = 'crawlstocks.spiders'
 
-RETRY_TIMES = 3
-DEPTH_LIMIT = 4
+RETRY_TIMES = 1
+# next page depth
+DEPTH_LIMIT = 60
 DOWNLOAD_TIMEOUT = 10
 REDIRECT_ENABLED = False
 
@@ -26,13 +27,13 @@ USER_AGENT = 'crawlstocks (+https://qrsforever.github.io)'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 4
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 # 防止网站封爬虫
-DOWNLOAD_DELAY = 1.0
+DOWNLOAD_DELAY = 2.5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -42,7 +43,7 @@ DOWNLOAD_DELAY = 1.0
 COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
@@ -104,14 +105,20 @@ LOG_ENCODING = 'utf-8'
 # CRITICAL、 ERROR、WARNING、INFO、DEBUG
 LOG_LEVEL = 'DEBUG'
 
-# 自定义
+####### 自定义
+
 STOCK_LIST_FILE = 'stock_list.txt'
 STOCK_INFO_FILE = 'stock_info.txt'
 STOCK_URLS_FILE = 'stock_urls.txt'
 STOCK_CWZB_FILE = 'stock_cwzb.txt'
 
+# 雄安新区板块
+#  BLOCKINFO_XIONGANXINQUE = '003813'
+# 京津冀一体化板块
+#  BLOCKINFO_JINGJINYIYITIHUA = '003684'
+
 # random firfox chrome opera google safari
-RANDOM_UA_TYPE = "chrome"
+RANDOM_UA_TYPE = "opera"
 
 USER_PROXY_LIST = [
     '1.85.220.195:8118',
@@ -123,7 +130,7 @@ USER_PROXY_LIST = [
     '139.129.166.68:3128'
 ]
 
-# 总有不通的问题
+# 总有不通的问题, 改用Splash
 USER_AGENT_LIST = [
     'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)',

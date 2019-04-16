@@ -6,6 +6,7 @@ from crawlstocks.items import EastmoneyStockCwzbItem
 
 # 平安银行(000001.SZ)深度F9-PC_HSF9资料
 re_name_code = re.compile(r'(?P<name>.+)\((?P<code>[0369]\d{5})\.*\)*')
+re_replace_f9 = re.compile('quote')
 
 class EastmoneystockcwzbSpider(scrapy.Spider):
     name = 'EastmoneyStockCwzb'
@@ -46,18 +47,37 @@ class EastmoneystockcwzbSpider(scrapy.Spider):
     # 1. http://quote.eastmoney.com/sz000056.html
     # 2. <a href="http://f9.eastmoney.com/sz000056.html#cwzb" target="_blank">财务指标</a>
     # 3. http://f9.eastmoney.com/sz000056.html#cwzb
+    # 提取财务指标的URL (页面是动态异步加载, 直接请求可能拿不到tbody, 所以使用
+    # SplashRequest传递一个等待页面加载时间, cwzb页面加载太慢了....
+    # wait time must < splash --max-timeout
+    def start_requests(self):
+        for url in self.start_urls:
+            # 自行解析财务指标中的link
+            # yield SplashRequest(url,
+            #        callback=self.parse_link,
+            #        args={'wait': 2.0},
+            #        )
+            
+            # 直接拼接出, 缺点是如果地址变更就失效, 但是效率高了一倍
+            # link = url.replace("quote", "f9") + '#cwzb'
+            link = re_replace_f9.sub('f9', url) + '#cwzb'
+            self.logger.info("link: %s" % link)
+            yield SplashRequest(link,
+                  callback=self.parse_cwzb,
+                  args={'wait': 9.0},
+                  )
 
-    # 提取财务指标的URL
-    def parse(self, response):
-        link = response.xpath('//a[contains(@href, "cwzb")]/@href').get()
-        yield SplashRequest(link,
-               callback=self.parse_item,
-               args={'wait': 1.5},
-               )
-        #  yield scrapy.Request(link, callback=self.parse_item)
+    # def parse_link(self, response):
+    #     link = response.xpath('//a[contains(@href, "cwzb")]/@href').get()
+    #     self.logger.info("link: %s" % link)
+    #     yield SplashRequest(link,
+    #            callback=self.parse_cwzb,
+    #            args={'wait': 4.0},
+    #            )
+    #    #  yield scrapy.Request(link, callback=self.parse_cwzb)
 
-    # 解析财务数据
-    def parse_item(self, response):
+    # 解析财务指标数据
+    def parse_cwzb(self, response):
         #  self.logger.info(response.url)
         res = re_name_code.search(response.xpath('//title/text()').get())
         if res is None:
