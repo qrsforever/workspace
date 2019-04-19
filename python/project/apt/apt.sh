@@ -135,3 +135,9 @@ __pip_install tox pytest
 # sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
 # sudo apt-get install python3-numpy python3-scipy python3-matplotlib ipython3 ipython3-notebook python3-pandas python3-nose
 # sudo pip install pydelicious (没有pip3版本)
+
+
+# 数据库
+__pip_install pymongo
+
+
