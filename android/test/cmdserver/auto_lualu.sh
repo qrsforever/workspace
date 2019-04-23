@@ -5,10 +5,18 @@ setenforce 0
 log_file=/data/lualu.txt
 pid_file=/data/lualu.pid
 
+__myecho() {
+    dt=`date`
+    echo "$dt:$*"
+    echo "$dt:$*" >> $log_file
+}
+
+
 mv $log_file ${log_file}_bak
 echo "shell pid $$, caller args: $*" > $log_file
 
 cut="cut"
+ps="ps"
 ff=2
 sid=`getprop ro.boot.serialno`
 if [[ $sid == "c060751" ]]
@@ -18,6 +26,7 @@ then
 elif [[ $sid == "2855c05b7cf5" ]]
 then
     __myecho "red mi 5A"
+    ps='toybox ps -A'
 elif [[ $sid == "56ed266" ]]
 then
     __myecho "xiao mi"
@@ -35,14 +44,8 @@ then
     cut="busybox cut"
 fi
 
-__myecho() {
-    dt=`date`
-    echo "$dt:$*"
-    echo "$dt:$*" >> $log_file
-}
-
 _kill_android_test() {
-    pidstr=`ps | grep "com.android.test.$1"`
+    pidstr=`$ps | grep "com.android.test.$1"`
     if [[ x$pidstr != x ]]
     then
         __myecho "test: $pidstr"

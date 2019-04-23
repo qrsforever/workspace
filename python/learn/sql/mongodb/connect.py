@@ -4,6 +4,7 @@
 from pymongo import MongoClient
 
 ## 数据库连接
+# [mongod](https://docs.mongodb.com/manual/introduction/)
 myclient = MongoClient('mongodb://localhost:27017/')
 
 ## 数据库删除

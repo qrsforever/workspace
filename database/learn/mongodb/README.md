@@ -2,7 +2,9 @@
 
 ## 参考
 
+    [官网手册](https://docs.mongodb.com/manual/mongo/)
     [mongodb的安装和配置](https://blog.csdn.net/zn505119020/article/details/81331808)
+    [Python mogodb](http://www.runoob.com/python3/python-mongodb.html)
 
 ## 配置文件
  
@@ -43,3 +45,14 @@
 7. 查看所有数据库
 
     show dbs
+
+
+## CRUD
+
+### Create
+
+### Read
+
+### Update
+
+### Delete
