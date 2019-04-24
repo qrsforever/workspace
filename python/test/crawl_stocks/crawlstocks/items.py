@@ -7,7 +7,6 @@
 
 import scrapy
 
-
 class CrawlstocksItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
@@ -54,3 +53,20 @@ class EastmoneyStockCwzbItem(scrapy.Item):
     total_assets_turnover = scrapy.Field() # 总资产周转率(次)
     liability_assets_rate = scrapy.Field() # 资产负债率(%)
     debt_flow_total_rate = scrapy.Field()  # 流动负债/总负债(%)
+
+class QuotesCHDDataItem(scrapy.Item):
+    name = scrapy.Field()           # 股票名称
+    code = scrapy.Field()           # 股票代码
+    date = scrapy.Field()           # 日期
+    tclose = scrapy.Field()         # 收盘价
+    high = scrapy.Field()           # 最高价
+    low = scrapy.Field()            # 最低价
+    topen = scrapy.Field()          # 开盘价
+    lclose = scrapy.Field()         # 前收盘
+    chg = scrapy.Field()            # 涨跌额
+    pchg = scrapy.Field()           # 涨跌幅
+    turnover = scrapy.Field()       # 换手率
+    voturnover = scrapy.Field()     # 成交量
+    vaturnover = scrapy.Field()     # 成交金额
+    tcap = scrapy.Field()           # 总市值
+    mcap = scrapy.Field()           # 流通市值

@@ -16,7 +16,7 @@ class EastmoneystockurlsSpider(scrapy.Spider):
             'https://hq.gucheng.com/gpdmylb.html',
             ]
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.EastmoneyCrawlUrlsPipeline':200}
+            'ITEM_PIPELINES' : {'crawlstocks.pipelines.file.EastmoneyCrawlUrlsPipeline':200}
             }
 
     def parse(self, response):

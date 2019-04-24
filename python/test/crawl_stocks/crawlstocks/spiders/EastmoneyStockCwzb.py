@@ -16,7 +16,7 @@ class EastmoneystockcwzbSpider(scrapy.Spider):
             ]
     custom_settings = {
             'ITEM_PIPELINES': {
-                'crawlstocks.pipelines.EastmoneyCrawlCwzbPipeline':200,
+                'crawlstocks.pipelines.file.EastmoneyCrawlCwzbPipeline':200,
                 },
             'SPLASH_URL': 'http://localhost:8050',
             'DOWNLOADER_MIDDLEWARES': {

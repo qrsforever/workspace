@@ -12,7 +12,7 @@ class GuchengstockinfoSpider(CrawlSpider):
     start_urls = ['https://hq.gucheng.com/gpdmylb.html']
 
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.GuchengCrawlInfoPipeline':200}
+            'ITEM_PIPELINES' : {'crawlstocks.pipelines.file.GuchengCrawlInfoPipeline':200}
             }
 
     # 提取需要请求的链接 (SZ SH)

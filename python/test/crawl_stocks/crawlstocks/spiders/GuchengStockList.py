@@ -12,7 +12,10 @@ class GuchengstocklistSpider(scrapy.Spider):
     start_urls = ['https://hq.gucheng.com/gpdmylb.html']
 
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.GuchengCrawlListPipeline':200}
+            'ITEM_PIPELINES' : {
+                'crawlstocks.pipelines.file.GuchengCrawlListPipeline':200,
+                'crawlstocks.pipelines.db.GuchengCodesPipeline':100
+                }
             }
 
     def parse(self, response):

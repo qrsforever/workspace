@@ -9,7 +9,7 @@ class GuchengblockcodesSpider(scrapy.Spider):
     allowed_domains = ['hq.gucheng.com']
 
     custom_settings = {
-            'ITEM_PIPELINES' : {'crawlstocks.pipelines.GuchengCrawlListPipeline':200}
+            'ITEM_PIPELINES' : {'crawlstocks.pipelines.file.GuchengCrawlListPipeline':200}
             }
 
     def __init__(self, blockname='xiongan'):

@@ -168,3 +168,16 @@ USER_AGENT_LIST = [
     'Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
 ]
+
+# MongoDB
+
+DB_HOST = 'mongodb://localhost:27017/'
+DB_NAME = 'stock'
+DB_CODES_TABLE_NAME = 'codes'
+DB_CHDDATA_TABLE_NAME = 'chddata'
+
+
+# Request
+
+DATETIME_START = '20150101'
+DATETIME_END = '20150110'
