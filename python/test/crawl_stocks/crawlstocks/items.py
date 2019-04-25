@@ -55,6 +55,7 @@ class EastmoneyStockCwzbItem(scrapy.Item):
     debt_flow_total_rate = scrapy.Field()  # 流动负债/总负债(%)
 
 class QuotesCHDDataItem(scrapy.Item):
+    _id = scrapy.Field()            # 股票代码_日期
     name = scrapy.Field()           # 股票名称
     code = scrapy.Field()           # 股票代码
     date = scrapy.Field()           # 日期

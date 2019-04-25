@@ -57,29 +57,11 @@ class QuotesCHDDataPipeline(object):
 
     def process_item(self, item, spider):
         try:
-            key = item['code'] + '_' + item['date']
-            self.table.update_one({'_id': key},
-               {'$set': {
-                   '_id': key,
-                   'name': item['name'],
-                   'code':item['code'],
-                   'date': datetime.strptime(item['date'], '%Y-%m-%d'),
-                   'tclose': item['tclose'],
-                   'high': item['high'],
-                   'low': item['low'],
-                   'topen': item['topen'],
-                   'lclose': item['lclose'],
-                   'chg': item['chg'],
-                   'pchg': item['pchg'],
-                   'turnover': item['turnover'],
-                   'voturnover': item['voturnover'],
-                   'vaturnover': item['vaturnover'],
-                   'tcap': item['tcap'],
-                   'mcap': item['mcap']
-                   }},
-               upsert = True)
+            # item is subclass of dict
+            self.table.update_one({'_id': item['_id']},
+                    {'$set': item}, upsert = True)
         except Exception as e:
-             spider.logger.info("write error:", e)
+             spider.logger.info("write error: ", e)
         return item
 
     def open_spider(self, spider):
