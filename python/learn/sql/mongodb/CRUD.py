@@ -37,6 +37,17 @@ try:
 except Exception as e:
     print(e)
 
+## Capped Collections
+## capped 循环空间, size最大空间字节, max最大条目
+mydb.drop_collection('col2')
+# print(mydb.get_collection('col2'))
+mycol2 = mydb.create_collection('col2', capped=True, size=1000000, max=1000)
+for each in mydb.list_collection_names():
+    if each == 'col2':
+        print("ok")
+        break
+
+
 #####################################################################################
 ## [find](https://docs.mongodb.com/manual/reference/method/db.collection.find/)
 

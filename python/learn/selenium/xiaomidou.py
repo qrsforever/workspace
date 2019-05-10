@@ -43,7 +43,7 @@ def DebugFindElements(driver, path, attr):
         items = driver.find_elements_by_xpath(path)
         print("find elements by xpath(%s)" % path)
         i = 1
-        for e in items:  
+        for e in items:
             if attr == 'text':
                 print("%3d. text = %s" % (i, e.text))
             else:

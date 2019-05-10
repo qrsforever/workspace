@@ -1,0 +1,21 @@
+#!/bin/bash
+#=================================================================
+# date: 2019-04-28 10:47:20
+# title: mqtt
+#=================================================================
+
+
+sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+
+sudo apt-get update
+
+sudo apt-get install mosquitto
+
+sudo service mosquitto status
+
+sudo service mosquitto start
+
+sudo service mosquitto stop
+
+
+sudo apt-get install mosquitto-clients
