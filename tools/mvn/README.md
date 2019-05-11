@@ -24,3 +24,13 @@ mvn clean install -DskipTests 
 ## 执行
 
     mvn exec:java -Dexec.mainClass="com.java.learn.App"
+
+## settings.xml
+
+    see $MERMAID_HOME/etc/mvn
+    [csdn](https://blog.csdn.net/allwords/article/details/78222606)
+
+##  archetype-catalog.xml
+
+    see $MERMAID_HOME/etc/mvn
+    [web](http://maven.apache.org/archetype/maven-archetype-plugin/specification/archetype-catalog.html)

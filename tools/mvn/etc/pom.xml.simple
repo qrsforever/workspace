@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- : mvn archetype:generate -DgroupId=com.java.learn -DartifactId=top -DpacakgeName=com.java.learn -DinteractiveMode=false -->
 
     <!-- 各种属性参考: https://maven.apache.org/pom.html -->
@@ -8,17 +8,17 @@
     <!-- 公司网址 -->
     <groupId>com.java.learn</groupId>
     <!-- 项目名 -->
-    <artifactId>top-meta</artifactId>
+    <artifactId>dome</artifactId>
     <!-- 大版本.分支版本.小版本-快照SNAPSHOT、内部测试alpha、公测beta、稳定Release、正式发布GA -->
     <version>1.0.0</version>
     <!-- 打包类型 jar war zip pom等 -->
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <!-- 项目描述名 -->
-    <name>top-meta</name>
+    <name>demo</name>
     <!-- 项目地址 -->
     <url>https://github.com/qrsforever/workspace</url>
     <!-- 项目描述 -->
-    <description>Java Learnnig</description>
+    <description>Just Test</description>
 
     <properties>
         <!-- fix: [ERROR] Source option 1.5 is no longer supported. Use 1.6 or later. -->
@@ -27,13 +27,9 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <junit.version>4.12</junit.version>
         <assembly.version>2.4</assembly.version>
-        <surefire.version>2.5</surefire.version>
         <compiler.version>3.5</compiler.version>
-        <dependency.version>3.0.2</dependency.version>
         <exec.version>1.6.0</exec.version>
-        <antrun.version>1.8</antrun.version>
         <jar.version>3.0.2</jar.version>
     </properties>
 
@@ -45,12 +41,6 @@
     <!-- 只是声明不自动导入, 统一管理项目的版本号 -->
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -61,7 +51,6 @@
                 <!-- 插件路径: https://mvnrepository.com/artifact/org.apache.maven.plugins -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler.version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -71,38 +60,30 @@
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <!-- 跳过编译Test -->
-                    <!-- <skip>true</skip> -->
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
             <plugin>
-                <!-- Unit test, skip=true not test  -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.version}</version>
-                <configuration>
-                    <!-- <skip>true</skip>     -->
-                    <!-- <skipTests>true</skipTests>  -->
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <!-- http://maven.apache.org/components/plugins/maven-dependency-plugin/ -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>${dependency.version}</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <!-- 执行mvn compile后执行main函数 -->
+                        <phase>compile</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>java</goal>
                         </goals>
-                        <configuration>
-                             <!-- 默认: ${project.build.directory}/dependency -->
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        </configuration>
+                        <configuration/>
                     </execution>
                 </executions>
+                <configuration>
+                    <!-- 执行 mvn exec:java 若此处注释掉执行:mvn exec:java -Dexec.mainClass="com.java.learn.App" -Dexec.args="" -->
+                    <mainClass>com.java.learn.App</mainClass>
+                    <arguments>
+                        <argument>test</argument>
+                    </arguments>
+                </configuration>
             </plugin>
 
         </plugins>
@@ -129,13 +110,6 @@
                     <version>${exec.version}</version>
                 </plugin>
 
-                <!-- jar中有多个mainclass想执行它们 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${antrun.version}</version>
-                </plugin>
-
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${assembly.version}</version>
@@ -143,14 +117,4 @@
             </plugins>
         </pluginManagement>
     </build>
-  <modules>
-    <module>demo</module>
-  </modules>
-</project><!-- <property name="compile_classpath" refid="maven.compile.classpath"/>
-  - <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-  - <property name="test_classpath" refid="maven.test.classpath"/>
-  - <property name="plugin_classpath" refid="maven.plugin.classpath"/>
-  - <echo message="compile classpath: ${compile_classpath}"/>
-  - <echo message="runtime classpath: ${runtime_classpath}"/>
-  - <echo message="test classpath:    ${test_classpath}"/>
-  - <echo message="plugin classpath:  ${plugin_classpath}"/> -->
+</project>
