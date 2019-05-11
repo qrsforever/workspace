@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <!-- : mvn archetype:generate -DgroupId=com.java.learn -DartifactId=top -DpacakgeName=com.java.learn -DinteractiveMode=false -->
+
+    <!-- 各种属性参考: https://maven.apache.org/pom.html -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 公司网址 -->
+    <groupId>com.java.learn</groupId>
+    <!-- 项目名 -->
+    <artifactId>xml</artifactId>
+    <!-- 大版本.分支版本.小版本-快照SNAPSHOT、内部测试alpha、公测beta、稳定Release、正式发布GA -->
+    <version>1.0.0</version>
+    <!-- 打包类型 jar war zip pom等 -->
+    <packaging>jar</packaging>
+    <!-- 项目描述名 -->
+    <name>xml</name>
+    <!-- 项目地址 -->
+    <url>https://github.com/qrsforever/workspace</url>
+    <!-- 项目描述 -->
+    <description>Just Test</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <assembly.version>2.4</assembly.version>
+        <compiler.version>3.7.0</compiler.version>
+        <exec.version>1.6.0</exec.version>
+        <jar.version>3.0.2</jar.version>
+    </properties>
+
+    <!--即使在子项目中不写该依赖项，那么子项目仍然会从父项目中继承该依赖项 -->
+    <dependencies>
+
+    </dependencies>
+
+    <!-- 只是声明不自动导入, 统一管理项目的版本号 -->
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- 自动导入子模块 -->
+            <plugin>
+                <!-- 插件路径: https://mvnrepository.com/artifact/org.apache.maven.plugins -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgs>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
+                    <encoding>UTF8</encoding>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                        <!-- 跳过编译Test -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- 执行mvn compile后执行main函数 -->
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration/>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 执行 mvn exec:java 若此处注释掉执行:mvn exec:java -Dexec.mainClass="com.java.learn.App" -Dexec.args="" -->
+                    <mainClass>com.java.learn.App</mainClass>
+                    <arguments>
+                        <argument>test</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <!-- 只是声明不自动导入, 统一管理项目的版本号 -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${jar.version}</version>
+                </plugin>
+
+                <!-- jar中一个mainclass -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec.version}</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
