@@ -41,5 +41,9 @@
                     </snapshots>
                 </pluginRepository>
             </pluginRepositories>
-    </profile></profiles>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <!-- <activeProfile>nexus</activeProfile> -->
+    </activeProfiles>
 </settings>
