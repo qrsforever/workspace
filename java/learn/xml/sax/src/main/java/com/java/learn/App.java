@@ -8,7 +8,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import com.java.learn.App.AppHandler;
 
 import java.util.ArrayList;
 import java.util.List;
