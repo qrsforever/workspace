@@ -9,10 +9,10 @@
     </formats>
     <files>
         <file>
-            <source>src/main/resources/demo.xml</source>
+            <source>src/main/resources/app.xml</source>
             <outputDirectory>/${artifactId}/</outputDirectory>
             <filtered>true</filtered>
-        </file>
+        </file> 
     </files>
     <includeBaseDirectory>false</includeBaseDirectory>
 </assembly>

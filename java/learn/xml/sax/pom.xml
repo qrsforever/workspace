@@ -8,13 +8,13 @@
     <!-- 公司网址 -->
     <groupId>com.java.learn</groupId>
     <!-- 项目名 -->
-    <artifactId>xml</artifactId>
+    <artifactId>sax</artifactId>
     <!-- 大版本.分支版本.小版本-快照SNAPSHOT、内部测试alpha、公测beta、稳定Release、正式发布GA -->
     <version>1.0.0</version>
     <!-- 打包类型 jar war zip pom等 -->
     <packaging>jar</packaging>
     <!-- 项目描述名 -->
-    <name>xml</name>
+    <name>sax</name>
     <!-- 项目地址 -->
     <url>https://github.com/qrsforever/workspace</url>
     <!-- 项目描述 -->
@@ -56,7 +56,7 @@
                     <encoding>UTF8</encoding>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                        <!-- 跳过编译Test -->
+                    <!-- 跳过编译Test -->
                     <skip>true</skip>
                 </configuration>
             </plugin>

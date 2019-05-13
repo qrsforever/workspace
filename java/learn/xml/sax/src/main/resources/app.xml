@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<app>
+    <item id="001">
+        <name>qrs</name>
+        <age>30</age>
+        <sex>male</sex>
+    </item>
+    <item id="002">
+        <name>zyt</name>
+        <age>20</age>
+        <sex>famale</sex>
+    </item>
+</app>
