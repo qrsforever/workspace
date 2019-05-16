@@ -26,4 +26,8 @@ client.on_message = on_message
 client.username_pw_set("stocktech", "stocktech");
 client.connect(HOST, PORT, 60)
 client.subscribe("100001/stocktech/tapereading/#")
-client.loop_forever()
+# client.loop_forever()
+while True:
+    client.loop(10)
+    print("loop")
+
