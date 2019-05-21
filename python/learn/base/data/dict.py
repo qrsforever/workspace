@@ -13,6 +13,13 @@ print(d.setdefault('a', 0))
 print(d['a'])
 print("-------------- ")
 
+## 访问一个不存在的项 KeyError:
+# print(d['w'])
+if d.get('w', None):
+    print('exist w')
+else:
+    print('not exist w')
+
 for x, y in d.items():
     print(x, ':' , y)
 
@@ -37,3 +44,5 @@ print("-------------- ")
 d = {}
 d[2,1] = 2
 print(d) # result: {(2, 1): 2}
+
+

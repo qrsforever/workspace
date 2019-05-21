@@ -9,6 +9,7 @@
 # @date 2019-05-13 17:21:59
 
 import paho.mqtt.client as mqtt
+import os
 
 HOST = "127.0.0.1"
 PORT = 1883
@@ -24,7 +25,8 @@ client = mqtt.Client("100001")
 client.on_connect = on_connect
 client.on_message = on_message
 client.username_pw_set("stocktech", "stocktech");
-client.connect(HOST, PORT, 60)
+
+client.connect(os.environ.get('HOST', HOST), PORT, 60)
 client.subscribe("100001/stocktech/tapereading/#")
 # client.loop_forever()
 while True:
