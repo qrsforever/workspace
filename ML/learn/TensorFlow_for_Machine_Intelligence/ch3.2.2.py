@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# @file ch3.2.1.py
+# @file ch3.2.2.py
 # @brief
 # @author QRS
 # @blog qrsforever.github.io
 # @version 1.0
-# @date 2019-05-23 23:41:40
+# @date 2019-05-23 23:51
 
 #############################  jupyter-vim map ######################################
 # https://github.com/qrsforever/vim/blob/master/bundle/.configs/jupyter-vim_conf.vim
@@ -27,23 +27,21 @@ import tensorflow as tf
 #####################################################################################
 # <codecell> 定义数据流
 #####################################################################################
-a = tf.constant(5, name='input_a')
-b = tf.constant(3, name='input_b')
-c = tf.multiply(a, b, name='mul_c')
-d = tf.add(a, b, name='add_d')
-e = tf.add(c, d, name='add_e')
+a = tf.constant([5,3], name='input_a')
+b = tf.reduce_prod(a, name='prod_b')
+c = tf.reduce_sum(a, name='sum_c')
+d = tf.add(b, c, name='add_d')
 
 #####################################################################################
 # <codecell> 运行数据流
 #####################################################################################
 sess = tf.Session()
-sess.run(e)
+sess.run(d)
 
 #####################################################################################
 # <codecell> tensorboard --logdir=/tmp/tf
 #####################################################################################
 writer = tf.summary.FileWriter('/tmp/tf', sess.graph)
-
 
 #####################################################################################
 # <codecell> 关闭资源
