@@ -166,3 +166,134 @@ print(sess.run(my_var_times_two)) # 2
 sess.run(my_var1.assign_add(1)) # 2
 sess.run(my_var1.assign_add(1)) # 3
 sess.run(my_var1.assign_sub(1)) # 2
+
+
+#####################################################################################
+# <codecell> name scope
+#####################################################################################
+
+graph = tf.Graph()
+
+with graph.as_default():
+    ph_input1 = tf.placeholder(dtype=tf.float32, shape=[], name='ph_input1')
+    ph_input2 = tf.placeholder(dtype=tf.float32, shape=[], name='ph_input2')
+    # 常量Tensor在每个域中都会存在
+    k_input3 = tf.constant(3, dtype=tf.float32, name='static_value')
+
+    with tf.name_scope('A_scope'):
+        A_mul = tf.math.multiply(ph_input1, k_input3)
+        A_out = tf.math.subtract(A_mul, ph_input1)
+
+
+    with tf.name_scope('B_scope'):
+        B_mul = tf.multiply(ph_input2, k_input3)
+        B_out = tf.math.subtract(B_mul, ph_input2)
+
+    with tf.name_scope('C_scope'):
+        C_div = tf.math.divide(A_out, B_out)
+        C_out = tf.math.add(C_div, k_input3)
+
+    with tf.name_scope('D_scope'):
+        D_div = tf.math.divide(B_out, A_out)
+        D_out = tf.math.add(D_div, k_input3)
+
+    out = tf.maximum(C_out, D_out)
+
+    writer = tf.summary.FileWriter('/tmp/tf', graph=graph)
+    writer.close()
+
+
+#####################################################################################
+# <codecell> 实例  [None]:任意长度的向量, []:标量
+#####################################################################################
+#                                                      scope: transformation
+#    +--------------------------------------------------------------------+
+#    |                              b                                     |
+#    |      a                     *****                                   |
+#    |   +-------+   [None]     **     **    []                           |
+#    |   |       | ---------->  * prod  *   ------\          d            |
+#    |   |       |              **     **          \      *******         |
+#    |   |       |                *****             \   **       **       | []
+#  ----->| input |                                   -->*   add   *    ---------->
+#    |   |       |                  c                -->**       **       |  |
+#    |   |       |                *****             /     *******         |  |
+#    |   |       |   [None]     **     **    []    /                      |  |
+#    |   |       | ---------->  *  sum  *   ------/                       |  |
+#    |   +-------+              **     **                                 |  |
+#    |                            *****                                   |  |
+#    |  layer: input        layer: intermediate         layer: output     |  |
+#    +--------------------------------------------------------------------+  |
+#                                                                            |
+#                                                                            |
+#                                                         +------------------+
+#                                                         |
+#   scope: summaries                    scope: update     v
+#    +--------------------------+           +------------------------+
+#    |                          |           |    update_total        |
+#    |                          |     +---- |    update_steps        |------+
+#    |                          |     |     +------------------------+      |
+#    | output_summary <---------------|                                     |
+#    |                          |     |[]                                   |[]
+#    |                          |     |      scope: variables               |
+#    |  total_summary <---------------|     +------------------------+      |
+#    |                          |     |     |                        |      |
+#    |                          |     |     |                        |      |
+#    |    avg_summary <---------------|     |     output_total  <-----------|
+#    |                          |           |                        |      |
+#    +--------------------------+           |     global_steps  <-----------|
+#                                           |                        |
+#                                           +------------------------+
+
+graph = tf.Graph()
+with graph.as_default():
+    with tf.name_scope('variables'):
+        output_total = tf.Variable(0.0, trainable=False,
+                dtype=tf.float32, name='output_total')
+        global_step = tf.Variable(0, trainable=False,
+                dtype=tf.int32, name='global_step')
+
+    with tf.name_scope('transformation'):
+        with tf.name_scope('input'):
+            a = tf.placeholder(dtype=tf.float32, shape=[None], name='input_a')
+
+        with tf.name_scope('intermediate'):
+            b = tf.reduce_prod(a, name='prod_b')
+            c = tf.reduce_sum(a, name='sum_c')
+
+        with tf.name_scope('output'):
+            d = tf.add(b, c, name='output_d')
+
+    with tf.name_scope('update'):
+        update_total = output_total.assign_add(d)
+        update_step = global_step.assign_add(1)
+
+    with tf.name_scope('summaries'):
+        avg = tf.math.divide(update_total,
+                tf.cast(update_step, tf.float32), name='avg')
+        tf.summary.scalar(name='output_summary', tensor=d)
+        tf.summary.scalar(name='total_summary', tensor=update_total)
+        tf.summary.scalar(name='avg_summary', tensor=avg)
+
+    with tf.name_scope('global_ops'):
+        init = tf.global_variables_initializer()
+        merged_summaries = tf.summary.merge_all()
+
+    sess = tf.Session(graph=graph)
+    writer = tf.summary.FileWriter('/tmp/tf', graph)
+
+    sess.run(init)
+
+    def run_graph(input_tensor):
+        feed_dict = {a: input_tensor}
+        _, step, summaries = sess.run(
+                fetches=[d, update_step, merged_summaries], feed_dict=feed_dict)
+        print(step)
+        print(d)
+        print(update_total)
+        writer.add_summary(summary=summaries, global_step=step)
+
+    run_graph([2, 8])
+    run_graph([3, 1, 3, 3])
+    run_graph([8])
+    run_graph([1,2,4])
+    run_graph([11,4])

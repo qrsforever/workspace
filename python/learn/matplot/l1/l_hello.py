@@ -19,6 +19,8 @@ plt.title("Start Activity Time")
 plt.grid(True)
 plt.legend(loc='upper left')
 plt.show()
+plt.plot([1,2,3,4])
+plt.savefig("/tmp/1.png")
 
 # character	   description
 #   '-'	        solid line style
