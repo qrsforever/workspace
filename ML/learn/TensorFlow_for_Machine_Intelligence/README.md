@@ -8,5 +8,8 @@ categories: [ML]
 
 ---
 
+# 资源
 
+[本书PDF下载](https://pan.baidu.com/s/13OSHa4VmQHFWOZS4Nhx8bA) `提取码: gb1a`
 
+[本书源码下载](https://github.com/backstopmedia/tensorflowbook)

@@ -1,7 +1,8 @@
-*/**/.settings
-*/**/hello
-*/**/.ipynb_checkpoints
-*/**/.ipynb
+**/**/.settings
+**/**/hello
+**/**/.ipynb_checkpoints
+**/**/.ipynb
+**/**/res
 .ipynb_checkpoints
 asset
 gitblog

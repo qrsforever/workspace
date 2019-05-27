@@ -7,3 +7,7 @@ pandas_merge_join_concat
 
 45 Great Resources for Learning Data Mining Concepts and Techniques:
     https://www.import.io/post/great-resources-learning-data-mining-concepts-techniques/
+
+
+tf.unstack与tf.stack
+    https://www.jianshu.com/p/25706575f8d4
