@@ -8,8 +8,13 @@
 # @version 1.0
 # @date 2019-05-28 18:32:34
 
+#####################################################################################
+# <codecell> Header
+#####################################################################################
+
 import tensorflow as tf
 
+tf.__version__
 
 #####################################################################################
 # <codecell> tensor values
@@ -145,6 +150,67 @@ print(sess.run(y, {x:[[1,2,3], [4,5,6]]}))
 # [-9.467066]]
 
 #####################################################################################
-# <codecell> Feature column (将不是数字的格式转换为数字 (媒介)
+# <codecell> Feature column 将不是数字的格式转换为数字 (媒介)
 #####################################################################################
 
+# 'sales': [5, 10, 8, 9], # is ok
+features = {
+    'sales': [[5], [10], [8], [9]],
+    'department': ['sports', 'sports', 'gardening', 'gardening']
+}
+
+department_column = tf.feature_column.categorical_column_with_vocabulary_list(
+        'department', ['sports', 'gardening'])
+
+# one-hot
+department_column = tf.feature_column.indicator_column(department_column)
+
+columns = {
+    tf.feature_column.numeric_column('sales'),
+    department_column
+}
+
+inputs = tf.feature_column.input_layer(features, columns)
+
+var_init = tf.global_variables_initializer()
+tab_init = tf.tables_initializer()
+sess = tf.Session()
+sess.run((var_init, tab_init))
+
+print(sess.run(inputs))
+
+sess.close()
+
+#####################################################################################
+# <codecell> Training
+#####################################################################################
+
+# data
+
+xs = tf.constant([[1],[2],[3],[4]], dtype=tf.float32)
+ys = tf.constant([[0],[-1],[-2],[-3]], dtype=tf.float32)
+
+# model
+
+linear = tf.layers.Dense(units=1) # Dense
+ys_pred = linear(xs)
+
+# loss
+
+loss = tf.losses.mean_squared_error(ys, ys_pred)
+
+# train
+
+optimizer = tf.train.GradientDescentOptimizer(0.01)
+train = optimizer.minimize(loss) # Operation
+
+#
+
+init = tf.global_variables_initializer()
+with tf.Session() as sess:
+    sess.run(init)
+    for i in range(100):
+        _op_, loss_value = sess.run((train, loss))
+        print(loss_value)
+
+    print(sess.run(ys_pred))

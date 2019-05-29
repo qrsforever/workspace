@@ -140,4 +140,5 @@ __pip_install tox pytest
 # 数据库
 __pip_install pymongo
 
-
+# matplotlib 支持数学公式
+__apt_install texlive-full
