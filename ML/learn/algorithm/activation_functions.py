@@ -31,7 +31,7 @@ plt.rcParams['text.usetex'] = True
 
 xs = np.arange(-6, 6, 0.01)
 
-## plot.show
+##
 
 def display(title, yaxis,
         func, ftxt = None, xpos=0, xytext=(0,0),
@@ -64,22 +64,22 @@ def display(title, yaxis,
 
 
 #####################################################################################
-# <codecell> binary step (二元阶跃)
+# <codecell> Binary step (二元阶跃)
 #####################################################################################
 
 step_func = np.vectorize(lambda x: 1 if x > 0 else 0, otypes=[np.float])
 
-f_text  = r'$ f(x) = \bigg\{\begin{array}{ccc}'
+f_text  = r'$ f(x) = \left\{\begin{array}{ccc}'
 f_text += r' 0 & for & x\leq 0 \\ '
 f_text += r' 1 & for & x> 0 '
-f_text += r'\end{array} $'
+f_text += r'\end{array}\right. $'
 
 display('binary step', (-0.1, 1.6),
         step_func, f_text, 2, (2.2, 0.5))
 
 
 #####################################################################################
-# <codecell> piecewise linear (线性分段)
+# <codecell> Piecewise Linear (线性分段)
 #####################################################################################
 
 xmin = -3.5
@@ -94,3 +94,132 @@ piece_dfunc = np.vectorize(lambda x: w, otypes=[np.float])
 display('piecewise linear', (-0.1, 1.6),
         piece_func, -2, (-2.2, 0.5), 'aaaa',
         piece_dfunc, 2, (2.2, 0.5), 'bbbb')
+
+
+#####################################################################################
+# <codecell> Bipolar
+#####################################################################################
+
+bipolar_func = np.vectorize(lambda x: 1 if x > 0 else -1, otypes=[np.float])
+
+display('bipolar', (-1.5, 1.5),
+        bipolar_func, 'bipolar_func', 1, (2, 0.5))
+
+
+#####################################################################################
+# <codecell> Sigmoid
+#####################################################################################
+
+def sigmoid_func(x):
+    return 1 / (1 + np.exp(-x))
+
+def sigmoid_dfunc(x):
+    fx = sigmoid_func(x)
+    return fx * (1 - fx)
+
+display('sigmiod', (-0.2, 1.2),
+        sigmoid_func, 'sigmoid_func', 1, (2, 0.5),
+        sigmoid_dfunc, 'sigmoid_dfunc', -1, (-2, 0.5))
+
+#####################################################################################
+# <codecell> Bipolar Sigmoid
+#####################################################################################
+
+def bisigmoid_func(x):
+    return (1 - np.exp(-x)) / (1 + np.exp(-x))
+
+def bisigmoid_dfunc(x):
+    return 2 * np.exp(x) / ((np.exp(x) + 1) ** 2)
+
+display('bisigmiod', (-1.2, 1.2),
+        bisigmoid_func, 'bisigmoid_func', 0.2, (1, -0.5),
+        bisigmoid_dfunc, 'bisigmoid_dfunc', -5, (-4, 0.5))
+
+
+#####################################################################################
+# <codecell> Hyperbolic Tangent, TanH (双曲正切)
+#####################################################################################
+
+def tanh_func(x):
+    return 2 / (1 + np.exp(-2 * x)) - 1
+
+def tanh_dfunc(x):
+    fx = tanh_func(x)
+    return 1 - fx ** 2
+
+display('hyperbolic tangent', (-1.2, 1.2),
+        tanh_func, 'aaa', 0.2, (1, -0.5),
+        tanh_dfunc, 'bbb', -1.0, (-2, 0.5))
+
+
+#####################################################################################
+# <codecell> Arctangent, Arctan
+#####################################################################################
+
+def arctan_func(x):
+    return np.arctan(x)
+
+def arctan_dfunc(x):
+    return 1 / (1 + x ** 2)
+
+display('arctangent', (-1.5, 1.5),
+        arctan_func, 'aaa', 0.2, (1, -0.5),
+        arctan_dfunc, 'bbb', -1.0, (-2, 0.5))
+
+
+#####################################################################################
+# <codecell> Rectified Linear Units, ReLU
+#####################################################################################
+
+relu_func = np.vectorize(lambda x: x if x > 0 else 0, otypes=[np.float])
+
+relu_dfunc = np.vectorize(lambda x: 1 if x > 0 else 0, otypes=[np.float])
+
+display('relu', (-0.5, 1.5),
+        relu_func, 'aaa', 0.6, (1.8, 0.5),
+        relu_dfunc, 'bbb', -2.0, (-3.2, 0.5))
+
+
+#####################################################################################
+# <codecell> Leaky Rectified Linear Units, Leaky ReLU
+#####################################################################################
+
+a = 0.1
+
+lrelu_func = np.vectorize(lambda x: x if x > 0 else a*x, otypes=[np.float])
+
+lrelu_dfunc = np.vectorize(lambda x: 1 if x > 0 else a, otypes=[np.float])
+
+display('leaky relu', (-0.5, 1.5),
+        lrelu_func, 'aaa', 0.6, (1.8, 0.5),
+        lrelu_dfunc, 'bbb', -2.0, (-3.2, 0.5))
+
+
+#####################################################################################
+# <codecell> Exponential Linear Units, ELU
+#####################################################################################
+
+a = 0.5
+
+elu_func = np.vectorize(lambda x: x if x > 0 else a*(np.exp(x)-1), otypes=[np.float])
+
+elu_dfunc = np.vectorize(lambda x: 1 if x > 0 else a*np.exp(x), otypes=[np.float])
+
+display('elu', (-0.5, 1.5),
+        elu_func, 'aaa', 0.6, (1.8, 0.5),
+        elu_dfunc, 'bbb', -2.0, (-3.2, 0.5))
+
+
+#####################################################################################
+# <codecell> SoftPlus
+#####################################################################################
+
+def softplus_func(x):
+    return np.log(1+np.exp(x))
+
+def softplus_dfunc(x):
+    return 1/(1+np.exp(-x))
+
+display('softplus', (-0.5, 1.5),
+        softplus_func, 'aaa', 0.6, (1.8, 0.5),
+        softplus_dfunc, 'bbb', -2.0, (-3.2, 0.5))
