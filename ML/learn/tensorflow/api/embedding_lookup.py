@@ -15,10 +15,6 @@
 
 import tensorflow as tf
 
-sess = tf.InteractiveSession()
-
-##
-
 #####################################################################################
 # <codecell> 简单实例(single tensor)
 #####################################################################################
@@ -41,72 +37,152 @@ except Exception as e:
 
 
 #####################################################################################
-# <codecell> 多个Tensor (list)
+# <codecell> 多Tensor, 每个tensor第一维包含的元素个数相同(其他维度shape必须相同)
 #####################################################################################
 
-params1 = tf.constant([1, 2])
-params2 = tf.constant([10, 20])
-params3 = tf.constant([15, 5])
-params = [params1, params2, params3]
+sess = tf.InteractiveSession()
 
-print(len(params)) # 3 > 1
-print(tf.convert_to_tensor(params).eval())
-# output:
-# [[ 1   2]
-#  [10  20]
-#  [15   5]]
+param1 = tf.constant([[1, 101], [2, 102], [3, 103], [33, 333]])
+param2 = tf.constant([[4, 104], [5, 105], [6, 106], [66, 666]])
+param3 = tf.constant([[7, 107], [8, 108], [9, 109], [99, 999]])
 
-ids = tf.constant([0, 1, 2, 3, 5])
-print(tf.nn.embedding_lookup(params, ids).eval()) # [1 10 15 2 5]
+params = [param1, param2, param3]
+ids = tf.constant([0, 1, 2, 3, 4, 7])
 
-# index 0 correponses to the first element of the first tensor, so is 1
-# index 1 correponses to the first element of the second tensor, so is 10
-# index 2 correponses to the first element of the third tensor, so is 15
-# index 3 correponses to the second element of the first tensor, so is 2
-# index 4 correponses to the second element of the third tensor, so is 5
+#
+# 分析:
+#   第一个关键数字是"3": params由3个tensor组成, ids索引分别从这个3个分区选取
+#   第二个关键数字是"12": 12 = 3(tensor个数) x 4(每个tensor的第一维个数), 即最大id+1
+#   第三个关键数字是"4": 4 = (11 + 1) / 3 (得出每个tensor应该含有id的最大个数)
+#                        11是ids中最大下标 = 所有tensor第一维元素个数总和
+#
+#   "mod": id % 3 代表落入哪个tensor中, eg: 7 % 3 = 1(第二个tensor中)
+#       tensor0包含的ids: [ 0, 3, 6, 9 ]
+#       tensor1包含的ids: [ 1, 4, 7, 10 ]
+#       tensor2包含的ids: [ 2, 5, 8, 11 ]
+#
+#                      [1, 101]  [2, 102]  [3, 103]  [33, 333]
+#                         0         3         6          9
+#                      [4, 104]  [5, 105]  [6, 106]  [66, 666]
+#                         1         4         7         10
+#                      [7, 107]  [8, 108]  [9, 109]  [99, 999]
+#                         2         5         8         11
+#
+#   "div": id // 4 代表落入哪个tensor中, eg: 7 // 4 = 1(第二个tensor中)
+#       tensor0包含的ids: [ 0, 1, 2, 3 ]
+#       tensor1包含的ids: [ 4, 5, 6, 7 ]
+#       tensor2包含的ids: [ 8, 9, 10, 11 ]
+#
+#                      [1, 101]  [2, 102]  [3, 103]  [33, 333]
+#                         0         1         2          3
+#                      [4, 104]  [5, 105]  [6, 106]  [66, 666]
+#                         4         5         6          7
+#                      [7, 107]  [8, 108]  [9, 109]  [99, 999]
+#                         8         9        10         11
 
-
-#####################################################################################
-# <codecell> 策略(模与除)
-#####################################################################################
-
-params1 = tf.constant([1, 2])
-params2 = tf.constant([10, 20])
-ids = tf.constant([0, 1, 2, 3])
-
-mod = tf.nn.embedding_lookup([params1, params2], ids, partition_strategy='mod')
-print(mod.eval()) # output: [ 1, 10,  2, 20], p = id % len(params)
-
-div = tf.nn.embedding_lookup([params1, params2], ids, partition_strategy='div')
-print(div.eval()) # output: [ 1,  2, 10, 20], p = id / len(params)
-
-
-#####################################################################################
-# <codecell> 
-#####################################################################################
-
-params1 = tf.constant([1, 2, 3, 4])
-params2 = tf.constant([10, 20, 30])
-ids = tf.constant([[0, 1], [5, 2]])
-
-mod = tf.nn.embedding_lookup([params1, params2], ids)
+mod = tf.nn.embedding_lookup(params, ids)
 print(mod.eval())
 
-div = tf.nn.embedding_lookup([params1, params2], ids, partition_strategy='div')
+# [[  1 101]
+#  [  4 104]
+#  [  7 107]
+#  [  2 102]
+#  [  5 105]
+#  [  6 105]]
+
+div = tf.nn.embedding_lookup(params, ids, partition_strategy='div')
 print(div.eval())
 
+# [[  1 101]
+#  [  2 102]
+#  [  3 103]
+#  [ 33 333]
+#  [  4 104]
+#  [ 66 666]]
+
+#
+
+sess.close()
 
 #####################################################################################
-# <codecell> 
+# <codecell> 多Tensor, 每个tensor第一维包含的元素个数不同(其他维度shape必须相同)
 #####################################################################################
 
-params1 = tf.constant([[1, 101], [2, 201], [3, 301], [4, 401]])
-params2 = tf.constant([[10, 15], [20, 25], [30, 35]])
-# ids = tf.constant([0, 1, 2, 3])
-ids = tf.constant([[0, 1], [5, 2]])
+sess = tf.InteractiveSession()
 
-mod = tf.nn.embedding_lookup([params1, params2], ids)
+param1 = tf.constant([[1, 101], [2, 102], [3, 103], [4, 104], [33, 333]])
+param2 = tf.constant([[5, 105], [6, 106]])
+param3 = tf.constant([[7, 107], [8, 108], [9, 109], [99, 999]])
+
+params = [param1, param2, param3]
+ids = tf.constant([0, 1, 2, 3, 4, 5, 8])
+
+
+# 分析:
+#     3个tensor
+#     11个元素: 9 = 5 + 2 + 4
+#     每个tensor含有的id的最大个数 4 = (11 + 1) / 3
+#
+#     "mod":
+#       tensor0包含的ids: [ 0, 3, 6, 9 ]
+#       tensor1包含的ids: [ 1, 4, 7, 10 ]
+#       tensor2包含的ids: [ 2, 5, 8, 11 ]
+#
+#                    [1, 101]  [2, 102]  [3, 103], [4, 104], [33, 333]
+#                       0         3         6         9
+#                    [5, 105]  [6, 106]    ---       ---
+#                       1         4         7         10
+#                    [7, 107]  [8, 108], [9, 109], [9, 999]
+#                       2         5         8         11
+#      注意: 如果ids中含有7 || 10, 将会报错, 该位置是空
+#
+#      "div":
+#       tensor0包含的ids: [ 0, 1, 2, 3 ]
+#       tensor1包含的ids: [ 4, 5, 6, 7 ]
+#       tensor2包含的ids: [ 8, 9, 10, 11 ]
+#
+#                    [1, 101]  [2, 102]  [3, 103], [4, 104], [33, 333]
+#                       0         1         2         3
+#                    [5, 105]  [6, 106]    ---       ---
+#                       4         5         6         7
+#                    [7, 107]  [8, 108], [9, 109], [99, 999]
+#                       8         9         10        11
+#       注意: 如果ids中含有 6 || 7, 将会报错, 该位置是空
+
+mod = tf.nn.embedding_lookup(params, ids)
 print(mod.eval())
 
-div = tf.nn.embedding_lookup([params1, params2], ids, partition_strategy='div')
+# [[  1 101]
+#  [  5 105]
+#  [  7 107]
+#  [  2 102]
+#  [  6 106]
+#  [  8 108]
+#  [  9 109]]
+
+div = tf.nn.embedding_lookup(params, ids, partition_strategy='div')
 print(div.eval())
+
+# [[  1 101]
+#  [  2 102]
+#  [  3 103]
+#  [  4 104]
+#  [  5 105]
+#  [  6 106]
+#  [  7 107]]
+
+ids = tf.constant([7])
+
+try:
+    mod = tf.nn.embedding_lookup(params, ids)
+    print(mod.eval())
+except: # noqa: E722
+    print("indices[0] = 2 is not in [0, 2)")
+
+try:
+    div = tf.nn.embedding_lookup(params, ids, partition_strategy='div')
+    print(div.eval())
+except: # noqa: E722
+    print("indices[0] = 3 is not in [0, 2)")
+
+sess.close()
