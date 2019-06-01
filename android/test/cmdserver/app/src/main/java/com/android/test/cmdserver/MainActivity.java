@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
     Switch mSwHui, mSwQu, mSwDuo;
     TextView mTxt;
     private MyApplication myApplication;
-    int mSwitchVals[] = { 1, 1, 1 };
+    int mSwitchVals[] = { 1, 1, 0 };
 
 
     @Override
@@ -112,11 +112,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
             mBtnStart.setEnabled(false);
             mBtnStop.setEnabled(true);
         } else {
-            if (Build.PRODUCT.equals("LeMax2_CN")) {
-                String value = Utils.getProperty("init.svc.letv_fts_service");
-                if ("running".equals(value))
-                    Utils.setProperty("ctl.stop", "letv_fts_service");
-            }
             mBtnStart.setEnabled(true);
             mBtnStop.setEnabled(false);
         }

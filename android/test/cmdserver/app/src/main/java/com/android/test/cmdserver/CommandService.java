@@ -133,21 +133,14 @@ public class CommandService extends Service {
             int flag = 0;
 			while(!mQuitFlag) {
 				try {
-                    if (mProduct.equals("LeMax2_CN")) {
-                        if (flag == 0) {
-                            Log.i(TAG, "BEG: ctl.start letv_fts_service:" + mArgs);
-                            Utils.setProperty("ctl.start", "letv_fts_service:" + mArgs);
-                            flag = 1;
-                        }
-                        Thread.sleep(1000);
-                    } else if (mProduct.equals("Le2_CN1")) {
+                    if (mProduct.equals("Le2_CN1")) {
                         if (flag == 0) {
                             Log.i(TAG, "BEG: ctl.start wechatproxy:" + mArgs);
                             Utils.setProperty("ctl.start", "wechatproxy:" + mArgs);
                             flag = 1;
                         }
                         Thread.sleep(1000);
-                    } else if (mProduct.equals("max1") || mProduct.equals("x1")) {
+                    } else if (mProduct.equals("max1") || mProduct.equals("x1") || mProduct.equals("LeMax2_CN")) {
                         if (flag == 0) {
                             Log.i(TAG, "BEG: ctl.start tinyproxy:" + mArgs);
                             Utils.setProperty("ctl.start", "tinyproxy:" + mArgs);
@@ -221,15 +214,11 @@ public class CommandService extends Service {
             // public void run() {
 				try {
                     Log.i(TAG, "/system/bin/sh /data/auto_lualu.sh kill");
-                    if (mProduct.equals("LeMax2_CN")) {
-                        Utils.setProperty("ctl.stop", "letv_fts_service");
-                        Thread.sleep(1000);
-                        Utils.setProperty("ctl.start", "letv_fts_service:kill");
-                    } else if (mProduct.equals("Le2_CN1")) {
+                    if (mProduct.equals("Le2_CN1")) {
                         Utils.setProperty("ctl.stop", "wechatproxy");
                         Thread.sleep(1000);
                         Utils.setProperty("ctl.start", "wechatproxy:kill");
-                    } else if (mProduct.equals("max1") || mProduct.equals("x1")) {
+                    } else if (mProduct.equals("max1") || mProduct.equals("x1") || mProduct.equals("LeMax2_CN")) {
                         Utils.setProperty("ctl.stop", "tinyproxy");
                         Thread.sleep(1000);
                         Utils.setProperty("ctl.start", "tinyproxy:kill");

@@ -94,6 +94,14 @@ fi
 curr_pid=$$
 echo $curr_pid > $pid_file 
 
+max=23
+min=7
+
+hui=1
+qu=1
+duo=0
+sltm=600
+
 _run_am_instrument() {
     __myecho "currpid: $curr_pid vs $(__read_pid)"
     if [[ x$curr_pid != x$(__read_pid) ]]
@@ -105,14 +113,6 @@ _run_am_instrument() {
     am instrument -w com.android.test.$1.test/android.support.test.runner.AndroidJUnitRunner
     sleep $sltm
 }
-
-max=23
-min=7
-
-hui=1
-qu=1
-duo=1
-sltm=10
 
 if [[ x$1 == x0 ]]
 then
