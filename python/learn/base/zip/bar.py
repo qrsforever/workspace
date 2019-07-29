@@ -50,3 +50,8 @@ print(list(z2))
 z = list(z1) + list(z2)  # [(1,2), (1,2), (1,2), (1,2)]
 d = zip(*z) # [(1,1,1,1), (2,2,2,2)]
 print(list(d))
+
+print("---------------")
+print(d1)
+print(d2)
+print(list(zip(d1, d2)))
