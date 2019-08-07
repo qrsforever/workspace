@@ -63,3 +63,15 @@ for no, name in blog.items():
 #  1  		　中国石油大学　
 #  2  		　　浙江大学　　
 #  3  		南京航空航天大学
+
+doc_tmpl = r"""\documentclass[english]{article}
+    \usepackage{graphicx}
+    \usepackage[paperheight=%fin,paperwidth=%fin]{geometry}
+    \usepackage{psfrag}
+    \begin{document}
+    \input{%s}
+    \includegraphics{%s} 
+    \end{document} """
+
+
+print(doc_tmpl % (1.0, 2.0, "aa", "bb"))
