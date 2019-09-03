@@ -25,7 +25,6 @@ np.multiply(a, b)
 np.dot(a, b)
 # Out[5]: 32
 
-
 ###### ndarray
 
 ##
