@@ -3,6 +3,8 @@
 
 ### jupyter
 
+**sudo apt install --reinstall jupyter-notebook**
+
 ```
 sudo pip3 install -U jedi
 sudo pip3 install -U jupyter

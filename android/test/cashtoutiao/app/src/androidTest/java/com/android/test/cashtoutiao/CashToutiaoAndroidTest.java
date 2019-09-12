@@ -26,7 +26,7 @@ public class CashToutiaoAndroidTest extends UiAutomatorTestCase {
     public UiDevice mDevice = null;
     public static final int mLoopCount = 3;
     public static final int mNewsCount = 16;
-    public static final int mVideoCount = 6;
+    public static final int mVideoCount = 2;
     public static int mHeight = 1920;
     public static int mWidth = 1280;
     public static final int mSDK = Build.VERSION.SDK_INT;

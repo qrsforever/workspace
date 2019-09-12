@@ -18,7 +18,7 @@ CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
 CPPFLAGS:= -std=c++11
-LDFLAGS :=
+LDFLAGS := -Wl,-rpath=.
 INCLUDE :=
 
 # 源文件可能的后缀

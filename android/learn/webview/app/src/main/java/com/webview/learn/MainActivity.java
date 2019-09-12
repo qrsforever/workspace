@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         mWebview.getSettings().setSaveFormData(false);
         mWebview.getSettings().setLoadsImagesAutomatically(true);
 
-        mWebview.loadUrl("http://10.58.82.240:4000/");
+        mWebview.loadUrl("http://10.58.89.77:8899/");
 
         mWebview.setWebViewClient(new WebViewClient() {
             //直接显示在当前Webview
