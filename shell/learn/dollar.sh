@@ -20,3 +20,5 @@
 
 # 获取父脚本的名字
 # PARENT_COMMAND=$(ps -o comm= $PPID)
+
+echo ${@:2:$#}
