@@ -19,7 +19,7 @@ class Logger(object):
     # '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
     def __init__(
             self, filename, level='info', when='D', backCount=3,
-            fmt='%(asctime)s - %(pathname)s:%(lineno)d - %(levelname)s: %(message)s'):  # noqa
+            fmt='%(asctime)s - %(pathname)s - %(funcName)s:%(lineno)d - %(levelname)s: %(message)s'):  # noqa
 
         self.logger = logging.getLogger(filename)
         format_str = logging.Formatter(fmt)  # 设置日志格式
