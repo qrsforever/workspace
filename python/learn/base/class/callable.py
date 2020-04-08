@@ -8,14 +8,15 @@ class MyClass(object):
 
     def __init__(self):
         """TODO: to be defined1. """
-        
+
     def __call__(self):
-        print("__call_ called")
+        print("__call__ called")
         pass
 
     def __getattr__(self, method):
         print("call", method)
         return lambda *args, **kwargs: 100
+
 
 class MyClass2(object):
     def __delay_do(self, method, *args, **kwargs):
@@ -27,6 +28,7 @@ class MyClass2(object):
     def __getattr__(self, method):
         print("call", method)
         return lambda *args, **kwargs: self.__delay_do(method, args, kwargs)
+
 
 class MyClass3(object):
     def __init__(self):
@@ -40,6 +42,7 @@ class MyClass3(object):
             return 10
         return wrapper
 
+
 def function(f):
     """TODO: Docstring for function.
 
@@ -51,7 +54,7 @@ def function(f):
     f()
 
 
-# function(MyClass())
+function(MyClass())
 
 # c = MyClass()
 # print(c.add(1,1))
