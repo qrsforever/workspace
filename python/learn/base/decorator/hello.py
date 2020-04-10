@@ -12,7 +12,7 @@ def callme():
 
 
 def myexception(handler):
-    def decorator(func):
+    def decorator(func=None):
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
