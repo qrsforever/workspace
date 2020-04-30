@@ -11,8 +11,14 @@ def callme():
     traceback.print_tb(traceback_)
 
 
-def myexception(handler):
-    def decorator(func=None):
+def myexception(handler=None):
+    if handler:
+        print("handler name:" , handler.__name__)
+
+    def decorator(func):
+        if func:
+            print("func name:", func.__name__)
+
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
@@ -35,10 +41,21 @@ class MessageHandler(object):
         print(msg)
 
 
-@myexception(MessageHandler.report)
-def zero_divide():
+@myexception(MessageHandler.report) # handler name: report
+def zero_divide(): # func name: zero_divide
+    1 / 0
+
+
+@myexception()  
+def zero_divide2():  # func name: zero_divide2
+    1 / 0
+
+
+@myexception        # handler name: zero_divide3
+def zero_divide3():
     1 / 0
 
 
 if __name__ == '__main__':
     zero_divide()
+    zero_divide2()
